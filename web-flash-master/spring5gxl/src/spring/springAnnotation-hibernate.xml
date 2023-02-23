@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE hibernate-configuration PUBLIC 
+    "-//Hibernate/Hibernate Configuration DTD 3.0//EN" 
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd"> 
+<hibernate-configuration> 
+    <!-- 当前Session工厂的配置(相当于连接池) --> 
+<session-factory> 
+    <!-- 常规配置 --> 
+    <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property> 
+    <!-- 可以处理中文乱码 --> 
+    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/test?useUnicode=true&amp;characterEncoding=UTF-8</property> 
+    <property name="hibernate.connection.username">root</property> 
+    <property name="hibernate.connection.password">1234</property> 
+    <!-- 方言 , hibernate生成sql依据--> 
+    <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property> 
+    <!-- 其他配置（格式化sql，显示sql） --> 
+    <property name="hibernate.format_sql">true</property> 
+    <property name="hibernate.show_sql">true</property> 
+    <!-- 映射文件中是否自动创建表 （hibernate不能自动的创建数据库） 
+        create : 每一次运行时都创建表。但如果表存在，则先删除后创建 
+        create-drop : 每一次运行是都创建表。但如果factory.close();将在执行之后删除表。 
+        update : 每一次运行更新表结构。 
+        如果表不存在怎创建。 
+        如果表没有被修改则不进行任何操作。 
+        如果表结构修改了，将修改的表字段追加到数据库表中。(hibernate不负责字段的删除，只负责字段变更时的追加) 
+        validate ： 数据库中的表结构，与配置文件的描述不符合时，将抛异常 
+    --> 
+    <property name="hibernate.hbm2ddl.auto">create</property> 
+ 
+    <!-- 在javaee 6.0 web项目中，需要将对象验证取消 --> 
+    <property name="javax.persistence.validation.mode">none</property> 
+ 
+    <!-- 添加映射文件--> 
+    <mapping resource="com/hibernate/code/model/adminstrator.hbm.xml" /> 
+ 
+</session-factory> 
+ 
+</hibernate-configuration>

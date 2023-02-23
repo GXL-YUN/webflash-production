@@ -1,0 +1,9 @@
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sql.dao.mapper.InsertDateMapper">
+
+	<insert id="insert"  parameterType="java.util.Map" >      
+	     INSERT INTO ${table} (${text}) VALUES (${val})
+	</insert>
+</mapper> 

@@ -1,0 +1,9 @@
+/com/
+/db.properties
+/log4j.properties
+/myBatis/
+/rebel.xml
+/spring/
+/springMVC/
+/springhibernate/
+/ut_tst_user.sql

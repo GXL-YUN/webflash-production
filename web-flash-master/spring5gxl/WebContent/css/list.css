@@ -1,0 +1,28 @@
+.tiger{
+    size: 10px;
+    margin-left: 9px;
+    margin-bottom: -12px;
+    padding: 10px;
+}
+.right{
+    width: 700px;
+    height: 150px;
+    background-color:#f4f5f6 ;
+    margin: 20px;
+    padding: 10px;
+}
+.list {
+    width: 700px;
+    background-color: azure;
+    margin: 20px;
+}
+
+.right1{
+    width: 1100px;
+    background-color:#f4f5f6 ;
+    margin: 20px;
+    padding: 10px;
+}
+.p{
+   color: #21759b;
+}
