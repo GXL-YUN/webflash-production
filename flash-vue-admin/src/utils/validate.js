@@ -7,7 +7,6 @@
  * @returns {Boolean}
  */
 export function isExternal(path) {
-  console.log("isExternal");
   return /^(https?:|mailto:|tel:)/.test(path)
 }
 

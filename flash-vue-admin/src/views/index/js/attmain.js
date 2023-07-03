@@ -6,9 +6,7 @@ export default {
     return {
       form: {
         fileList: [], // 文件列表
-
       },
-
       id: '11',
     }
   },

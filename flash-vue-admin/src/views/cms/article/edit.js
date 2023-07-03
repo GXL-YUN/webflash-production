@@ -1,22 +1,19 @@
 import editorImage from '@/components/Tinymce'
-import {Loading} from 'element-ui'
+import { Loading } from 'element-ui'
 import plugins from './plugins'
 import toolbar from './toolbar'
 import articleApi from '@/api/cms/article'
-import channelApi from '@/api/cms/channel'
-import {getApiUrl} from '@/utils/utils'
-import {getToken} from '@/utils/auth'
-import files from "@/views/index/attmain";
-
-import attmain from "@/views/index/js/attmain.js";
+import channelApi  from '@/api/cms/channel'
+import { getApiUrl } from '@/utils/utils'
+import { getToken } from '@/utils/auth'
 
 export default {
   name: 'editArticle',
-  components: {editorImage, files},
+  components: { editorImage },
   props: {
     id: {
       type: String,
-      default: function () {
+      default: function() {
         return 'vue-tinymce-' + +new Date() + ((Math.random() * 1000).toFixed(0) + '')
       }
     },
@@ -54,13 +51,12 @@ export default {
         author: '',
         idChannel: '1',
         content: '',
-        img: '',
-        fileList: [], // 文件列表
-
+        img: ''
       },
       articleImg: '',
       ifUpload: true,
-      options: [],
+      options: [
+      ],
       hasChange: false,
       hasInit: false,
       tinymceId: this.id,
@@ -102,11 +98,6 @@ export default {
     this.destroyTinymce()
   },
   methods: {
-    //获取附件数据
-    getAttMian(file){
-      debugger;
-      this.form.fileList.push(file)
-   },
     init() {
       this.uploadUrl = getApiUrl() + '/file'
       this.uploadHeaders['Authorization'] = getToken()
@@ -186,8 +177,6 @@ export default {
       })
     },
     save() {
-      debugger;
-      const list=this.form.fileList;
       this.$refs['form'].validate((valid) => {
         if (valid) {
           const content = this.form.content.split('%').join('%25')
@@ -197,8 +186,7 @@ export default {
             author: this.form.author,
             idChannel: this.form.idChannel,
             content: content,
-            file: this.form.fileList,
-            img: this.form.img,
+            img: this.form.img
           }).then(response => {
             this.$message({
               message: this.$t('common.optionSuccess'),

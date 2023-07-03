@@ -1,4 +1,4 @@
-import api from '@/api/cms/fileInfo'
+import { getList } from '@/api/cms/fileInfo'
 import { getApiUrl } from '@/utils/utils'
 
 export default {
@@ -15,7 +15,6 @@ export default {
       listLoading: true,
       selRow: {},
       downloadUrl: '',
-      viewPdf:'',
       imgHost: ''
     }
   },
@@ -26,12 +25,11 @@ export default {
     init() {
       this.downloadUrl = getApiUrl() + '/file/download?idFile='
       this.imgHost = getApiUrl() + '/file/getImgStream?idFile='
-      this.viewPdf = getApiUrl() + '/fileUtil/previewPdf.do?idFile='
       this.fetchData()
     },
     fetchData() {
       this.listLoading = true
-      api.getList(this.listQuery).then(response => {
+      getList(this.listQuery).then(response => {
         this.list = response.data.records
         this.listLoading = false
         this.total = response.data.total
@@ -72,16 +70,9 @@ export default {
     handleCurrentChange(currentRow, oldCurrentRow) {
       this.selRow = currentRow
     },
-    download(id, fileName,falge) {
-
+    download(id, fileName) {
       window.location.href = this.downloadUrl + id + '&fileName=' + fileName
     },
-
-
-    view(id, fileName) {
-      window.location.href = this.viewPdf + id + '&fileName=' + fileName
-    },
-
     chkFileType(fileName, types) {
       const typeArr = types.split(',')
       for (const i in typeArr) {

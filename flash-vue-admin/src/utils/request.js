@@ -11,10 +11,9 @@ const service = axios.create({
   timeout: 25000 // request timeout
 })
 
-// request interceptor    请求拦截器
+// request interceptor
 service.interceptors.request.use(
   config => {
-    console.log("请求拦截器");
     // do something before request is sent
     var token = getToken()
     if (token) {
@@ -29,8 +28,7 @@ service.interceptors.request.use(
   }
 )
 
-// response interceptor  //响应拦截器
-
+// response interceptor
 service.interceptors.response.use(
   /**
    * If you want to get http information such as headers or status

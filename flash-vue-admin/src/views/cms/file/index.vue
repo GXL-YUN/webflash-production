@@ -24,12 +24,12 @@
           {{scope.row.id}}
         </template>
       </el-table-column>
-      <el-table-column label="文件名">
+      <el-table-column label="文件名3">
         <template slot-scope="scope">
           {{scope.row.originalFileName}}
         </template>
       </el-table-column>
-      <el-table-column label="文件类型">
+      <el-table-column label="缩略图">
         <template slot-scope="scope">
           <img style="width:60px" v-if="chkFileType(scope.row.originalFileName,'.jpg,.png,.gif,.bmp')" :src="imgHost+scope.row.id">
 
@@ -43,13 +43,6 @@
       <el-table-column label="下载">
         <template slot-scope="scope">
           <el-button type="text" icon="el-icon-download" size="mini" @click.native="download(scope.row.id,scope.row.originalFileName)">下载</el-button>
-        </template>
-      </el-table-column>
-
-
-      <el-table-column label="查看">
-        <template slot-scope="scope">
-          <el-button type="text" icon="el-icon-view" size="mini" @click.native="view(scope.row.id,scope.row.originalFileName)">查看</el-button>
         </template>
       </el-table-column>
 

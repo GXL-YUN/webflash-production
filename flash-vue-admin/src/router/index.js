@@ -26,7 +26,6 @@ import Layout from '@/layout'
  */
 
 /**
- * 配置访问路径   单个访问路径 多个访问文路径  及其他访问路径
  * constantRoutes
  * a base page that does not have permission requirements
  * all roles can be accessed
@@ -52,11 +51,13 @@ export const constantRoutes = [
     component: () => import('@/views/login/index'),
     hidden: true
   },
+
   {
-    path: '/index',
-    component: () => import('@/views/protal/index'),
+    path: '/404',
+    component: () => import('@/views/404'),
     hidden: true
   },
+
   {
     path: '/',
     component: Layout,
@@ -78,7 +79,9 @@ export const constantRoutes = [
         path: 'profile',
         name: '个人资料',
         component: () => import('@/views/account/profile.vue'),
+
         meta: { title: '个人资料' }
+
       }
     ]
   }
@@ -86,7 +89,6 @@ export const constantRoutes = [
 ]
 
 const createRouter = () => new Router({
-
   mode: 'history', // 去掉url中的#
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRoutes

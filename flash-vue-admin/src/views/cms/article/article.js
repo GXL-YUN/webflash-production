@@ -17,12 +17,7 @@ export default {
         author: '',
         img: ''
       },
-      ChangeFrom:{
-        id: '',
-        title: '',
-        author: '',
-        img: ''
-      },
+
       listQuery: {
         page: 1,
         limit: 20,

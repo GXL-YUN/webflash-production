@@ -36,7 +36,8 @@ export default {
     recordAdd:'档案录入',
     recordList:'档案数据',
     record:'档案管理',
-    addIn:'23'
+    index:'前台界面',
+    action:'首页'
   },
   navbar: {
     logOut: '退出登录',

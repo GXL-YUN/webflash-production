@@ -71,7 +71,7 @@ export default {
     },
     add() {
       this.resetForm()
-      this.formTitle = '添加档案类别'
+      this.formTitle = '添加栏目'
       this.formVisible = true
       this.isAdd = true
     },

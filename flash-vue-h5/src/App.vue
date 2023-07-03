@@ -12,7 +12,6 @@
   </div>
 </template>
 
-
 <script>
   import { TransferDom, LoadingPlugin} from 'vux'
   import Vue from 'vue'

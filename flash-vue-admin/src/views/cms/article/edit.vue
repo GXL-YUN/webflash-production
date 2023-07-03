@@ -33,9 +33,8 @@
             </el-row>
           </el-col>
           <el-col :span="12">
-
             <el-form-item label="题图"  v-if="ifUpload">
-<!--              <el-upload
+              <el-upload
                 class="upload-demo"
                 drag
                 :action="uploadUrl"
@@ -45,11 +44,8 @@
               >
                 <i class="el-icon-upload"></i>
                 <div class="el-upload__text">上传图片</div>
-              </el-upload>-->
-
-              <files @giveFather="getAttMian">  </files>
+              </el-upload>
             </el-form-item>
-
             <img :src="articleImg" style="height:8rem;"  v-if="ifUpload!==true" >
             <el-button icon="el-icon-edit" v-if="ifUpload!==true" @click.native="uploadImg">修改题图</el-button>
           </el-col>

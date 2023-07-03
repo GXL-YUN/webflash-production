@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: '知识文档后台管理',
+  title: 'web-flash后台管理',
 
   /**
    * @type {boolean} true | false
@@ -14,15 +14,5 @@ module.exports = {
    */
   sidebarLogo: false,
 
-
-  "stylelint.validate": [
-    "css",
-    "less",
-    "postcss",
-    "scss",
-    "vue",
-    "sass",
-    "html"
-  ],
   tagsView: true
 }

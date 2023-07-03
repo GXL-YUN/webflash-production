@@ -60,7 +60,7 @@
           {{scope.row.author}}
         </template>
       </el-table-column>
-      <el-table-column label="附件数据">
+      <el-table-column label="文章配图">
         <template slot-scope="scope">
           <img :src="scope.row.img" style="width:80px;">
         </template>

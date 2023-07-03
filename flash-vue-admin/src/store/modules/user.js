@@ -41,10 +41,8 @@ const mutations = {
 }
 
 const actions = {
-
   // user login
   login({ dispatch, commit }, userInfo) {
-    console.log("请求拦截器"+userInfo);
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password }).then(response => {

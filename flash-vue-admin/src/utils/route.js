@@ -11,7 +11,6 @@ export function getSideMenus() {
 
 
 export function traverseRoutes(menus){
-  console.log("menus");
   let routes = menus.map( menu =>{
     if(menu.component){
       let name = menu.component
