@@ -1,12 +1,6 @@
 <template>
 
 <el-button type="text" @click="dialogFormVisible = true">打开嵌套表单的 Dialog</el-button>
-
-
-
-
-
-
   <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
     <el-form ref="form" :model="form" label-width="80px">
       <el-form-item label="档案名称">

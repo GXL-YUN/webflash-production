@@ -60,9 +60,9 @@
           {{scope.row.author}}
         </template>
       </el-table-column>
-      <el-table-column label="文章配图">
+      <el-table-column label="档案类别">
         <template slot-scope="scope">
-          <img :src="scope.row.img" style="width:80px;">
+          {{scope.row.idChannel}}
         </template>
       </el-table-column>
 

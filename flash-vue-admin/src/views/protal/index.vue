@@ -1,8 +1,5 @@
 <template>
-
   <div class="father">
-
-
     <!--前台页面-->
     <div class="vie app-container" >
       <el-row :gutter="20">
@@ -14,8 +11,6 @@
         <el-col :span="15">
           <div class="grid-content bg-purple">
             <el-tabs v-model="activeName" @tab-click="handleClick">
-
-
               <el-tab-pane label="首页" name="fourth">
                 <div>
                   <files/>
@@ -50,7 +45,8 @@
           <div class="grid-content bg-pur">数据</div>
         </el-col>
       </el-row>
-    </div></div>
+    </div>
+  </div>
 </template>
 
 <script src="./protal.js"></script>
