@@ -13,11 +13,11 @@
 </template>
 
 <script>
-  import { TransferDom, LoadingPlugin} from 'vux'
-  import Vue from 'vue'
+import {TransferDom, LoadingPlugin} from 'vux'
+import Vue from 'vue'
 
-  Vue.use(LoadingPlugin)
-  Vue.directive('transfer-dom', TransferDom)
+Vue.use(LoadingPlugin)
+Vue.directive('transfer-dom', TransferDom)
 export default {
   name: 'app'
 }

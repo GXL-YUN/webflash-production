@@ -1,8 +1,12 @@
 # change log
+
 ## 2.2
+
 [gitee](https://gitee.com/enilu/web-flash/releases/2.2)
 [github](https://github.com/enilu/web-flash/releases/tag/2.2)
+
 ### Issues
+
 - Issue 增加扫码登陆功能
 - Issue 使用aes加密算法对登录密码加密后传送
 - Change 将角色编码字段名从之前得tips调整为code
@@ -10,16 +14,21 @@
 - Change 限制对初始化数据的删除
 
 ## 2.1
+
 [gitee](https://gitee.com/enilu/web-flash/releases/2.1)
 [github](https://github.com/enilu/web-flash/releases/tag/2.1)
+
 ### Issues
+
 - Issue 启用keep-Alive保存标签页状态
 - Change 路由模式由默认的hash调整为history
 - Change 去掉maven冗余的依赖
 - Change 完善单元测试
 - Issue 集成activiti实现基本的工作流功能
 - Change 完善代码生成器中controller生成模板中关于权限配置部分
+
 ### Fixes
+
 - Fix #I3Z1QT 后端启动后，API接口访问不到后端，中途权限被拦截
 - Fix #I271AB token验证失败后，弹出过多token过期提示
 - Fix 初始化sql语句中菜单资源地址重复的问题
@@ -28,21 +37,26 @@
 
 [gitee](https://gitee.com/enilu/web-flash/releases/2.0)
 [github](https://github.com/enilu/web-flash/releases/tag/2.0)
+
 ### Issues
+
 - Change 完善消息发送服务功能
 - Change 完善参数管理功能细节
 - Change 完善账号管理逻辑
+
 ### Fixes
+
 - Fix 参数管理中参数值长度校验问题
 - Fix 自动生成hibernate_sequence的问题
 - Fix 包装类命名单词错误
-
 
 ## 1.9
 
 [gitee](https://gitee.com/enilu/web-flash/releases/1.9)
 [github](https://github.com/enilu/web-flash/releases/tag/1.9)
+
 ### Issues
+
 - Issue 用户管理中增加重置用户密码功能
 - Issue 优化个人中心功能
 - Issue 提供手动生成代码的方式:cn.enilu.flash.CodeGenerator
@@ -57,7 +71,9 @@
 
 [gitee](https://gitee.com/enilu/web-flash/releases/1.8)
 [github](https://github.com/enilu/web-flash/releases/tag/1.8)
+
 ### Issues
+
 - Change 重构BaseRepository部分方法
 - Change 优化获取用户菜单数据的方法
 - Issue 优化JsonUtil性能（ObjectMapper采用单例模式)
@@ -68,7 +84,9 @@
 - Issue cms模块文件列表增加图片预览功能
 - Issue 禁止冻结初始账户
 - Issue 提交定时任务时对相关参数有效性进行校验
+
 ### Fixes
+
 - Fix 文件下载过程文件损坏
 - Fix 用户锁定和删除状态可以登录的问题
 - Fix 新增菜单时候候选页面不显示菜单图标
@@ -79,6 +97,7 @@
 [github](https://github.com/enilu/web-flash/releases/tag/1.7)
 
 ### Issues
+
 - Issue前端request.js请求默认配置：withCredentials: false,(仅作开发使用，不建议生产使用该配置)
 - Issue 优化菜单维护功能
 - Issue 优化页面标题显示（从之前的英文调整为中文）
@@ -88,7 +107,9 @@
 - Issue 映入vue-treeselect组件代替之前的input+el-tree的用法
 - Issue 菜单编辑窗口使用图标选择组件输入菜单图标
 - Issue 完善权限管理功能
+
 ### Fixes
+
 - Fix 修复登陆页面标题显示错误问题
 - Fix 编辑菜单默认的父菜单没有选中
 - Fix 编辑功能使用深拷贝表格记录，代替之前的直接引用
@@ -100,7 +121,9 @@
 
 [gitee](https://gitee.com/enilu/web-flash/releases/1.6)
 [github](https://github.com/enilu/web-flash/releases/tag/1.6)
+
 ### Issues
+
 - Issue 各个功能的列表页面完善查询条件
 - Issue 各个功能的列表页面增加操作列：包含修改，删除等操作按钮
 - Issue 完善功能按钮的权限控制
@@ -114,6 +137,7 @@
 - Issue 完善查询条件为(not)null的代码封装
 
 ### Fixes
+
 - Fix #65 语言切换bug
 - Fix 处理延迟加载导致对象转换为json异常的问题
 - Fix 修正初始化数据
@@ -121,11 +145,13 @@
 - Fix MD5在高并发环境生成md5值错误
 - Fix 生成代码时 js文件没有和index.vue文件同级目录问题
 
-
 ## 1.5
+
 [gitee](https://gitee.com/enilu/web-flash/releases/1.5)
 [github](https://github.com/enilu/web-flash/releases/tag/1.5)
-### Issues 
+
+### Issues
+
 - Issue 压缩svg图标文件
 - Issue 完善权限管理
 - Issue 修改管理员密码后自动退出登录
@@ -135,16 +161,18 @@
 - Issue 添加单元测试支持
 - Issue BaseRepository封装根据sql查询数据返回Map或List方法
 - Issue BaseRepository封装根据sql查询返回指定对象（列表）方法
-- Change BaseRepository 去掉根据sql查询返回Object数组的方法 
+- Change BaseRepository 去掉根据sql查询返回Object数组的方法
 - Issue echarts随着窗口缩放自适应
 
 ### Fixes
+
 - Fix 业务日志中如果获取不到字段值对应的中文名称则返回字段名本身，代替之前的null
 - Fix 超级管理员判断错误
 - Fix SearchFilter构建查询条件中的问题 bug
 - Fix 更新缓存的时候连带更新常量工具类中使用的本地(TimeCacheMap)缓存
 
 ## 1.4
+
 [gitee](https://gitee.com/enilu/web-flash/releases/1.4)
 [github](https://github.com/enilu/web-flash/releases/tag/1.4)
 
@@ -160,8 +188,10 @@
 - Add MIT license文件
 
 ## 1.3
+
 [gitee](https://gitee.com/enilu/web-flash/releases/1.3)
 [github](https://github.com/enilu/web-flash/releases/tag/1.3)
+
 - Add 页面导航增加多标签页的方式
 - Add 左侧菜单完全通过后台配置动态生成
 - Add 基于vue-cli3构建脚手架，更精简合理的配置方式
@@ -172,8 +202,8 @@
 - Fix 保存菜单出现异常：Converting circular structure to JSON
 - Fix 权限编码配置错误的问题
 
+## 1.2
 
-## 1.2 
 [gitee](https://gitee.com/enilu/web-flash/releases/1.2)
 [github](https://github.com/enilu/web-flash/releases/tag/1.2)
 
@@ -181,24 +211,33 @@
 - Change 简化手机站点api地址配置
 - Change baseService增加缓存功能
 - Update 升级element-ui至2.11.0
-- Update 升级Vue全家桶：vue.js(2.6.10),vuex(3.1.1),vue-router(3.0.3),axios(0.18.1),"vue-loader(15.7.0),vue-template-compiler(2.6.10)
+- Update 升级Vue全家桶：vue.js(2.6.10),vuex(3.1.1),vue-router(3.0.3),axios(0.18.1),"vue-loader(15.7.0),vue-template-compiler(
+  2.6.10)
 - Change 完善在线文档
 - Fix bug
 
 ## 1.1
+
 [github](https://github.com/enilu/web-flash/releases/tag/1.1)
+
 ### Issues
+
 - 封装公共的[service](https://github.com/enilu/web-flash/issues/11)和[dao](https://github.com/enilu/web-flash/issues/9)
 - [使用shiro和jwt针对后台接口完成权限认证](https://github.com/enilu/web-flash/issues/15)
 - 使用Validator实现后台对数据的校验
 - 同步更新代码生成功能
+
 ### Fixes
+
 - [权限管理中，父子权限级联选择问题](https://github.com/enilu/web-flash/issues/14)
 - [import的utils报错：Module is not installed ](https://github.com/enilu/web-flash/issues/6)
 
 ## 1.0
+
 [github](https://github.com/enilu/web-flash/releases/tag/v1.0)
+
 ### Issues
+
 - add 部门管理
 - add 用户管理
 - add 角色管理

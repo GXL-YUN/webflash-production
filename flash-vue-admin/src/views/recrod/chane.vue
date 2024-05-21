@@ -1,6 +1,6 @@
 <template>
 
-<el-button type="text" @click="dialogFormVisible = true">打开嵌套表单的 Dialog</el-button>
+  <el-button type="text" @click="dialogFormVisible = true">打开嵌套表单的 Dialog</el-button>
   <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
     <el-form ref="form" :model="form" label-width="80px">
       <el-form-item label="档案名称">
@@ -43,29 +43,34 @@
 </template>
 <script src="./edit.js"></script>
 <style scoped>
-  .tinymce-container {
-    position: relative;
-    line-height: normal;
-  }
-  .tinymce-container >>> .mce-fullscreen {
-    z-index: 10000;
-  }
-  .tinymce-textarea {
-    visibility: hidden;
-    z-index: -1;
-  }
-  .editor-custom-btn-container {
-    position: absolute;
-    right: 4px;
-    top: 4px;
-    /*z-index: 2005;*/
-  }
-  .fullscreen .editor-custom-btn-container {
-    z-index: 10000;
-    position: fixed;
-  }
-  .editor-upload-btn {
-    display: inline-block;
-  }
+.tinymce-container {
+  position: relative;
+  line-height: normal;
+}
+
+.tinymce-container >>> .mce-fullscreen {
+  z-index: 10000;
+}
+
+.tinymce-textarea {
+  visibility: hidden;
+  z-index: -1;
+}
+
+.editor-custom-btn-container {
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  /*z-index: 2005;*/
+}
+
+.fullscreen .editor-custom-btn-container {
+  z-index: 10000;
+  position: fixed;
+}
+
+.editor-upload-btn {
+  display: inline-block;
+}
 </style>
 

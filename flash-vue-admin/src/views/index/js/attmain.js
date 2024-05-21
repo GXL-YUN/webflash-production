@@ -1,5 +1,3 @@
-
-
 export default {
   name: 'files',
   data() {
@@ -14,7 +12,7 @@ export default {
     // 选中文件
     onChange(file) {
       this.form.fileList.push(file)
-       //传递参数文件到副组件数据  附件文件数据列表
+      //传递参数文件到副组件数据  附件文件数据列表
       this.$emit("getData", file);
     },
 
