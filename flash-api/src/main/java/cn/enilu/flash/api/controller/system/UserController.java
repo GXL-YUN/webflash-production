@@ -64,15 +64,16 @@ public class UserController extends BaseController {
 
     @PostMapping
     @BussinessLog(value = "编辑账号", key = "name")
-    @RequiresPermissions(value = {Permission.USER_EDIT})
     public Object save(@RequestBody @Valid UserDto user, BindingResult result) {
         if (user.getId() == null) {
             // 判断账号是否重复
             User theUser = userService.findByAccount(user.getAccount());
             if (theUser != null) {
-                throw new ApplicationException(BizExceptionEnum.USER_ALREADY_REG);
+                //throw new ApplicationException(BizExceptionEnum.USER_ALREADY_REG);
+                return Rets.failure(String.valueOf(BizExceptionEnum.USER_ALREADY_REG));
             }
             // 完善账号信息
+            user.setRoleid("3,");
             user.setSalt(RandomUtil.getRandomString(5));
             user.setPassword(MD5.md5(user.getPassword(), user.getSalt()));
             user.setStatus(ManagerStatus.OK.getCode());

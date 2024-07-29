@@ -9,10 +9,6 @@ import {getToken} from '@/utils/auth'
 
 export default {
 
-
-
-
-
   name: 'editvoid',
   components: {editorImage},
   props: {
@@ -191,6 +187,16 @@ export default {
       })
     },
     save() {
+
+
+      if(this.ruleVideForm.videId==""&&this.ruleVideForm.imgId){
+
+        this.$message({
+          message: '附件上传未完成',
+          type: 'error'
+        })
+      }else{
+
       this.$refs['ruleVideForm'].validate((valid) => {
         debugger;
         if (valid) {
@@ -211,6 +217,7 @@ export default {
           return false
         }
       })
+      }
     },
     back() {
 

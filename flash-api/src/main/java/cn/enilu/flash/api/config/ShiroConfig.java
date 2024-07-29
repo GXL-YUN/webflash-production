@@ -77,19 +77,21 @@ public class ShiroConfig {
         filterRuleMap.put("/file/download", "anon");
         filterRuleMap.put("/file/getImgStream", "anon");
         filterRuleMap.put("/file/getVideo.do", "anon");
-
+        filterRuleMap.put("/user", "anon");
         filterRuleMap.put("/vode/list.do", "anon");
 
-        filterRuleMap.put("/file/getImgBase64", "anon");
+        filterRuleMap.put("/user/getImgBase64", "anon");
         filterRuleMap.put("/fileUtil/download.do", "anon");
         filterRuleMap.put("/fileUtil/getImgStream.do", "anon");
         filterRuleMap.put("/fileUtil/getImgBase64.do", "anon");
         filterRuleMap.put("/fileUtil/previewPdf.do", "anon");
 
-
+        filterRuleMap.put("/account/qrcode/getRet", "anon");
+        filterRuleMap.put("/account/getUser", "anon");
+        filterRuleMap.put("/account/isLogin", "anon");
         filterRuleMap.put("/fileUtil/**", "anon");
         filterRuleMap.put("/test/**", "anon");
-
+        filterRuleMap.put("/message/sendYj", "anon");
         //工作流定义文件流
         filterRuleMap.put("/workflow/process/definition/getDefinitionXML", "anon");
         //druid监控地址不拦截

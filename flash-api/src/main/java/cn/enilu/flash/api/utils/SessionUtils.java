@@ -35,6 +35,4 @@ public class SessionUtils {
         WebApplicationContext context = ContextLoader.getCurrentWebApplicationContext();
         return context.getServletContext();
     }
-
-
 }

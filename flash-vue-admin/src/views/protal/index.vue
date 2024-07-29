@@ -27,7 +27,7 @@
 .bodys {
   color: #FFFFFF;
   height: auto;
-  padding-left: 20%;
+  padding-left: 15%;
   padding-right: 15%;
 }
 .vie {

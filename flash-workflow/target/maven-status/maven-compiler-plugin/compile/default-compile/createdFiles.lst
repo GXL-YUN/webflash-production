@@ -1,0 +1,10 @@
+cn\enilu\flash\bean\vo\workflow\ProcessDefinitionVo.class
+cn\enilu\flash\dao\workflow\WorkFlowRequestRepository.class
+cn\enilu\flash\api\controller\workflow\ProcessDefinitionController.class
+cn\enilu\flash\service\workflow\WorkFlowRequestService.class
+cn\enilu\flash\api\controller\workflow\WorkFlowRequestController.class
+cn\enilu\flash\workflow\servicetask\AutoCompleteServiceTask.class
+cn\enilu\flash\service\workflow\ProcessDefinitionService.class
+cn\enilu\flash\workflow\WorkFlowRequestEndListener.class
+cn\enilu\flash\bean\entity\workflow\WorkFlowRequest.class
+cn\enilu\flash\wrapper\TaskWrapper.class

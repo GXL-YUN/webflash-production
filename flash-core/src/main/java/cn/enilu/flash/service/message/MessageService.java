@@ -117,6 +117,13 @@ public class MessageService extends BaseService<Message, Long, MessageRepository
         sendSms(tplCode, receiver, params);
     }
 
+
+    /**
+     * 发送短信
+     * @param tplCode
+     * @param receiver
+     * @param params
+     */
     public void sendSms(String tplCode, String receiver, LinkedHashMap params) {
         MessageTemplate messageTemplate = messagetemplateRepository.findByCode(tplCode);
         String content = getContent(messageTemplate.getContent(), params);

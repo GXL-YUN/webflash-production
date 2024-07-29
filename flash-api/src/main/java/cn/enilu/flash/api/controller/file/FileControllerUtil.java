@@ -157,7 +157,7 @@ public class FileControllerUtil {
             byte[] b = null;
             BufferedImage buff = PicUtil.fileStreamToBufferedImage(fis);
             BufferedImage change = PicUtil.resizeImage(buff, 614, 200);
-            b = PicUtil.imageToBytes(change);
+            b = PicUtil.imageToBytes(change,"jpg");
 
             fis.read(b);
             out.write(b);

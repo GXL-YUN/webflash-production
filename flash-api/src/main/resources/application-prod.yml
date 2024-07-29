@@ -3,12 +3,12 @@ spring:
   datasource:
     druid:
       url: jdbc:mysql://127.0.0.1:3306/webflash?useUnicode=true&characterEncoding=UTF8&useSSL=false
-      username: root
-      password: 123456
+        username: webflash
+        password: aFHptTpfJthTK3EE
   jpa:
     hibernate:
       ## 生产环境建议去掉改配置
-      ##ddl-auto: create
+      ddl-auto: update
   activiti:
     check-process-definitions: false
     database-schema-update: update

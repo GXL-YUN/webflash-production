@@ -57,7 +57,6 @@ public class VodeController extends BaseController {
         return Rets.success(page);
     }
     @DeleteMapping
-    @PostMapping(value = "del.do")
     @BussinessLog(value = "删除视频", key = "id")
     @RequiresPermissions(value = {Permission.ARTICLE_DEL})
     public Object remove(Long id) {

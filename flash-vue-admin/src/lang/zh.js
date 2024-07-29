@@ -50,9 +50,9 @@ export default {
     size: '布局大小'
   },
   login: {
-    title: 'web-flash',
-    errorAccount: '请输入5到32位的数字和字母',
-    errorPassword: '密码至少位5位',
+    title: 'OpenAI',
+    errorAccount: 'Please enter 5 to 32 digits and letters',
+    errorPassword: 'The password must contain at least 5 characters',
     logIn: '登录',
     username: '账号',
     password: '密码'

@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: 'web-flash后台管理',
+  title: 'OpenAI',
 
   /**
    * @type {boolean} true | false

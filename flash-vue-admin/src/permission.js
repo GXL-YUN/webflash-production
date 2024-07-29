@@ -9,7 +9,7 @@ import i18n from '@/lang'
 
 NProgress.configure({showSpinner: false}) // NProgress Configuration
 
-const whiteList = ['/login' ,'/index'] //  无定向白名单 no redirect whitelist
+const whiteList = ['/login' ,'/index','/'] //  无定向白名单 no redirect whitelist
 
 router.beforeEach(async (to, from, next) => {
   // start progress bar
@@ -25,6 +25,7 @@ router.beforeEach(async (to, from, next) => {
 
 
   if (hasToken) {
+    debugger
     if (to.path === '/login') {
       // if is logged in, redirect to the home page
       next({path: '/'})

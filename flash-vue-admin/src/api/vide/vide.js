@@ -20,11 +20,24 @@ export default {
   },
   remove: function (id) {
     return request({
-      url: '/vode/del.do',
+      url: '/vode',
       method: 'delete',
       params: {
         id: id
       }
+    })
+  },
+  getUser: function() {
+    return request({
+      url: '/account/getUser',
+      method: 'get'
+    })
+  },
+
+  getUserIsLogin: function() {
+    return request({
+      url: '/account/isLogin',
+      method: 'get'
     })
   },
   get: function (id) {

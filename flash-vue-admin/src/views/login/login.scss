@@ -39,11 +39,26 @@ $cursor: #fff;
       }
     }
   }
+  .login-container .login-form {
+    position: relative;
+    width: 50%;
+    max-width: 100%;
+    padding: 160px 35px 0;
+    margin: 0 auto;
+    overflow: hidden;
+  }
 
+  .el-input {
+    position: relative;
+    font-size: 14px;
+    display: inline-block;
+    width: 100%;
+    background: #2f2a2a;
+  }
   .el-form-item {
     border: 1px solid rgba(255, 255, 255, 0.1);
     //  background: rgba(0, 0, 0, 0.1);
-    background-color: #454545;
+    background-color: #ffffff;
 
     border-radius: 5px;
     color: #454545;
@@ -58,6 +73,7 @@ $light_gray: #eee;
   min-height: 100%;
   width: 100%;
   overflow: hidden;
+  margin-top: 0%;
 
   .login-form {
     position: relative;

@@ -165,15 +165,7 @@ export default {
       this.formVisible = true
       this.isAdd = true
     },
-    changeUserStatus(record) {
-      changeStatus(record.id).then(response => {
-        this.$message({
-          message: '提交成功',
-          type: 'success'
-        })
-        this.fetchData()
-      })
-    },
+
     validPasswd() {
       if (!this.isAdd) {
         return true
@@ -199,6 +191,7 @@ export default {
       var self = this
       this.$refs['form'].validate((valid) => {
         if (valid) {
+          debugger
           if (this.validPasswd()) {
             var form = self.form
             console.log('form.status', form.status);

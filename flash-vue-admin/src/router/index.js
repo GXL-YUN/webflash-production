@@ -79,6 +79,16 @@ export const constantRoutes = [
     component: () => import('@/views/protal/index'),
     hidden: true
   },
+
+  {
+    path: '/three',
+    name: 'three',
+    meta: {
+      title: 'three'
+    },
+    component: () => import('@/views/protal/three'),
+    hidden: true
+  },
   {
     path: '/dashboard',
     component: Layout,

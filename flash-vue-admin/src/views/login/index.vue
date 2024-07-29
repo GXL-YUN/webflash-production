@@ -1,5 +1,5 @@
 <template>
-  <div class="login-container" style="background-image: url(./img/bg.jpg)">
+  <div class="login-container"  v-if="isVisible" style="background-image: url(./img/bg.jpg)">
     <el-form
       ref="loginForm"
       :model="loginForm"
@@ -18,9 +18,10 @@
             <span class="svg-container">
               <svg-icon icon-class="user"/>
             </span>
+<!--     $t('login.username')       -->
             <el-input
               v-model="loginForm.username"
-              :placeholder="$t('login.username')"
+              placeholder="username"
               name="username"
               type="text"
               auto-complete="on"
@@ -34,7 +35,7 @@
             <el-input
               :type="pwdType"
               v-model="loginForm.password"
-              :placeholder="$t('login.password')"
+              placeholder="password"
               name="password"
               auto-complete="on"
               @keyup.enter.native="handleLogin"
@@ -48,10 +49,10 @@
             :loading="loading"
             type="primary"
             style="width: 100%; margin-bottom: 30px"
-            @click.native.prevent="handleLogin"> {{ $t("login.logIn") }}
+            @click.native.prevent="handleLogin"> Login
           </el-button>
 
-          <div style="position: relative">
+<!--          <div style="position: relative">
             <div class="tips">
               <span>{{ $t("login.username") }} : admin</span>
               <span>{{ $t("login.password") }} : admin</span>
@@ -60,7 +61,7 @@
               <span style="margin-right: 18px">{{ $t("login.username") }} : developer</span>
               <span>{{ $t("login.password") }} : developer</span>
             </div>
-          </div>
+          </div>-->
         </el-tab-pane>
       <el-tab-pane label="register" name="second">
 <!--          <div v-if="qrcode.activeName=='second'">

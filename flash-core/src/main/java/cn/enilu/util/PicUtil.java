@@ -33,10 +33,10 @@ public class PicUtil {
     /**
      * BufferedImage图片流转byte[]数组
      */
-    public static byte[] imageToBytes(BufferedImage bImage) {
+    public static byte[] imageToBytes(BufferedImage bImage,String type) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
-            ImageIO.write(bImage, "jpg", out);
+            ImageIO.write(bImage, type, out);
         } catch (IOException e) {
             e.printStackTrace();
         }

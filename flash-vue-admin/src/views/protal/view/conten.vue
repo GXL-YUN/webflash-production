@@ -13,19 +13,20 @@
           :src="date.imgId"
           :fit="date.massage"></el-image>
         </a>
+        <el-button type="danger" icon="el-icon-delete" circle @click="delect(date.videId)"></el-button>
       </div>
     </el-row>
 
 <!--   查看详细视频 -->
     <el-dialog
-      title="视频查看"
+      title="Video viewing"
       :visible.sync="dialogVisibles"
+      :before-close="handleClose"
       width="50%"
-
       style="z-index: 100; background: #000000">
-      <video width="100%" controls>
+      <video v-if="videoPlaying" width="100%" controls>
         <source :src="urlVodeMap" type="video/mp4">
-        您的浏览器不支持视频标签。
+        Your browser does not support video tags.
       </video>
     </el-dialog>
 
@@ -40,9 +41,11 @@
 import articleApi from "@/api/cms/article";
 import {getApiUrl} from "@/utils/utils";
 import vodeApi from '@/api/vide/vide'
+
 export default {
   data() {
     return {
+      videoPlaying: false,
       list:"",
       urlVodeMap:"",
       dialogVisibles:false,
@@ -53,7 +56,52 @@ export default {
   },
   //初始化数据
   methods:{
+
+    //删除
+    delect(videId){
+      this.$confirm('确认删除？')
+        .then(_ => {
+            // 确认则关闭对话框
+          vodeApi.remove(
+            videId
+          ).then(response => {
+            this.$message({
+              message: this.$t('common.optionSuccess'),
+              type: 'success'
+            })
+            this.back()
+          })
+        }).catch(_ => {
+                // 取消则不做任何操作
+
+      });
+
+
+
+
+
+
+    },
+
+
+    //关闭弹窗
+    handleClose(done) {
+      // 在这里编写你想在关闭前执行的代码
+      // 例如：弹出确认对话框
+    /*  this.$confirm('确认关闭？')
+        .then(_ => {*/
+          // 确认则关闭对话框
+          this.videoPlaying = !this.videoPlaying;
+          done();
+      /*  })
+        .catch(_ => {
+          // 取消则不做任何操作
+
+        });*/
+    },
     SelectVode(videId){
+      //显示voder
+      this.videoPlaying = !this.videoPlaying;
       this.urlVodeMap=getApiUrl() + '/file/getVideo.do?idFile='+videId
 
       this.dialogVisibles=true

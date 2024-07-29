@@ -4,6 +4,9 @@ import AesUtil from "@/utils/aes.js"
 import {getQrcodeStatus} from '@/api/user'
 import LangSelect from '@/components/LangSelect'
 import register from '@/views/system/user/register'
+import alent from '@/views/protal/view/alent'
+
+
 export default {
   name: 'login',
   components: {LangSelect,register},
@@ -23,7 +26,7 @@ export default {
       }
     }
     return {
-
+      isVisible: true,
       qrcode: {
         activeName: 'first',
         showAppdownload: false,
@@ -58,11 +61,18 @@ export default {
       }
 
     },
+    //打开弹窗
+    openModal() {
+      this.isVisible = true;
+    },//关闭弹窗
+    closeModal() {
+      this.isVisible = false;
+    },
     changeLoginType(tab) {
       if (this.qrcode.activeName === 'second') {
 
         this.getQrcode()
-        this.getQrcodeResult()
+        //this.getQrcodeResult()
       }
     },
     uuid() {
@@ -87,7 +97,7 @@ export default {
     refreshQrcode() {
       this.getQrcode()
       this.qrcode.resultStatus = ''
-      this.getQrcodeResult()
+      //this.getQrcodeResult()
     },
     getQrcodeResult() {
       if (this.qrcode.activeName === 'second') {
@@ -112,7 +122,7 @@ export default {
               })
             }
             if (me.qrcode.activeName === 'second' && res.data.status === 'undo') {
-              me.getQrcodeResult()
+              //me.getQrcodeResult()
             }
           }).catch((err) => {
             console.log('err', err)
@@ -139,6 +149,12 @@ export default {
           let loginBody = {username: loginForm.username, password: AesUtil.encrypt(loginForm.password)}
           this.$store.dispatch('user/login', loginBody).then(() => {
             this.loading = false
+
+            this.$message({
+              message: 'success',
+              type: 'success'
+            })
+            this.$emit('send-data', true);
             this.$router.push({path: this.redirect})
           }).catch((err) => {
             this.loading = false

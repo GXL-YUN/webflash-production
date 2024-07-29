@@ -11,6 +11,7 @@ import cn.enilu.flash.bean.vo.node.RouterMenu;
 import cn.enilu.flash.cache.TokenCache;
 import cn.enilu.flash.core.log.LogManager;
 import cn.enilu.flash.core.log.LogTaskFactory;
+import cn.enilu.flash.security.JwtUtil;
 import cn.enilu.flash.security.ShiroFactroy;
 import cn.enilu.flash.service.system.MenuService;
 import cn.enilu.flash.service.system.QrcodeService;
@@ -32,6 +33,7 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * AccountController
@@ -114,9 +116,9 @@ public class AccountController extends BaseController {
                 //该用户可能被删除
                 return Rets.expire();
             }
-            if (StringUtil.isEmpty(user.getRoleid())) {
-                return Rets.failure("该用户未配置权限");
-            }
+            //if (StringUtil.isEmpty(user.getRoleid())) {
+           //     return Rets.failure("该用户未配置权限");
+            //}
             ShiroUser shiroUser = tokenCache.getUser(getToken());
             Map map = Maps.newHashMap("name", user.getName(), "role", "admin", "roles", shiroUser.getRoleCodes());
             List<RouterMenu> list = menuService.getSideBarMenus(shiroUser.getRoleList());
@@ -131,6 +133,49 @@ public class AccountController extends BaseController {
             return Rets.success(map);
         }
         return Rets.failure("获取用户信息失败");
+    }
+
+
+    /**
+     * 判断用户是否是管理员
+     * @return
+     */
+
+    @GetMapping(value = "/getUser")
+    public Object getUser() {
+        HttpServletRequest request = HttpUtil.getRequest();
+        boolean  flage=false;
+        Long idUser = null;
+        try {
+            idUser = getIdUser(request);
+        } catch (Exception e) {
+           e.printStackTrace();
+        }
+        if (idUser != null) {
+            User user = userService.get(idUser);
+            if(user.getAccount().equals("admin")){
+                flage=true;
+            }
+
+        }
+        return Rets.success(flage);
+    }
+
+    /**
+     * 判断用户是否登录
+     * @return
+     */
+    @GetMapping(value = "/isLogin")
+    public Object isLogin() {
+        HttpServletRequest request = HttpUtil.getRequest();
+
+        Long idUser = null;
+        try {
+            idUser = getIdUser(request);
+        } catch (Exception e) {
+            return Rets.expire();
+        }
+        return Rets.success();
     }
 
     @PostMapping(value = "/updatePwd")

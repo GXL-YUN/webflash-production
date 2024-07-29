@@ -149,13 +149,27 @@ public class FileController extends BaseController {
         response.setContentType(contentType);
         try {
             OutputStream out = response.getOutputStream();
+            System.out.println("路径"+fileInfo.getAblatePath());
             File file = new File(fileInfo.getAblatePath());
             fis = new FileInputStream(file);
             //byte[] b = new byte[fis.available()];
             byte[] b = null;
             BufferedImage buff = PicUtil.fileStreamToBufferedImage(fis);
             BufferedImage change = PicUtil.resizeImage(buff, 614, 200);
-            b = PicUtil.imageToBytes(change);
+            System.out.println("图片名称"+fileInfo.getOriginalFileName());
+            String [] arr=fileInfo.getOriginalFileName().split(".");
+           if( fileInfo.getOriginalFileName().indexOf("png")>-1){
+
+               b = PicUtil.imageToBytes(change,"jpg");
+               System.out.println("图片类型jpg");
+           }else{
+
+               b = PicUtil.imageToBytes(change,"png");
+               System.out.println("图片类型png");
+           }
+
+            //System.out.println("图片类型"+arr[1]);
+           // b = PicUtil.imageToBytes(change,arr[1]);
 
             fis.read(b);
             out.write(b);
