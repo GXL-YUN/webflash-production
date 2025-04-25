@@ -1,4 +1,4 @@
-package cn.good.yan.util;
+package cn.enilu.flash.api.mq.use.util;
 
 /**
  * 常量
@@ -7,5 +7,5 @@ package cn.good.yan.util;
  * @create 2024-06-07
  */
 public class C {
-    public static final String IP = "xxxxx";
+    public static final String IP = "124.222.2.102";
 }

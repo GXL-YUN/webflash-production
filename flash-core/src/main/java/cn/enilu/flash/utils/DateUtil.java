@@ -187,6 +187,21 @@ public class DateUtil {
         }
         return null;
     }
+    public static String parse(Long date, String pattern) {
+        if (date != null) {
+            if (pattern == null || "".equals(pattern)) {
+                return null;
+            }
+            Date longDate = new Date(date);
+
+            // 定义日期时间格式
+            SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+
+            // 格式化输出
+            return sdf.format(longDate);
+        }
+        return null;
+    }
 
     public static SimpleDateFormat getDFormat(String pattern) {
         ThreadLocal<SimpleDateFormat> tl = POOL.get(pattern);

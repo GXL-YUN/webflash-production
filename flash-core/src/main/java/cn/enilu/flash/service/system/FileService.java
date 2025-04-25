@@ -16,11 +16,14 @@ import org.jxls.expression.JexlExpressionEvaluator;
 import org.jxls.transform.Transformer;
 import org.jxls.util.JxlsHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -34,14 +37,69 @@ public class FileService extends BaseService<FileInfo, Long, FileInfoRepository>
     @Autowired
     private TokenCache tokenCache;
 
+
+    @Value("${urlpath}")
+    private String configValue;
     /**
      * 文件上传
      *
      * @param multipartFile
      * @return
      */
+    public FileInfo upload(MultipartFile multipartFile, String fdKey, String fdModelId) {
+        // 参数校验
+        if (multipartFile == null || multipartFile.isEmpty()) {
+            throw new IllegalArgumentException("上传文件不能为空");
+        }
+
+        InputStream inputStream = null;
+        try {
+            // 生成UUID
+            String uuid = UUID.randomUUID().toString();
+
+            // 安全获取文件扩展名
+            String originalFilename = multipartFile.getOriginalFilename();
+            if (originalFilename == null || !originalFilename.contains(".")) {
+                throw new IllegalArgumentException("文件名不合法");
+            }
+
+            String fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
+            String realFileName = uuid + "." + fileExtension;
+
+            // 创建目标文件
+            String path = configValue;
+            File file = new File(path + File.separator + realFileName);
+
+            // 确保目录存在
+            File parentDir = file.getParentFile();
+            if (!parentDir.exists() && !parentDir.mkdirs()) {
+                throw new IOException("无法创建目录: " + parentDir.getAbsolutePath());
+            }
+
+            // 使用try-with-resources确保流关闭
+            inputStream = multipartFile.getInputStream();
+            Files.copy(inputStream, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+            return save(originalFilename, file, fdKey, fdModelId);
+
+        } catch (IOException e) {
+            throw new RuntimeException("文件上传失败", e);
+        } finally {
+            // 确保关闭输入流
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    // 记录日志但不要抛出异常
+                    //log.error("关闭输入流失败", e);
+                }
+            }
+        }
+    }
     public FileInfo upload(MultipartFile multipartFile) {
+        //生成uUid
         String uuid = UUID.randomUUID().toString();
+        //文件名称
         String realFileName = uuid + "." + multipartFile.getOriginalFilename().split("\\.")[1];
         try {
             File file = new File(configCache.get(ConfigKeyEnum.SYSTEM_FILE_UPLOAD_PATH) + File.separator + realFileName);
@@ -111,6 +169,24 @@ public class FileService extends BaseService<FileInfo, Long, FileInfoRepository>
      * @param file
      * @return
      */
+    public FileInfo save(String originalFileName, File file,String fdKey,String fdModelId) {
+        try {
+            FileInfo fileInfo = new FileInfo();
+           // fileInfo.setCreateBy(JwtUtil.getUserId());
+            fileInfo.setOriginalFileName(originalFileName);
+            fileInfo.setRealFileName(file.getName());
+            fileInfo.setFdKey(fdKey);
+            fileInfo.setFdModelId(fdModelId);
+            //doc转换为pdf
+            //判断类型
+            insert(fileInfo);
+            docToPdf(fileInfo.getId());
+            return fileInfo;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
     public FileInfo save(String originalFileName, File file) {
         try {
             FileInfo fileInfo = new FileInfo();
@@ -120,7 +196,7 @@ public class FileService extends BaseService<FileInfo, Long, FileInfoRepository>
             //doc转换为pdf
             //判断类型
             insert(fileInfo);
-            docToPdf(fileInfo.getId());
+            //docToPdf(fileInfo.getId());
             return fileInfo;
         } catch (Exception e) {
             e.printStackTrace();

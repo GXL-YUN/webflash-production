@@ -55,6 +55,7 @@ public class ApiApplication extends SpringBootServletInitializer {
     }
     public static void main(String[] args) throws UnknownHostException {
 
+        System.out.println("开始启动");
         ConfigurableApplicationContext application = SpringApplication.run(ApiApplication.class, args);
         Environment env = application.getEnvironment();
         String ip = InetAddress.getLocalHost().getHostAddress();

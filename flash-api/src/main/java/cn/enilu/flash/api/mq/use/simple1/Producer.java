@@ -1,10 +1,8 @@
-package cn.good.yan.simple1;
+package cn.enilu.flash.api.mq.use.simple1;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
-
-import static cn.good.yan.util.C.*;
 
 /**
  * 1 简单模式
@@ -20,15 +18,15 @@ public class Producer {
         // 创建连接工厂
         ConnectionFactory connectionFactory = new ConnectionFactory();
         // 主机地址
-        connectionFactory.setHost("127.0.0.1");
+        connectionFactory.setHost("124.222.2.102");
         // 端口号：默认为 5672
         connectionFactory.setPort(5672);
         // 主机名称：默认为 /
-        connectionFactory.setVirtualHost("/");
+        connectionFactory.setVirtualHost("gxl");
         // 用户名；默认为guest
-        connectionFactory.setUsername("guest");
+        connectionFactory.setUsername("gxl");
         // 密码；默认为guest
-        connectionFactory.setPassword("123456");
+        connectionFactory.setPassword("gxl");
         // 创建连接
         Connection connection = connectionFactory.newConnection();
         // 创建频道
@@ -43,7 +41,7 @@ public class Producer {
         channel.queueDeclare("new_queue", true, false, false, null);
 
         // 要发送的信息  
-        String message = "你好；xxx生产一个消息123！";
+        String message = "你好；xxx生产一个消息123333！";
         // 参数1：交换机名称,如果没有指定则使用默认Default Exchange
         // 参数2：路由key,简单模式可以传递队列名称  
         // 参数3：配置信息  

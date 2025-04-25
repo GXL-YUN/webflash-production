@@ -21,4 +21,19 @@ public class FileInfo extends BaseEntity {
     @Transient
     private String ablatePath;
 
+
+    @Column(columnDefinition = "VARCHAR(64) COMMENT '模版id'")
+    private String fdModelId;
+
+
+    @Column(columnDefinition = "VARCHAR(64) COMMENT '关键字'")
+    private String fdKey;
+
+
+    @Column(columnDefinition = "VARCHAR(64) COMMENT '模版类名'")
+    private String fdModelName;
+
+
+
+
 }

@@ -217,12 +217,19 @@ public class Page<T> {
         }
         filters.add(filter);
     }
-
+    //改变连接条件 默认and
     public void addFilter(String fieldName, SearchFilter.Operator operator, Object value) {
         if (!StringUtil.isNullOrEmpty(value)) {
             addFilter(SearchFilter.build(fieldName, operator, value));
         }
     }
+    //改变连接条件  or  and
+    public void addFilter(String fieldName, SearchFilter.Operator operator, Object value, SearchFilter.Join join) {
+        if (!StringUtil.isNullOrEmpty(value)) {
+            addFilter(SearchFilter.build(fieldName, operator, value));
+        }
+    }
+
 
     public void addFilter(String fieldName, Object val) {
         addFilter(fieldName, SearchFilter.Operator.EQ, val);

@@ -41,11 +41,11 @@ public class FileControllerUtil {
      * @return
      */
     @PostMapping
-    @RequiresPermissions(value = {Permission.FILE_UPLOAD})
-    public Object upload(@RequestPart("file") MultipartFile multipartFile) {
+   // @RequiresPermissions(value = {Permission.FILE_UPLOAD})
+    public Object upload(@RequestPart("file") MultipartFile multipartFile,@RequestPart("fdKey") String fdKey,@RequestPart("fdModelId") String  fdModelId) {
 
         try {
-            FileInfo fileInfo = fileService.upload(multipartFile);
+            FileInfo fileInfo = fileService.upload(multipartFile,fdKey,fdModelId);
             return Rets.success(fileInfo);
         } catch (Exception e) {
             logger.error("上传文件异常", e);

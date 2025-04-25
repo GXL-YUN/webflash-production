@@ -1,8 +1,9 @@
-package cn.good.yan.util;
+package cn.enilu.flash.api.mq.use.util;
 
-import com.rabbitmq.client.*;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
 
-import static cn.good.yan.util.C.*;
+import static cn.enilu.flash.api.mq.use.util.C.*;
 
 /**
  * 封装工具类 - 连接MQ
@@ -20,11 +21,11 @@ public class ConnectionUtil {
         // 设置服务地址
         factory.setHost(HOST_ADDRESS);
         // 端口
-        factory.setPort(5672);
+        factory.setPort(15672);
         //设置账号信息，用户名、密码、vhost
-        factory.setVirtualHost("/");
-        factory.setUsername("guest");
-        factory.setPassword("123456");
+        factory.setVirtualHost("gxl");
+        factory.setUsername("gxl");
+        factory.setPassword("gxl");
         // 通过工程获取连接
         Connection connection = factory.newConnection();
         return connection;

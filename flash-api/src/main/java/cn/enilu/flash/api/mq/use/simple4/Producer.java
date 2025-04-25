@@ -1,6 +1,6 @@
-package cn.good.yan.simple4;
+package cn.enilu.flash.api.mq.use.simple4;
 
-import cn.good.yan.util.ConnectionUtil;
+import cn.enilu.flash.api.mq.use.util.ConnectionUtil;
 import com.rabbitmq.client.BuiltinExchangeType;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;

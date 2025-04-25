@@ -39,8 +39,14 @@ public class ExcelReaderByField {
 
             // 查找目标字段所在的列索引
             int targetColumnIndex = -1;
+
+            /**
+             * 排除第一条数据
+             */
             Row headerRow = sheet.getRow(0); // 假设第一行为表头
             for (Cell cell : headerRow) {
+
+                String str=cell.getStringCellValue();
                 if (cell.getStringCellValue().equals(targetFieldName)) {
                     targetColumnIndex = cell.getColumnIndex();
                     break;

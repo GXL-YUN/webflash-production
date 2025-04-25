@@ -1,9 +1,9 @@
 debug: false
 spring:
   datasource:
-    url: jdbc:mysql://83.147.43.63:3306/webflash?useUnicode=true&characterEncoding=UTF8&useSSL=false
-    username: webflash
-    password: aFHptTpfJthTK3EE
+    url: jdbc:mysql://127.0.0.1:3306/webflash?useUnicode=true&characterEncoding=UTF8&useSSL=false
+    username: root
+    password: 123456
   jpa:
     hibernate:
       ddl-auto: update
@@ -18,3 +18,4 @@ spring:
 server:
   tomcat:
     basedir: /data/app/web-flash/runtime/tmp
+urlpath: /data/app/web-flash/runtime/tmp

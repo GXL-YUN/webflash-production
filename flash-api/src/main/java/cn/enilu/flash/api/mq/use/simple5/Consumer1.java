@@ -1,6 +1,6 @@
-package cn.good.yan.simple5;
+package cn.enilu.flash.api.mq.use.simple5;
 
-import cn.good.yan.util.ConnectionUtil;
+import cn.enilu.flash.api.mq.use.util.ConnectionUtil;
 import com.rabbitmq.client.*;
 
 import java.io.IOException;

@@ -1,6 +1,8 @@
 package cn.enilu.flash.api.controller;
 
+import cn.enilu.flash.api.model.UserWxml;
 import cn.enilu.flash.api.utils.ApiConstants;
+import cn.enilu.flash.bean.constant.factory.PageFactory;
 import cn.enilu.flash.bean.constant.state.ManagerStatus;
 import cn.enilu.flash.bean.core.ShiroUser;
 import cn.enilu.flash.bean.dto.LoginDto;
@@ -8,6 +10,7 @@ import cn.enilu.flash.bean.entity.system.User;
 import cn.enilu.flash.bean.vo.front.Ret;
 import cn.enilu.flash.bean.vo.front.Rets;
 import cn.enilu.flash.bean.vo.node.RouterMenu;
+import cn.enilu.flash.bean.vo.query.SearchFilter;
 import cn.enilu.flash.cache.TokenCache;
 import cn.enilu.flash.core.log.LogManager;
 import cn.enilu.flash.core.log.LogTaskFactory;
@@ -17,6 +20,8 @@ import cn.enilu.flash.service.system.MenuService;
 import cn.enilu.flash.service.system.QrcodeService;
 import cn.enilu.flash.service.system.UserService;
 import cn.enilu.flash.utils.*;
+import cn.enilu.flash.utils.factory.Page;
+import cn.enilu.kmss.bean.entity.AnnouncementBean;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import org.nutz.json.Json;
@@ -30,10 +35,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * AccountController
@@ -56,6 +58,34 @@ public class AccountController extends BaseController {
     QrcodeService qrcodeService;
 
 
+    /*新增用户，更新用户
+     */
+    @PostMapping(value = "/verifyUser")
+    public Object verifyUser(@RequestBody UserWxml userWxml) {
+
+        //根据唯一编码查询数据
+        Page<User> page = new PageFactory<User>().defaultPage();
+        page.addFilter("fdWxmlCode", SearchFilter.Operator.EQ, userWxml.getWxmlCode(), SearchFilter.Join.and);
+        page = userService.queryPage(page);
+        //roomListService.queryIndexNews();
+        List<User> list = page.getRecords();
+        //判断是否存在
+        if(list.isEmpty()&&list.size()>0){
+                return Rets.success(list);
+        }else{
+            User user=new User();
+            user.setAccount(userWxml.getFdName());//账号
+            user.setFdWxmlCode(userWxml.getWxmlCode());//微信code
+            user.setPassword("123456");//默认密码
+            user.setPhone(userWxml.getFdPhone());//手机号
+            user.setEmail(userWxml.getFdEmail());//邮箱
+            List<User> listUser =new ArrayList<User>();
+            listUser.add(user);
+            userService.insert(user);
+            return Rets.success(null);
+        }
+    }
+
     /**
      * 用户登录<br>
      * 1，验证没有注册<br>
@@ -71,10 +101,10 @@ public class AccountController extends BaseController {
             //1,
             String password = loginDto.getPassword();
             String userName = loginDto.getUsername();
-            password = CryptUtil.desEncrypt(password);
+            //password = CryptUtil.desEncrypt(password);
             User user = userService.findByAccountForLogin(userName);
             if (user == null) {
-                return Rets.failure("用户名或密码错误");
+                return Rets.failure("用户名不存在");
             }
             if (user.getStatus() == ManagerStatus.FREEZED.getCode()) {
                 return Rets.failure("用户已冻结");

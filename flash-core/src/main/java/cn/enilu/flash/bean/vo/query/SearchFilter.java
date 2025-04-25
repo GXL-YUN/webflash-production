@@ -13,6 +13,7 @@ import java.util.Map;
  */
 public class SearchFilter {
     public enum Operator {
+        //等于（EQ）、模糊匹配（LIKE）、大于（GT）、小于（LT）、大于等于（GTE）、小于等于（LTE）以及不等于（NEQ）
         EQ, NE, LIKE, LIKEL, LIKER, GT, LT, GTE, LTE, IN, NOTIN, ISNULL, ISNOTNULL, BETWEEN
     }
 
@@ -21,6 +22,8 @@ public class SearchFilter {
     }
 
     public Join join = Join.and;
+
+
     public String fieldName;
     public Object value;
     public Operator operator;

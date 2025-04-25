@@ -54,6 +54,16 @@ public class UserService extends BaseService<User, Long, UserRepository> {
         return user;
     }
 
+
+    /**
+     * 根据微信code查询用户
+     */
+    public User findByFdWxmlCode(String phone) {
+        User user = userRepository.findByPhone(phone);
+        cacheDao.hset(CacheDao.SESSION, phone, user);
+        return user;
+    }
+
     @Override
     public User update(User record) {
         User user = super.update(record);

@@ -1,4 +1,4 @@
-package cn.enilu.flash.api.utils;
+package cn.enilu.util;
 
 import java.sql.Timestamp;
 import java.text.ParseException;

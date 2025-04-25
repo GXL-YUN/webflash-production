@@ -98,6 +98,8 @@ public class ShiroConfig {
         filterRuleMap.put("/druid/**", "anon");
         //登录，二维码登录，登出不拦截
         filterRuleMap.put("/index", "anon");
+
+        filterRuleMap.put("/room/**", "anon");
         filterRuleMap.put("/account/login", "anon");
         filterRuleMap.put("/account/qrcode/**", "anon");
         filterRuleMap.put("/logout", "logout");

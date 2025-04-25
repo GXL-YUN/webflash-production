@@ -1,10 +1,8 @@
-package cn.good.yan.simple1;
+package cn.enilu.flash.api.mq.use.simple1;
 
 import com.rabbitmq.client.*;
 
 import java.io.IOException;
-
-import static cn.good.yan.util.C.*;
 
 
 /**
