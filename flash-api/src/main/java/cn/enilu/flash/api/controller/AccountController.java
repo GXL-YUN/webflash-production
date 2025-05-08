@@ -62,7 +62,7 @@ public class AccountController extends BaseController {
      */
     @PostMapping(value = "/verifyUser")
     public Object verifyUser(@RequestBody UserWxml userWxml) {
-
+//测试环境
         //根据唯一编码查询数据
         Page<User> page = new PageFactory<User>().defaultPage();
         page.addFilter("fdWxmlCode", SearchFilter.Operator.EQ, userWxml.getWxmlCode(), SearchFilter.Join.and);
