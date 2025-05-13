@@ -1,5 +1,7 @@
 package cn.gui.app.management.main;
 
+import cn.enilu.flash.api.utils.StringUtil;
+import cn.enilu.flash.utils.DateUtil;
 import cn.gui.app.management.bean.Task;
 import cn.gui.app.management.dao.TaskDAO;
 
@@ -10,6 +12,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +24,7 @@ public class MainFrame extends JFrame {
     private JTextField taskNameField;
     private JTextArea descriptionArea;
 
+    private JTextArea descriptionAreaAdd;
     private JComboBox<String> comboBox;
 
     public MainFrame() {
@@ -67,10 +71,13 @@ public class MainFrame extends JFrame {
                             c.setBackground(new Color(255, 255, 200)); // 浅黄色
                             break;
                         case "进行中":
-                            c.setBackground(new Color(200, 255, 200)); // 浅绿色
+                            c.setBackground(new Color(220, 220, 220)); // 浅灰色
                             break;
                         case "已完成":
-                            c.setBackground(new Color(220, 220, 220)); // 浅灰色
+                            c.setBackground(new Color(200, 255, 200)); // 浅绿色
+                            break;
+                        case "任务暂停":
+                            c.setBackground(new Color(255, 0, 0)); // 红色
                             break;
                         default:
                             c.setBackground(table.getBackground());
@@ -104,11 +111,26 @@ public class MainFrame extends JFrame {
 
 
 
-        String[] items = {"全部","已完成", "未开始", "进行中"};
+        String[] items = {"全部","已完成", "未开始", "进行中","任务暂停"};
        comboBox = new JComboBox<>(items);
         gbc.gridx = 3;
         gbc.gridwidth = 3;
         detailPanel.add(comboBox, gbc);
+
+
+
+
+        JButton collectStop = new JButton("暂停");
+        collectStop.addActionListener(e -> updateSelectedTaskStop("STOPETED","暂停任务"));
+        gbc.gridx = 5;
+        detailPanel.add(collectStop, gbc);
+
+
+
+        JButton collectStopChange = new JButton("开启");
+        collectStopChange.addActionListener(e -> updateSelectedTaskStop("IN_PROGRESS","任务从新开启"));
+        gbc.gridx = 7;
+        detailPanel.add(collectStopChange, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -131,8 +153,31 @@ public class MainFrame extends JFrame {
 
         JButton collect = new JButton("汇总");
         collect.addActionListener(e -> getNewDate());
-        gbc.gridx = 4;
+        gbc.gridx = 5;
         detailPanel.add(collect, gbc);
+
+
+
+        //追加数据
+
+
+
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 1;
+        detailPanel.add(new JLabel("内容追加:"), gbc);
+
+        gbc.gridx = 1;
+        gbc.gridwidth = 2;
+        gbc.gridheight = 2;
+        descriptionAreaAdd = new JTextArea(3, 60);
+        descriptionAreaAdd.setLineWrap(true);
+        detailPanel.add(new JScrollPane(descriptionAreaAdd), gbc);
+
+
+
+
+
 
         // 按钮面板
         JPanel buttonPanel = new JPanel(new GridLayout(1, 5, 5, 5));
@@ -174,6 +219,43 @@ public class MainFrame extends JFrame {
         });
 
         add(mainPanel);
+    }
+
+    /**
+     * 任务暂停
+     */
+    private void updateSelectedTaskStop(String start,String massage) {{
+        int selectedRow = taskTable.getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "请先选择一个任务", "提示", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String taskName = taskNameField.getText().trim();
+        if (taskName.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "任务名称不能为空", "错误", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int taskId = (int) tableModel.getValueAt(selectedRow, 0);
+        String description="";
+        if(StringUtil.isNotNull(descriptionAreaAdd.getText().trim())){
+            description = descriptionArea.getText().trim()+"\n"+ DateUtil.getTime(new Date())+":"+descriptionAreaAdd.getText().trim();
+        }else{
+            description = descriptionArea.getText().trim();
+        }
+
+        Task task = new Task(taskName, description);
+        task.setId(taskId);
+        task.setStatus(start);
+        if (taskDAO.updateTask(task)) {
+            clearFields();
+            loadTasks();
+            JOptionPane.showMessageDialog(this, massage+"成功", "成功", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, massage+"失败", "错误", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     }
 
     /**
@@ -244,6 +326,7 @@ public class MainFrame extends JFrame {
             case "NOT_STARTED": return "未开始";
             case "IN_PROGRESS": return "进行中";
             case "COMPLETED": return "已完成";
+            case "STOPETED": return "任务暂停";
             default: return status;
         }
     }
@@ -337,12 +420,18 @@ public class MainFrame extends JFrame {
         }
 
         int taskId = (int) tableModel.getValueAt(selectedRow, 0);
-        String description = descriptionArea.getText().trim();
+        String description="";
+        if(StringUtil.isNotNull(descriptionAreaAdd.getText().trim())){
+            description = descriptionArea.getText().trim()+"\n"+ DateUtil.getTime(new Date())+":"+descriptionAreaAdd.getText().trim();
+        }else{
+             description = descriptionArea.getText().trim();
+        }
 
         Task task = new Task(taskName, description);
         task.setId(taskId);
 
         if (taskDAO.updateTask(task)) {
+            clearFields();
             loadTasks();
             JOptionPane.showMessageDialog(this, "任务更新成功", "成功", JOptionPane.INFORMATION_MESSAGE);
         } else {
@@ -376,5 +465,6 @@ public class MainFrame extends JFrame {
     private void clearFields() {
         taskNameField.setText("");
         descriptionArea.setText("");
+        descriptionAreaAdd.setText("");
     }
 }

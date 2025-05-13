@@ -154,6 +154,7 @@ public class TaskDAO {
             map.put("未开始","NOT_STARTED");
             map.put("已完成","COMPLETED");
             map.put("进行中","IN_PROGRESS");
+            map.put("任务暂停","STOPETED");
 
             if(!"全部".equals(state)){
 
@@ -206,13 +207,14 @@ public class TaskDAO {
     }
 
     public boolean updateTask(Task task) {
-        String sql = "UPDATE tasks SET task_name = ?, description = ? WHERE id = ?";
+        String sql = "UPDATE tasks SET task_name = ?, description = ?,status = ? WHERE id = ?";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, task.getTaskName());
             pstmt.setString(2, task.getDescription());
-            pstmt.setInt(3, task.getId());
+            pstmt.setInt(4, task.getId());
+            pstmt.setString(3, task.getStatus());
 
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
