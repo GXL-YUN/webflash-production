@@ -1,3 +1,5 @@
+package cn.enilu.util.tencent;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -78,6 +80,6 @@ public class TencentDocFetcher {
     // 需要实现获取QQ登录Cookie的方法
     private static String getQQCookie() {
         // 实际项目中应该通过登录流程获取或从配置读取
-        return "你的QQ登录Cookie";
+        return "RK=n6fQQhvmY4; ptcz=4ff38aaa73cf35b9db4943cb354ebbec03cda4487ac6aa991f9719073be768a5; low_login_enable=1; _clck=1wp0p04|1|fwn|0; yyb_muid=28D458B3459C63EC3AEB4C3D447662FA; traceid=c1eb6c1990; TOK=c1eb6c19900ed328; hashkey=c1eb6c19; backup_cdn_domain=docs.gtimg.com; fingerprint=9e68f8c480134da3b35fa4f18092d75040; uid=144115231536952723; uid_key=EOP1mMQHGixzbkRxTnEvMGZQdUVCMFdUc0dHZFJ0Q1ZqRFpOcFF2S21wVnptVktCRDlRPSKBAmV5SmhiR2NpT2lKQlEwTkJURWNpTENKMGVYQWlPaUpLVjFRaWZRLmV5SlVhVzU1U1VRaU9pSXhORFF4TVRVeU16RTFNelk1TlRJM01qTWlMQ0pXWlhJaU9pSXhJaXdpUkc5dFlXbHVJam9pYzJGaGMxOTBiMk1pTENKU1ppSTZJbWRzWkhWMVNpSXNJbVY0Y0NJNk1UYzFORFl4TmpNd01Dd2lhV0YwSWpveE56VXlNREkwTXpBd0xDSnBjM01pT2lKVVpXNWpaVzUwSUVSdlkzTWlmUS5McXVMMmxVTUlmN2o1elNmZmJwNTNBcmlPT0p5WW5MemdJQlI0cXdySW9BKOyj1cQG; utype=wx; wx_appid=wx02b8ff0031cec148; openid=oy6SixCYIiW9CRAcCF74Mt90ERxA; access_token=94_b36pOlRHHZ_ndXg4xDzsYeoc16xf1U0mlR4tfyIHYY5uokH9bVWx7NxpUe7ZyMzYuB4YESrcXcCKqHXHi3tb6avp6VSd0_yrp6vrCXyp5kU; refresh_token=94_-AkCHLlIgU4kOjkNFOcsVMVG06VSMzOR4N0y91wbTGnotIxFirsh81GdnAszv8X5b6IiYMntduJbME_baJVFbxSjNyNLf03s5UFwsj0qXmc; env_id=gray-pct25; gray_user=true; DOC_SID=3ffe67b7f5f74c79b08aec1ae5e9dcff8d9fe1cfc8ae41158e3c4a529a47bbfa; SID=3ffe67b7f5f74c79b08aec1ae5e9dcff8d9fe1cfc8ae41158e3c4a529a47bbfa; optimal_cdn_domain=docs2.gtimg.com; dark_mode_setting=system; loginTime=1752135130686";
     }
 }

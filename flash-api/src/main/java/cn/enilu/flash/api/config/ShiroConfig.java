@@ -89,6 +89,7 @@ public class ShiroConfig {
         filterRuleMap.put("/account/qrcode/getRet", "anon");
         filterRuleMap.put("/account/getUser", "anon");
         filterRuleMap.put("/account/isLogin", "anon");
+        filterRuleMap.put("/account/*", "anon");
         filterRuleMap.put("/fileUtil/**", "anon");
         filterRuleMap.put("/test/**", "anon");
         filterRuleMap.put("/message/sendYj", "anon");
@@ -99,6 +100,7 @@ public class ShiroConfig {
         //登录，二维码登录，登出不拦截
         filterRuleMap.put("/index", "anon");
 
+        filterRuleMap.put("/rabbit/*", "anon");
         filterRuleMap.put("/room/**", "anon");
         filterRuleMap.put("/account/login", "anon");
         filterRuleMap.put("/account/qrcode/**", "anon");

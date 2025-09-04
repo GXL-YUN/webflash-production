@@ -24,6 +24,7 @@ import cn.enilu.flash.utils.factory.Page;
 import cn.enilu.kmss.bean.entity.AnnouncementBean;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
+import org.nutz.aop.interceptor.async.Async;
 import org.nutz.json.Json;
 import org.nutz.mapl.Mapl;
 import org.slf4j.Logger;
@@ -33,6 +34,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.*;
@@ -61,22 +63,26 @@ public class AccountController extends BaseController {
     /*新增用户，更新用户
      */
     @PostMapping(value = "/verifyUser")
-    public Object verifyUser(@RequestBody UserWxml userWxml) {
-//测试环境
+    public Object verifyUser(@RequestBody @Valid UserWxml userWxml) {
         //根据唯一编码查询数据
         Page<User> page = new PageFactory<User>().defaultPage();
-        page.addFilter("fdWxmlCode", SearchFilter.Operator.EQ, userWxml.getWxmlCode(), SearchFilter.Join.and);
+        page.addFilter("phone", SearchFilter.Operator.EQ, userWxml.getFdPhone(), SearchFilter.Join.and);
         page = userService.queryPage(page);
         //roomListService.queryIndexNews();
         List<User> list = page.getRecords();
         //判断是否存在
-        if(list.isEmpty()&&list.size()>0){
-                return Rets.success(list);
+        if(list.isEmpty()||list.size()>0){
+                return Rets.failure("手机号重复");
         }else{
             User user=new User();
             user.setAccount(userWxml.getFdName());//账号
             user.setFdWxmlCode(userWxml.getWxmlCode());//微信code
-            user.setPassword("123456");//默认密码
+
+            String salt= RandomUtil.getRandomString(5);
+            user.setSalt(salt);
+            user.setPassword(MD5.md5("12345", salt));//默认密码
+            user.setStatus(1);
+            user.setRoleid(",");
             user.setPhone(userWxml.getFdPhone());//手机号
             user.setEmail(userWxml.getFdEmail());//邮箱
             List<User> listUser =new ArrayList<User>();
@@ -85,6 +91,10 @@ public class AccountController extends BaseController {
             return Rets.success(null);
         }
     }
+
+
+
+
 
     /**
      * 用户登录<br>
@@ -101,7 +111,7 @@ public class AccountController extends BaseController {
             //1,
             String password = loginDto.getPassword();
             String userName = loginDto.getUsername();
-            //password = CryptUtil.desEncrypt(password);
+            password = CryptUtil.desEncrypt(password);
             User user = userService.findByAccountForLogin(userName);
             if (user == null) {
                 return Rets.failure("用户名不存在");
@@ -131,6 +141,52 @@ public class AccountController extends BaseController {
         return Rets.failure("登录时失败");
     }
 
+
+    /**
+     * 根据手机号注册登录账号
+     * @return
+     */
+
+    @PostMapping(value = "/loginWxml")
+    public Object loginWxml(@RequestBody @Valid UserWxml loginDto) {
+        try {
+            //1,
+            String fdPassword = loginDto.getFdPassword();
+            String fdPhone = loginDto.getFdPhone();
+            //password = CryptUtil.desEncrypt(password);
+            User user = userService.findByPhone(fdPhone);
+            if (user == null) {
+                return Rets.failure("用户不存在");
+            }
+            if (user.getStatus() == ManagerStatus.FREEZED.getCode()) {
+                return Rets.failure("用户已冻结");
+            } else if (user.getStatus() == ManagerStatus.DELETED.getCode()) {
+                return Rets.failure("用户已删除");
+            }
+            String passwdMd5 = MD5.md5(fdPassword, user.getSalt());
+            //2,
+            if (!user.getPassword().equals(passwdMd5)) {
+                return Rets.failure("用户名或密码错误");
+            }
+            String token = userService.loginForToken(user);
+            ShiroFactroy.me().shiroUser(token, user);
+            Map<String, String> result = new HashMap<>(1);
+            result.put("token", token);
+
+            //判断是否是管理员
+            if(user.getAccount().equals("admin")){
+                result.put("isAdmin", "true");
+            }else{
+                result.put("idAdmin", "false");
+            }
+            LogManager.me().executeLog(LogTaskFactory.loginLog(user.getId(), HttpUtil.getIp()));
+            return Rets.success(result);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+        return Rets.failure("登录时失败");
+    }
+
     @GetMapping(value = "/info")
     public Object info() {
         HttpServletRequest request = HttpUtil.getRequest();
@@ -146,9 +202,9 @@ public class AccountController extends BaseController {
                 //该用户可能被删除
                 return Rets.expire();
             }
-            //if (StringUtil.isEmpty(user.getRoleid())) {
-           //     return Rets.failure("该用户未配置权限");
-            //}
+            if (StringUtil.isEmpty(user.getRoleid())) {
+                return Rets.failure("该用户未配置权限");
+            }
             ShiroUser shiroUser = tokenCache.getUser(getToken());
             Map map = Maps.newHashMap("name", user.getName(), "role", "admin", "roles", shiroUser.getRoleCodes());
             List<RouterMenu> list = menuService.getSideBarMenus(shiroUser.getRoleList());

@@ -15,13 +15,14 @@ import java.util.Map;
 
 public class TaskDAO {
     public boolean addTask(Task task) {
-        String sql = "INSERT INTO tasks(task_name, description, status) VALUES(?, ?, ?)";
+        String sql = "INSERT INTO tasks(task_name, description, status,fd_type) VALUES(?, ?, ?,?)";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             pstmt.setString(1, task.getTaskName());
             pstmt.setString(2, task.getDescription());
             pstmt.setString(3, task.getStatus());
+            pstmt.setString(4, task.getFdTYpe());
 
             int affectedRows = pstmt.executeUpdate();
             if (affectedRows > 0) {
@@ -132,7 +133,7 @@ public class TaskDAO {
 
                 task.setTotalMinutes(rs.getInt("total_minutes"));
                 task.setStatus(rs.getString("status"));
-
+                task.setFdTYpe(rs.getString("fd_type"));
                 tasks.add(task);
             }
         } catch (SQLException e) {
@@ -141,7 +142,7 @@ public class TaskDAO {
         return tasks;
     }
 
-    public List<Task> getByName(String name,String state) {
+    public List<Task> getByName(String name,String state ,String fdType) {
         List<Task> tasks = new ArrayList<>();
         StringBuilder hql = new StringBuilder("SELECT * FROM tasks where  1=1");
         if(StringUtil.isNotNull(name) ){
@@ -161,6 +162,11 @@ public class TaskDAO {
                 hql.append(" and status= '"+map.get(state)+"'");
             }
 
+        }
+
+
+        if(StringUtil.isNotNull(fdType) ){
+                hql.append(" and fd_type= '"+fdType+"'");
         }
 
         hql.append(" ORDER BY create_time DESC");

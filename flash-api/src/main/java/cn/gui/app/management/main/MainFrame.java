@@ -4,6 +4,7 @@ import cn.enilu.flash.api.utils.StringUtil;
 import cn.enilu.flash.utils.DateUtil;
 import cn.gui.app.management.bean.Task;
 import cn.gui.app.management.dao.TaskDAO;
+import cn.gui.app.management.util.BasicAuthHttpClientJackson;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -24,6 +25,9 @@ public class MainFrame extends JFrame {
     private JTextField taskNameField;
     private JTextArea descriptionArea;
 
+
+
+    private  JComboBox<String> comboBoxs;
     private JTextArea descriptionAreaAdd;
     private JComboBox<String> comboBox;
 
@@ -98,15 +102,20 @@ public class MainFrame extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
-
         gbc.gridx = 0;
         gbc.gridy = 0;
         detailPanel.add(new JLabel("任务名称:"), gbc);
 
         gbc.gridx = 1;
-        gbc.gridwidth = 2;
+        gbc.gridwidth = 1;
         taskNameField = new JTextField(60);
         detailPanel.add(taskNameField, gbc);
+
+        String[] item = {"项目","项目", "仙姑", "项目","项目"};
+        comboBoxs = new JComboBox<>(item);
+        gbc.gridx = 2;
+        gbc.gridwidth = 1;
+        detailPanel.add(comboBoxs, gbc);
 
 
 
@@ -114,7 +123,7 @@ public class MainFrame extends JFrame {
         String[] items = {"全部","已完成", "未开始", "进行中","任务暂停"};
        comboBox = new JComboBox<>(items);
         gbc.gridx = 3;
-        gbc.gridwidth = 3;
+        gbc.gridwidth = 1;
         detailPanel.add(comboBox, gbc);
 
 
@@ -152,7 +161,13 @@ public class MainFrame extends JFrame {
 
 
         JButton collect = new JButton("汇总");
-        collect.addActionListener(e -> getNewDate());
+        collect.addActionListener(e -> {
+            try {
+                getNewDate();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
         gbc.gridx = 5;
         detailPanel.add(collect, gbc);
 
@@ -245,7 +260,16 @@ public class MainFrame extends JFrame {
             description = descriptionArea.getText().trim();
         }
 
-        Task task = new Task(taskName, description);
+
+
+
+
+
+
+
+
+
+        Task task = new Task(taskName, description,false,"");
         task.setId(taskId);
         task.setStatus(start);
         if (taskDAO.updateTask(task)) {
@@ -261,18 +285,22 @@ public class MainFrame extends JFrame {
     /**
      * 获取今日日报
      */
-    private void getNewDate() {
+    private void getNewDate() throws Exception {
         List<Task> tasks = taskDAO.getNewDate();
         StringBuilder date=new StringBuilder("");
         Map<String,String> map=new HashMap<>();
         map.put("NOT_STARTED","未开始");
         map.put("COMPLETED","已完成");
         map.put("IN_PROGRESS","进行中");
+        map.put("STOPETED","任务暂停");
         for (Task task:tasks){
             date.append("任务名称："+task.getTaskName()+" 任务描述："+task.getDescription().replaceAll("\\s*|\t|\r|\n", "")+" 是否完成："+map.get(task.getStatus())+"\n");
         }
+
+        BasicAuthHttpClientJackson.create(tasks);
         descriptionArea.setText(date.toString());
-        System.out.println("");
+        JOptionPane.showMessageDialog(this, "任务发送成功", "成功", JOptionPane.YES_OPTION);
+        return;
     }
 
 
@@ -301,7 +329,7 @@ public class MainFrame extends JFrame {
         String taskName = taskNameField.getText().trim();
 
         String selected = (String) comboBox.getSelectedItem();
-       List<Task> tasks = taskDAO.getByName(taskName,selected.trim());
+       List<Task> tasks = taskDAO.getByName(taskName,selected.trim(),"");
         tableModel.setRowCount(0);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -344,12 +372,15 @@ public class MainFrame extends JFrame {
         String taskName = taskNameField.getText().trim();
         String description = descriptionArea.getText().trim();
 
+
+        //获取项目类别
+
         if (taskName.isEmpty()) {
             JOptionPane.showMessageDialog(this, "任务名称不能为空", "错误", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        Task task = new Task(taskName, description);
+        Task task = new Task(taskName, description,true,"");
 
         if (taskDAO.addTask(task)) {
             loadTasks();
@@ -422,12 +453,12 @@ public class MainFrame extends JFrame {
         int taskId = (int) tableModel.getValueAt(selectedRow, 0);
         String description="";
         if(StringUtil.isNotNull(descriptionAreaAdd.getText().trim())){
-            description = descriptionArea.getText().trim()+"\n"+ DateUtil.getTime(new Date())+":"+descriptionAreaAdd.getText().trim();
+            description = descriptionArea.getText().trim()+"\n"+ DateUtil.formatDate(new Date(),"yyyy-MM-dd")+":"+descriptionAreaAdd.getText().trim();
         }else{
              description = descriptionArea.getText().trim();
         }
 
-        Task task = new Task(taskName, description);
+        Task task = new Task(taskName, description,false,"");
         task.setId(taskId);
 
         if (taskDAO.updateTask(task)) {

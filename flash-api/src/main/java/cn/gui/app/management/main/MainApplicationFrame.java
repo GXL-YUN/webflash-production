@@ -2,34 +2,52 @@ package cn.gui.app.management.main;
 
 import cn.enilu.flash.api.utils.StringUtil;
 import cn.enilu.flash.utils.DateUtil;
+import cn.gui.app.management.bean.Annotation;
+import cn.gui.app.management.bean.ProjectBean;
 import cn.gui.app.management.bean.Task;
+import cn.gui.app.management.bean.TreeNodeData;
+import cn.gui.app.management.dao.AnnotationDao;
+import cn.gui.app.management.dao.ProjctDao;
 import cn.gui.app.management.dao.TaskDAO;
 import cn.gui.app.management.util.BasicAuthHttpClientJackson;
 import cn.gui.app.management.util.HttpClientUtil;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.swing.*;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.*;
 import java.awt.*;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 import javax.swing.table.*;
 
 public class MainApplicationFrame extends JFrame {
 
     private TaskDAO taskDAO;
+
+    private AnnotationDao annotationDao;
     private JTable taskTable;
+    private JTable   annotationtaskTable;
+    //任务
     private DefaultTableModel tableModel;
+
+    //批注
+    private DefaultTableModel annotationtableModel;
     private JTextField taskNameField;
     private JTextArea descriptionArea;
     private  JComboBox<String> comboBoxs;
     private JTextArea descriptionAreaAdd;
     private JComboBox<String> comboBox;
+
+    //当前所选项目id
+    private String projectId;
+
     public MainApplicationFrame() {
         taskDAO = new TaskDAO();
+        annotationDao=new AnnotationDao();
         // 设置窗口标题和大小
         setTitle("项目管理系统");
         setSize(1000, 800);
@@ -58,37 +76,64 @@ public class MainApplicationFrame extends JFrame {
         container.add(rightPanel, BorderLayout.EAST);
 
         // 5. 底部表格面板
-        JScrollPane bottomPanel = createBottomTablePanel();
+        JPanel bottomPanel = createBottomTablePanel();
 
         container.add(bottomPanel, BorderLayout.SOUTH);
         loadTasks();
-    }
 
+        // 表格选择监听器
+        taskTable.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                int selectedRow = taskTable.getSelectedRow();
+                if (selectedRow >= 0) {
+                    displayTaskDetails(selectedRow);
+
+                }
+            }
+        });
+    }
     // 创建左侧目录面板（保持不变）
     private JPanel createLeftDirectoryPanel() {
-        getProject();
-
+        //拉取项目
+       //getProject();
+        ProjctDao dao=new ProjctDao();
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setPreferredSize(new Dimension(200, 0));
-        panel.setBorder(BorderFactory.createTitledBorder("项目目录"));
+        panel.setPreferredSize(new Dimension(300, 0));
+        panel.setBorder(BorderFactory.createTitledBorder("所有项目"));
 
+
+        //查询项目路径
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("项目根目录");
-        DefaultMutableTreeNode srcNode = new DefaultMutableTreeNode("src");
-        DefaultMutableTreeNode resNode = new DefaultMutableTreeNode("resources");
-        DefaultMutableTreeNode docNode = new DefaultMutableTreeNode("documents");
 
-        root.add(srcNode);
-        root.add(resNode);
-        root.add(docNode);
 
-        srcNode.add(new DefaultMutableTreeNode("main"));
-        srcNode.add(new DefaultMutableTreeNode("test"));
-        resNode.add(new DefaultMutableTreeNode("images"));
-        resNode.add(new DefaultMutableTreeNode("config"));
 
+        List<ProjectBean> list=dao.getAllTasks("1");
+
+        for (ProjectBean projrctBean:list){
+
+            TreeNodeData tst=new TreeNodeData(projrctBean.getFdName(),projrctBean.getFdId());
+            DefaultMutableTreeNode srcNode = new DefaultMutableTreeNode(tst);
+            //查询项目计划   查询一级二级三级
+            root.add(srcNode);
+        }
         JTree tree = new JTree(root);
-        JScrollPane scrollPane = new JScrollPane(tree);
+        // 2. 添加选中监听器
+        tree.addTreeSelectionListener(new TreeSelectionListener() {
+            @Override
+            public void valueChanged(TreeSelectionEvent e) {
+                // 获取选中的节点
+                DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode)
+                        tree.getLastSelectedPathComponent();
 
+                if (selectedNode != null) {
+                    projectId=((TreeNodeData)selectedNode.getUserObject()).getRealValue();
+                    System.out.println("选中节点: " + selectedNode.getUserObject());
+                    System.out.println("选中节点: "+projectId );
+                    clearFields();
+                }
+            }
+        });
+        JScrollPane scrollPane = new JScrollPane(tree);
         panel.add(scrollPane, BorderLayout.CENTER);
         return panel;
     }
@@ -97,126 +142,55 @@ public class MainApplicationFrame extends JFrame {
     private JPanel createTopOperationPanel() {
         // 任务详情面板
         JPanel detailPanel = new JPanel(new GridBagLayout());
-        detailPanel.setBorder(BorderFactory.createTitledBorder("任务详情"));
 
-        detailPanel.setPreferredSize(new Dimension(100, 200));
+        detailPanel.setBorder(BorderFactory.createTitledBorder("任务详情"));
+        detailPanel.setPreferredSize(new Dimension(1000, 80));
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridx = 0;
+        //gbc.insets = new Insets(10, 10, 10, 10);
+        //gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = 2;
         gbc.gridy = 0;
         detailPanel.add(new JLabel("任务名称:"), gbc);
-
-        gbc.gridx = 1;
-        gbc.gridwidth = 1;
-        taskNameField = new JTextField(80);
+        gbc.gridx = 4;
+       // gbc.gridwidth = 1;
+        taskNameField = new JTextField(60);
         detailPanel.add(taskNameField, gbc);
-
-        String[] item = {"项目","项目", "仙姑", "项目","项目"};
-        comboBoxs = new JComboBox<>(item);
-        gbc.gridx = 2;
-        gbc.gridwidth = 1;
-        detailPanel.add(comboBoxs, gbc);
-
-
-
-
-        String[] items = {"全部","已完成", "未开始", "进行中","任务暂停"};
-        comboBox = new JComboBox<>(items);
-        gbc.gridx = 3;
-        gbc.gridwidth = 1;
-        detailPanel.add(comboBox, gbc);
-
-
-
-
-        JButton collectStop = new JButton("暂停");
-        collectStop.addActionListener(e -> updateSelectedTaskStop("STOPETED","暂停任务"));
-        gbc.gridx = 5;
-        detailPanel.add(collectStop, gbc);
-
-
-
-        JButton collectStopChange = new JButton("开启");
-        collectStopChange.addActionListener(e -> updateSelectedTaskStop("IN_PROGRESS","任务从新开启"));
-        gbc.gridx = 7;
-        detailPanel.add(collectStopChange, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.gridwidth = 1;
-        detailPanel.add(new JLabel("描述:"), gbc);
-
-        gbc.gridx = 1;
-        gbc.gridwidth = 2;
-        gbc.gridheight = 2;
-        descriptionArea = new JTextArea(5, 60);
-        descriptionArea.setLineWrap(true);
-        detailPanel.add(new JScrollPane(descriptionArea), gbc);
-
 
         JButton select = new JButton("查询");
         select.addActionListener(e -> select());
-        gbc.gridx = 3;
+        gbc.gridx = 6;
         detailPanel.add(select, gbc);
 
 
-        JButton collect = new JButton("汇总");
-        collect.addActionListener(e -> {
-            try {
-                getNewDate();
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-        gbc.gridx = 5;
-        detailPanel.add(collect, gbc);
-        //追加数据
+        //第二行
+        String[] items = {"全部","已完成", "未开始", "进行中","任务暂停"};
+        comboBox = new JComboBox<>(items);
+        gbc.gridy = 0;
         gbc.gridx = 0;
-        gbc.gridy = 3;
-        gbc.gridwidth = 1;
-        detailPanel.add(new JLabel("内容追加:"), gbc);
-
-        gbc.gridx = 1;
-        gbc.gridwidth = 2;
-        gbc.gridheight = 2;
-        descriptionAreaAdd = new JTextArea(3, 60);
-        descriptionAreaAdd.setLineWrap(true);
-        detailPanel.add(new JScrollPane(descriptionAreaAdd), gbc);
-
-/*
-
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        panel.setBorder(BorderFactory.createTitledBorder("操作栏"));
-        panel.setPreferredSize(new Dimension(100, 50));
-        JButton newBtn = new JButton("新建");
-        JButton openBtn = new JButton("打开");
-        JButton saveBtn = new JButton("保存");
-        JButton deleteBtn = new JButton("删除");
-        JButton refreshBtn = new JButton("刷新");
-*/
-
-/*        panel.add(newBtn);
-        panel.add(openBtn);
-        panel.add(saveBtn);
-        panel.add(deleteBtn);
-        panel.add(refreshBtn);*/
-       // panel.add(detailPanel);
-
+       // gbc.gridwidth = 1;
+        detailPanel.add(comboBox, gbc);
         return detailPanel;
     }
 
     // 创建中部内容面板（保持不变）
     private JPanel createCenterContentPanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createTitledBorder("内容区"));
+        //修改成针对每个任务做的回复每天
 
-        JTextArea contentArea = new JTextArea();
-        contentArea.setFont(new Font("宋体", Font.PLAIN, 14));
-        JScrollPane scrollPane = new JScrollPane(contentArea);
+        panel.setBorder(BorderFactory.createTitledBorder("任务详情描述"));
+
+
+        descriptionArea= new JTextArea(10,60);
+        descriptionArea.setFont(new Font("宋体", Font.PLAIN, 15));
+        JScrollPane scrollPane = new JScrollPane(descriptionArea);
 
         panel.add(scrollPane, BorderLayout.CENTER);
         return panel;
+    }
+
+    @Override
+    public void setDefaultCloseOperation(int operation) {
+        super.setDefaultCloseOperation(operation);
     }
 
     // 创建右侧按钮面板（保持不变）
@@ -226,42 +200,58 @@ public class MainApplicationFrame extends JFrame {
         panel.setBorder(BorderFactory.createTitledBorder("操作按钮"));
         panel.setPreferredSize(new Dimension(150, 0));
 
-        JButton btn1 = new JButton("属性");
-        JButton btn2 = new JButton("设置");
-        JButton btn3 = new JButton("导出");
-        JButton btn4 = new JButton("导入");
-        JButton btn5 = new JButton("帮助");
 
-        btn1.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btn2.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btn3.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btn4.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btn5.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        Dimension btnSize = new Dimension(120, 30);
-        btn1.setPreferredSize(btnSize);
-        btn2.setPreferredSize(btnSize);
-        btn3.setPreferredSize(btnSize);
-        btn4.setPreferredSize(btnSize);
-        btn5.setPreferredSize(btnSize);
+        // 按钮面板
+        JPanel buttonPanel = new JPanel(new GridLayout(10, 1, 5, 5));
 
-        panel.add(Box.createVerticalStrut(10));
-        panel.add(btn1);
-        panel.add(Box.createVerticalStrut(10));
-        panel.add(btn2);
-        panel.add(Box.createVerticalStrut(10));
-        panel.add(btn3);
-        panel.add(Box.createVerticalStrut(10));
-        panel.add(btn4);
-        panel.add(Box.createVerticalStrut(10));
-        panel.add(btn5);
-        panel.add(Box.createVerticalGlue());
+        JButton addButton = new JButton("添加任务");
+        addButton.addActionListener(e -> addTask());
 
+        JButton startButton = new JButton("开始任务");
+        startButton.addActionListener(e -> startSelectedTask());
+
+        JButton endButton = new JButton("结束任务");
+        endButton.addActionListener(e -> endSelectedTask());
+
+        JButton updateButton = new JButton("添加批注");
+        updateButton.addActionListener(e -> updateSelectedTaskStop("新增批注"));
+
+        JButton deleteButton = new JButton("删除任务");
+        deleteButton.addActionListener(e -> deleteSelectedTask());
+
+/*
+        JButton collectStop = new JButton("暂停任务");
+        collectStop.addActionListener(e -> updateSelectedTaskStop("STOPETED","暂停任务"));
+*/
+
+        /*JButton collectStopChange = new JButton("开启任务");
+        collectStopChange.addActionListener(e -> updateSelectedTaskStop("IN_PROGRESS","任务从新开启"));
+*/
+        JButton collect = new JButton("汇总任务");
+        collect.addActionListener(e -> {
+            try {
+                getNewDate();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        buttonPanel.add(addButton);
+        buttonPanel.add(startButton);
+        buttonPanel.add(endButton);
+        buttonPanel.add(updateButton);
+        buttonPanel.add(deleteButton);
+        //buttonPanel.add(collectStop);
+        //buttonPanel.add(collectStopChange);
+        buttonPanel.add(collect);
+        JScrollPane scrollPane = new JScrollPane(panel);
+        panel.add(buttonPanel, BorderLayout.CENTER);
         return panel;
     }
-
     // 新增：创建底部表格面板
-    private JScrollPane createBottomTablePanel() {
+    private JPanel createBottomTablePanel() {
+        JPanel detailPanel = new JPanel(new GridLayout());
+
         // 任务列表表格
         String[] columnNames = {"ID", "任务名称", "描述", "开始时间", "结束时间", "用时(分钟)", "状态"};
         tableModel = new DefaultTableModel(columnNames, 0) {
@@ -271,8 +261,6 @@ public class MainApplicationFrame extends JFrame {
             }
         };
         taskTable = new JTable(tableModel);
-
-
         // 设置自定义渲染器
         taskTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
@@ -280,10 +268,8 @@ public class MainApplicationFrame extends JFrame {
                                                            boolean isSelected, boolean hasFocus, int row, int column) {
                 Component c = super.getTableCellRendererComponent(table, value,
                         isSelected, hasFocus, row, column);
-
                 // 获取状态列的值（假设状态是第2列，索引从0开始）
                 String status = (String) table.getModel().getValueAt(row, 6);
-
                 if (!isSelected) {
                     switch (status) {
                         case "未开始":
@@ -306,11 +292,41 @@ public class MainApplicationFrame extends JFrame {
                 return c;
             }
         });
-
-
+        //批注列表格
+        String[]  annotationCoulm= {"批注时间", "批注内容"};
+        annotationtableModel = new DefaultTableModel(annotationCoulm, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        annotationtaskTable = new JTable(annotationtableModel);
+        // 设置自定义渲染器
+        annotationtaskTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                                                           boolean isSelected, boolean hasFocus, int row, int column) {
+                Component c = super.getTableCellRendererComponent(table, value,
+                        isSelected, hasFocus, row, column);
+                // 获取状态列的值（假设状态是第2列，索引从0开始）
+                //String status = (String) table.getModel().getValueAt(row, 6);
+                return c;
+            }
+        });
         taskTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        annotationtaskTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane tableScrollPane = new JScrollPane(taskTable);
-       return tableScrollPane;
+        JScrollPane tableScrollPanes = new JScrollPane(annotationtaskTable);
+
+//        tableScrollPane.setPreferredSize(new Dimension(700, 400));
+//        tableScrollPanes.setPreferredSize(new Dimension(200, 400));
+
+
+        tableScrollPane.setColumnHeaderView(new JLabel("任务清单"));
+        tableScrollPanes.setColumnHeaderView(new JLabel("批注内容"));
+        detailPanel.add(tableScrollPane);
+        detailPanel.add(tableScrollPanes);
+       return detailPanel;
     }
 
     public static void main(String[] args) {
@@ -323,9 +339,9 @@ public class MainApplicationFrame extends JFrame {
 
 
     /**
-     * 任务暂停
+     * 批注添加
      */
-    private void updateSelectedTaskStop(String start,String massage) {{
+    private void updateSelectedTaskStop(String massage) {
         int selectedRow = taskTable.getSelectedRow();
         if (selectedRow < 0) {
             JOptionPane.showMessageDialog(this, "请先选择一个任务", "提示", JOptionPane.WARNING_MESSAGE);
@@ -340,23 +356,25 @@ public class MainApplicationFrame extends JFrame {
 
         int taskId = (int) tableModel.getValueAt(selectedRow, 0);
         String description="";
-        if(StringUtil.isNotNull(descriptionAreaAdd.getText().trim())){
-            description = descriptionArea.getText().trim()+"\n"+ DateUtil.getTime(new Date())+":"+descriptionAreaAdd.getText().trim();
+        if(StringUtil.isNotNull(descriptionArea.getText().trim())){
+            description = descriptionArea.getText().trim();
         }else{
             description = descriptionArea.getText().trim();
         }
 
-        Task task = new Task(taskName, description,false);
-        task.setId(taskId);
-        task.setStatus(start);
-        if (taskDAO.updateTask(task)) {
+
+        Annotation ans=new Annotation();
+       // ans.setFdCreateTime();
+        ans.setFdMainId(taskId+"");
+        ans.setFdMassage(description);
+        ans.setFdId(UUID.randomUUID().toString());
+        if (annotationDao.addTask(ans)) {
             clearFields();
             loadTasks();
             JOptionPane.showMessageDialog(this, massage+"成功", "成功", JOptionPane.INFORMATION_MESSAGE);
         } else {
-            JOptionPane.showMessageDialog(this, massage+"失败", "错误", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, massage + "失败", "错误", JOptionPane.ERROR_MESSAGE);
         }
-    }
     }
 
     /**
@@ -373,7 +391,6 @@ public class MainApplicationFrame extends JFrame {
         for (Task task:tasks){
             date.append("任务名称："+task.getTaskName()+" 任务描述："+task.getDescription().replaceAll("\\s*|\t|\r|\n", "")+" 是否完成："+map.get(task.getStatus())+"\n");
         }
-
         BasicAuthHttpClientJackson.create(tasks);
         descriptionArea.setText(date.toString());
         JOptionPane.showMessageDialog(this, "任务发送成功", "成功", JOptionPane.YES_OPTION);
@@ -401,12 +418,29 @@ public class MainApplicationFrame extends JFrame {
             tableModel.addRow(rowData);
         }
     }
+    private void loadAnnotationtableModel( int selectedRow) {
 
+        //= annotationtaskTable.getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "请先选择一个任务", "提示", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        java.util.List<Annotation> tasks = annotationDao.getAllTasks(""+selectedRow);
+        annotationtableModel.setRowCount(0);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        for (Annotation task : tasks) {
+            Object[] rowData = {
+                    task.getFdCreateTime() != null ? task.getFdCreateTime().format(formatter) : "",
+                    task.getFdMassage()
+            };
+            annotationtableModel.addRow(rowData);
+        }
+    }
     private void select() {
         String taskName = taskNameField.getText().trim();
 
         String selected = (String) comboBox.getSelectedItem();
-        List<Task> tasks = taskDAO.getByName(taskName,selected.trim());
+        List<Task> tasks = taskDAO.getByName(taskName,selected.trim(),projectId);
         tableModel.setRowCount(0);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -443,6 +477,8 @@ public class MainApplicationFrame extends JFrame {
 
         taskNameField.setText(taskName);
         descriptionArea.setText(description);
+
+        loadAnnotationtableModel(id);
     }
 
     private void addTask() {
@@ -457,14 +493,17 @@ public class MainApplicationFrame extends JFrame {
             return;
         }
 
-        Task task = new Task(taskName, description,true);
-
-        if (taskDAO.addTask(task)) {
-            loadTasks();
-            clearFields();
-            JOptionPane.showMessageDialog(this, "任务添加成功", "成功", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(this, "任务添加失败", "错误", JOptionPane.ERROR_MESSAGE);
+        if(StringUtil.isNotNull(projectId)){
+            Task task = new Task(taskName, description,true,projectId);
+            if (taskDAO.addTask(task)) {
+                loadTasks();
+                clearFields();
+                JOptionPane.showMessageDialog(this, "任务添加成功", "成功", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "任务添加失败", "错误", JOptionPane.ERROR_MESSAGE);
+            }
+        }else{
+            JOptionPane.showMessageDialog(this, "请选择项目类别", "错误", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -527,6 +566,8 @@ public class MainApplicationFrame extends JFrame {
         }
 
         int taskId = (int) tableModel.getValueAt(selectedRow, 0);
+
+
         String description="";
         if(StringUtil.isNotNull(descriptionAreaAdd.getText().trim())){
             description = descriptionArea.getText().trim()+"\n"+ DateUtil.formatDate(new Date(),"yyyy-MM-dd")+":"+descriptionAreaAdd.getText().trim();
@@ -534,15 +575,21 @@ public class MainApplicationFrame extends JFrame {
             description = descriptionArea.getText().trim();
         }
 
-        Task task = new Task(taskName, description,false);
-        task.setId(taskId);
+        if(StringUtil.isNotNull(projectId)){
 
-        if (taskDAO.updateTask(task)) {
-            clearFields();
-            loadTasks();
-            JOptionPane.showMessageDialog(this, "任务更新成功", "成功", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(this, "任务更新失败", "错误", JOptionPane.ERROR_MESSAGE);
+            Task task = new Task(taskName, description,false,projectId);
+            task.setId(taskId);
+
+            if (taskDAO.updateTask(task)) {
+                clearFields();
+                loadTasks();
+                JOptionPane.showMessageDialog(this, "任务更新成功", "成功", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "任务更新失败", "错误", JOptionPane.ERROR_MESSAGE);
+            }
+        }else{
+            JOptionPane.showMessageDialog(this, "请选择项目类别", "错误", JOptionPane.ERROR_MESSAGE);
+
         }
     }
 
@@ -572,7 +619,7 @@ public class MainApplicationFrame extends JFrame {
     private void clearFields() {
         taskNameField.setText("");
         descriptionArea.setText("");
-        descriptionAreaAdd.setText("");
+       // descriptionAreaAdd.setText("");
     }
 
     /**
@@ -585,6 +632,7 @@ public class MainApplicationFrame extends JFrame {
        JSONObject curUser=new JSONObject();
        curUser.put("fdLoginName","guxinlei");
        json.put("curUser",curUser);
+       json.put("pageSize",1000);
        Map<String, String> map=new HashMap<>();
        map.put("Authorization","Basic Z3hsOmd4bEAwNTE5");
        map.put("Content-Type","application/json");
@@ -598,11 +646,25 @@ public class MainApplicationFrame extends JFrame {
      * 对于数据处理
      */
     private void dateChange(String response){
+        ProjctDao dao=new ProjctDao();
 
-        System.out.println("响应结果: " + response);
         JSONObject paramStr = new JSONObject();
         paramStr =new  JSONObject(response);
-        paramStr.getJSONObject("data").getJSONObject("")js
+        JSONArray arr=paramStr.getJSONObject("data").getJSONArray("content");
+        for (Object date:arr){
+            JSONObject l= (JSONObject) date;
+            ProjectBean bean=new ProjectBean();
+            bean.setFdId(l.getString("fd_id"));
+            bean.setFdName(l.getString("fd_col_sv2q1k"));
+
+            try{
+                dao.addTask(bean);
+            }catch (Exception e){
+                System.out.println("存在该记录: " + l.getString("fd_id"));
+            }
+
+
+        }
 
     }
 

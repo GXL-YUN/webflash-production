@@ -7,20 +7,32 @@ import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Configuration
 public class RabbitMQConfig {
 
     // 示例队列和交换机
-    public static final String EXAMPLE_QUEUE = "example.queue";
+    public static final String EXAMPLE_QUEUE = "new_queue";
     public static final String EXAMPLE_EXCHANGE = "example.exchange";
     public static final String EXAMPLE_ROUTING_KEY = "example.routing.key";
 
     // 声明队列
     @Bean
-    public Queue exampleQueue() {
+    public Queue exampleQueues() {
         return new Queue(EXAMPLE_QUEUE, true);
     }
 
+
+    // 修改普通队列，添加死信队列配置
+    @Bean
+    public Queue exampleQueue() {
+        Map<String, Object> args = new HashMap<>();
+        args.put("x-dead-letter-exchange", DLX_EXCHANGE);
+        args.put("x-dead-letter-routing-key", DLX_ROUTING_KEY);
+        return new Queue(EXAMPLE_QUEUE, true, false, false, args);
+    }
     // 声明交换机
     @Bean
     public DirectExchange exampleExchange() {
@@ -72,4 +84,24 @@ public class RabbitMQConfig {
         factory.setAcknowledgeMode(AcknowledgeMode.MANUAL); // 手动确认
         return factory;
     }
-}}
+
+    // 死信队列配置
+    public static final String DLX_EXCHANGE = "dlx.exchange";
+    public static final String DLX_QUEUE = "dlx.queue";
+    public static final String DLX_ROUTING_KEY = "dlx.routing.key";
+
+    @Bean
+    public Queue dlxQueue() {
+        return new Queue(DLX_QUEUE, true);
+    }
+
+    @Bean
+    public DirectExchange dlxExchange() {
+        return new DirectExchange(DLX_EXCHANGE, true, false);
+    }
+
+    @Bean
+    public Binding dlxBinding() {
+        return BindingBuilder.bind(dlxQueue()).to(dlxExchange()).with(DLX_ROUTING_KEY);
+    }
+}

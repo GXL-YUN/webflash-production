@@ -1,3 +1,5 @@
+package cn.gui.app.management.util.job;
+
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 

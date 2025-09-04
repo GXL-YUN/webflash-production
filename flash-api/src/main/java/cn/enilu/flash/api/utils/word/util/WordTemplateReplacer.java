@@ -1,6 +1,8 @@
-package cn.enilu.flash.api.utils.word;
+package cn.enilu.flash.api.utils.word.util;
 
 import org.apache.poi.xwpf.usermodel.*;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTP;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTPPr;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -10,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 对于模版文件占位符替换操作
+ * 对于模版文件操作
  */
 public class WordTemplateReplacer {
 
@@ -40,7 +42,6 @@ public class WordTemplateReplacer {
                     }
                 }
             }
-
             // 保存替换后的文档
             try (FileOutputStream fos = new FileOutputStream(outputPath)) {
                 doc.write(fos);
@@ -50,18 +51,37 @@ public class WordTemplateReplacer {
 
     private static void replaceInParagraph(XWPFParagraph paragraph, Map<String, String> replacements) {
         String text = paragraph.getText();
+
+
+
+        CTPPr pPr = paragraph.getCTP().getPPr();
+        CTP paragrapsh=  paragraph.getCTP();
+        String paragraphText = paragrapsh.xmlText();
+
+        // 执行替换
+        for (Map.Entry<String, String> entry : replacements.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            if (paragraphText.contains(key)) {
+                paragraphText = paragraphText.replace(key, value);
+            }
+        }
+
+
+        // 6. 重新设置CTP内容
+
+
         if (text == null || text.isEmpty()) {
             return;
         }
 
+
         // 检查段落中是否包含任何占位符
         boolean containsPlaceholder = replacements.keySet().stream()
                 .anyMatch(text::contains);
-
         if (!containsPlaceholder) {
             return;
         }
-
         // 获取段落的所有文本运行
         List<XWPFRun> runs = paragraph.getRuns();
         if (runs == null || runs.isEmpty()) {
@@ -76,7 +96,7 @@ public class WordTemplateReplacer {
                 sb.append(runText);
             }
         }
-        String paragraphText = sb.toString();
+
 
         // 执行替换
         for (Map.Entry<String, String> entry : replacements.entrySet()) {
@@ -86,7 +106,7 @@ public class WordTemplateReplacer {
                 paragraphText = paragraphText.replace(key, value);
             }
         }
-
+        //执行强制替换
         // 清除原有运行
         for (int i = runs.size() - 1; i >= 0; i--) {
             paragraph.removeRun(i);
@@ -113,12 +133,14 @@ public class WordTemplateReplacer {
         try {
             // 准备替换数据
             Map<String, String> replacements = new HashMap<>();
-            replacements.put("${name}", "张三");
+            replacements.put("[name]", "张三");
             replacements.put("${date}", "2023-11-15");
-          //  replacements.put("${company}", "示例公司");
-
+            //replacements.put("${company}", "示例公司");
             // 执行替换
-            replaceTemplate("C:\\Users\\think\\Documents\\WeChat Files\\wxid_wc5abg3o0ikt22\\FileStorage\\File\\2025-07\\00华创需规合订版 v7.0\\00华创需规合订版 v7.0\\01安全员模块附件（9个）\\附件8：优秀安全员证书样式.docx", "D:\\项目文件.output.docx", replacements);
+            //replaceTemplate("C:\\Users\\think\\Documents\\WeChat Files\\wxid_wc5abg3o0ikt22\\FileStorage\\File\\2025-07\\00华创需规合订版 v7.0\\00华创需规合订版 v7.0\\01安全员模块附件（9个）\\附件8：优秀安全员证书样式.docx", "D:\\项目文件\\output.docx", replacements);
+
+
+            replaceTemplate("D:\\项目文件\\output.docx", "D:\\项目文件\\outputsdddd.docx", replacements);
 
             System.out.println("Word模板替换完成！");
         } catch (IOException e) {

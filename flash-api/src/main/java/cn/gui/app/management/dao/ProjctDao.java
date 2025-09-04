@@ -1,6 +1,5 @@
 package cn.gui.app.management.dao;
 
-import cn.gui.app.management.bean.Annotation;
 import cn.gui.app.management.bean.ProjectBean;
 import cn.gui.app.management.bean.Task;
 import cn.gui.app.management.util.DBUtil;
@@ -8,18 +7,18 @@ import cn.gui.app.management.util.DBUtil;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-public class AnnotationDao {
+
+public class ProjctDao {
 
     /**
      *   新增
      */
-    public boolean addTask(Annotation task) {
-        String sql = "INSERT INTO Annotation(fdId, fdMassage,fdMainId) VALUES(?, ?,?)";
+    public boolean addTask(ProjectBean task) {
+        String sql = "INSERT INTO ProjectBean(fdId, fdName) VALUES(?, ?,1)";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, task.getFdId());
-            pstmt.setString(2, task.getFdMassage());
-            pstmt.setString(3, task.getFdMainId());
+            pstmt.setString(2, task.getFdName());
 
             int affectedRows = pstmt.executeUpdate();
             if (affectedRows > 0) {
@@ -35,6 +34,8 @@ public class AnnotationDao {
         }
         return false;
     }
+
+
     /**
      *   更新
      */
@@ -56,20 +57,18 @@ public class AnnotationDao {
      *   查询
      */
 
-    public List<Annotation> getAllTasks(String type) {
-        List<Annotation> tasks = new ArrayList<>();
-        String sql = "SELECT * FROM Annotation  where  fdMainId="+type;
+    public List<ProjectBean> getAllTasks(String type) {
+        List<ProjectBean> tasks = new ArrayList<>();
+        String sql = "SELECT * FROM ProjectBean  where fdType = '1' and fdIsMe='1'  ";
 
         try (Connection conn = DBUtil.getConnection();
              Statement stmt = conn.createStatement();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
-                Annotation rojectBean = new Annotation();
+                ProjectBean rojectBean = new ProjectBean();
                 rojectBean.setFdId(rs.getString("fdId"));
-                rojectBean.setFdMassage(rs.getString("fdMassage"));
-                Timestamp endTime = rs.getTimestamp("fdCreateTime");
-                rojectBean.setFdCreateTime(endTime != null ? endTime.toLocalDateTime() : null);
+                rojectBean.setFdName(rs.getString("fdName"));
 
                 tasks.add(rojectBean);
             }
@@ -83,19 +82,19 @@ public class AnnotationDao {
      * 查询名称
      */
 
-    public List<Annotation> getTaskName(String id) {
-        List<Annotation> tasks = new ArrayList<>();
-        String sql = "SELECT * FROM Annotation  where fdId = '"+id+"'";
+    public List<ProjectBean> getTaskName(String id) {
+        List<ProjectBean> tasks = new ArrayList<>();
+        String sql = "SELECT * FROM ProjectBean  where fdId = '"+id+"'";
 
         try (Connection conn = DBUtil.getConnection();
              Statement stmt = conn.createStatement();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            // pstmt.setString(1, id);
+           // pstmt.setString(1, id);
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
-                Annotation rojectBean = new Annotation();
+                ProjectBean rojectBean = new ProjectBean();
                 rojectBean.setFdId(rs.getString("fdId"));
-                rojectBean.setFdMassage(rs.getString("fdMassage"));
+                rojectBean.setFdName(rs.getString("fdName"));
 
                 tasks.add(rojectBean);
             }
@@ -104,5 +103,7 @@ public class AnnotationDao {
         }
         return tasks;
     }
-}
 
+
+
+}

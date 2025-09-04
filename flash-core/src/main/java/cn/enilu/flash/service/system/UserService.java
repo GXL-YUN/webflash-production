@@ -77,6 +77,8 @@ public class UserService extends BaseService<User, Long, UserRepository> {
      * @param user
      * @return
      */
+
+
     public String loginForToken(User user) {
         //获取用户token值
         String token = JwtUtil.sign(user, tokenExpireTime * 60000);

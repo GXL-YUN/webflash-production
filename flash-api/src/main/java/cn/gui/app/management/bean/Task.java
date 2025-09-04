@@ -10,14 +10,31 @@ public class Task {
     private LocalDateTime endTime;
     private int totalMinutes;
     private String status;
+    private String fdTYpe;
+
+
+    public String getFdTYpe() {
+        return fdTYpe;
+    }
+
+    public void setFdTYpe(String fdTYpe) {
+        this.fdTYpe = fdTYpe;
+    }
 
     public Task() {}
 
-    public Task(String taskName, String description) {
+    public Task(String taskName, String description,boolean flage,String frdTYpe) {
         this.taskName = taskName;
         this.description = description;
-        this.status = "NOT_STARTED";
+        if(flage){
+            this.status = "NOT_STARTED";
+        }else{
+            this.status = "IN_PROGRESS";
+        }
+        this.fdTYpe=frdTYpe;
+        //
     }
+
 
     // Getters and Setters
     public int getId() { return id; }

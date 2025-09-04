@@ -20,7 +20,7 @@ public class Producer {
         // 主机地址
         connectionFactory.setHost("124.222.2.102");
         // 端口号：默认为 5672
-        connectionFactory.setPort(5672);
+        connectionFactory.setPort(15672);
         // 主机名称：默认为 /
         connectionFactory.setVirtualHost("gxl");
         // 用户名；默认为guest

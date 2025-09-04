@@ -1,4 +1,4 @@
-package cn.enilu.flash.api.utils.word;
+package cn.gui.app.management.util.util;
 
 import org.apache.poi.xwpf.usermodel.*;
 
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 对于模版文件占位符替换操作
+ * 对于模版文件操作
  */
 public class WordTemplateReplacer {
 
@@ -57,11 +57,9 @@ public class WordTemplateReplacer {
         // 检查段落中是否包含任何占位符
         boolean containsPlaceholder = replacements.keySet().stream()
                 .anyMatch(text::contains);
-
         if (!containsPlaceholder) {
             return;
         }
-
         // 获取段落的所有文本运行
         List<XWPFRun> runs = paragraph.getRuns();
         if (runs == null || runs.isEmpty()) {
@@ -86,7 +84,7 @@ public class WordTemplateReplacer {
                 paragraphText = paragraphText.replace(key, value);
             }
         }
-
+        //执行强制替换
         // 清除原有运行
         for (int i = runs.size() - 1; i >= 0; i--) {
             paragraph.removeRun(i);
@@ -113,12 +111,14 @@ public class WordTemplateReplacer {
         try {
             // 准备替换数据
             Map<String, String> replacements = new HashMap<>();
-            replacements.put("${name}", "张三");
+            replacements.put("[name]", "张三");
             replacements.put("${date}", "2023-11-15");
-          //  replacements.put("${company}", "示例公司");
-
+            //replacements.put("${company}", "示例公司");
             // 执行替换
-            replaceTemplate("C:\\Users\\think\\Documents\\WeChat Files\\wxid_wc5abg3o0ikt22\\FileStorage\\File\\2025-07\\00华创需规合订版 v7.0\\00华创需规合订版 v7.0\\01安全员模块附件（9个）\\附件8：优秀安全员证书样式.docx", "D:\\项目文件.output.docx", replacements);
+            replaceTemplate("C:\\Users\\think\\Documents\\WeChat Files\\wxid_wc5abg3o0ikt22\\FileStorage\\File\\2025-07\\00华创需规合订版 v7.0\\00华创需规合订版 v7.0\\01安全员模块附件（9个）\\附件8：优秀安全员证书样式.docx", "D:\\项目文件\\output.docx", replacements);
+
+
+            replaceTemplate("D:\\项目文件\\output.docx", "D:\\项目文件\\outputs.docx", replacements);
 
             System.out.println("Word模板替换完成！");
         } catch (IOException e) {

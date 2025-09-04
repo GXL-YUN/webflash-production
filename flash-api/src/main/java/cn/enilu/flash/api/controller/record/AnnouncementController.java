@@ -44,6 +44,13 @@ public class AnnouncementController {
     @PostMapping("/list")
     public Object showView() {
         //根据时间查出来当前三天的公告
+
+        //
+
+
+
+
+
         Page<AnnouncementBean> page = new PageFactory<AnnouncementBean>().defaultPage();
         page.addFilter("fdEndDate", SearchFilter.Operator.GTE, cn.enilu.util.DateUtil.getDateQueue(), SearchFilter.Join.and);
         page = announcementService.queryPage(page);
