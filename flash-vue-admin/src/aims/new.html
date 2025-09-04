@@ -2,9 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>$Title$</title>
+  <title>Title</title>
 </head>
 <body>
-$END$
+
 </body>
+
+<script>
+  window.onload = function() {
+    const schemeUrl = "xiaohongshu://note/detail?noteId=xxxx";
+    window.location.href = schemeUrl;
+    setTimeout(function() {
+      // 如果未跳转成功，引导下载
+      const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+      window.location.href = isIOS ? "https://apps.apple.com/cn/app/小红书/id741292507" : "https://app.xiaohongshu.com/download";
+    }, 500);
+  };
+</script>
 </html>
