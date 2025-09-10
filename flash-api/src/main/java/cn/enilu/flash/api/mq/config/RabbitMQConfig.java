@@ -72,4 +72,4 @@ public class RabbitMQConfig {
         factory.setAcknowledgeMode(AcknowledgeMode.MANUAL); // 手动确认
         return factory;
     }
-}}
+}
