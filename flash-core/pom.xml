@@ -26,6 +26,55 @@
 
     <dependencies>
 
+
+            <!-- 核心 POI -->
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>5.2.3</version> <!-- 使用最新稳定版 -->
+            </dependency>
+
+            <!-- POI-OOXML (XSSFWorkbook 需要) -->
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>5.2.3</version> <!-- 必须与poi版本一致 -->
+            </dependency>
+
+            <!-- POI-OOXML-Schemas -->
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml-schemas</artifactId>
+                <version>5.2.3</version>
+            </dependency>
+
+
+        <!-- 腾讯文档集成-->
+<!--        <dependency>
+            <groupId>com.tencentcloudapi</groupId>
+            <artifactId>tencentcloud-sdk-java</artifactId>
+            <version>3.1.1270</version>
+        </dependency>-->
+
+        <!-- 腾讯云核心库 -->
+        <dependency>
+            <groupId>com.tencentcloudapi</groupId>
+            <artifactId>tencentcloud-sdk-java-common</artifactId>
+            <version>3.1.270</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.tencentcloudapi</groupId>
+            <artifactId>tencentcloud-sdk-java-docs</artifactId>  <!-- 注意这个artifactId不同 -->
+            <version>3.1.270</version>  <!-- 使用最新版本 -->
+        </dependency>
+        <!-- 腾讯文档专用SDK -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.13</version>
+        </dependency>
         <!-- 文档操作https://mvnrepository.com/artifact/com.lowagie.itext/com.lowagie.itext -->
         <!-- https://mvnrepository.com/artifact/com.lowagie/com.lowagie.text -->
         <dependency>
@@ -72,6 +121,47 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+
+
+        <!-- Elasticsearch -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+        </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>org.elasticsearch.plugin</groupId>-->
+<!--            <artifactId>analysis-ik</artifactId>-->
+<!--            <version>9.0.3</version>-->
+<!--            <scope>provided</scope> &lt;!&ndash; 因为IK插件已安装在ES服务器上 &ndash;&gt;-->
+<!--        </dependency>-->
+
+        <!-- 测试 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- JSON 处理 -->
+<!--        <dependency>-->
+<!--            <groupId>com.fasterxml.jackson.core</groupId>-->
+<!--            <artifactId>jackson-databind</artifactId>-->
+<!--            <version>2.15.2</version>-->
+<!--        </dependency>-->
+
+        <!-- 日志 -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.20.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.20.0</version>
         </dependency>
 
 
@@ -212,4 +302,21 @@
         </dependency>
 
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>elastic</id>
+            <name>Elasticsearch Repository</name>
+            <url>https://artifacts.elastic.co/maven</url>
+        </repository>
+
+        <repository>
+            <id>central</id>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
+        <repository>
+            <id>apache-snapshots</id>
+            <url>https://repository.apache.org/snapshots</url>
+        </repository>
+    </repositories>
 </project>

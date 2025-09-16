@@ -1,9 +1,32 @@
 spring:
+  elasticsearch:
+    uris: http://localhost:9200
+    connection-timeout: 5s
+    socket-timeout: 30s
   rabbitmq:
-    host: 127.0.0.1
+    host: localhost
     port: 15672
-    username: admin
-    password: admin
+    username: guest
+    password: guest
+    virtual-host: /
+    # 开启发送方确认机制
+    publisher-confirms: true
+    # 开启发送方返回机制
+    publisher-returns: true
+    listener:
+      simple:
+        # 消费者最小数量
+        concurrency: 1
+        # 消费者最大数量
+        max-concurrency: 10
+        # 每次从队列中获取的消息数量
+        prefetch: 1
+        # 消费者自动启动
+        auto-startup: true
+        # 被拒绝的消息重新进入队列
+        default-requeue-rejected: true
+        # 签收模式：手动签收
+        acknowledge-mode: manual
   profiles:
     active: prod
   cache:
@@ -46,3 +69,6 @@ jwt:
       time: 30
 server:
   port: 9528
+app:
+  elasticsearch:
+    index-name: articles

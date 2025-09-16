@@ -2,7 +2,6 @@ package cn.enilu.flash.api;
 
 import cn.enilu.flash.api.mq.util.RabbitMQHelper;
 import cn.enilu.flash.dao.BaseRepositoryFactoryBean;
-import cn.gui.app.management.main.MainFrame;
 import cn.gui.app.management.util.job.ScheduledTasks;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,10 +79,10 @@ public class ApiApplication extends SpringBootServletInitializer {
                 "外部访问地址 : \thttp://" + ip + ":" + port + path + "/\n\t" +
                 "在线文档地址 : \thttp://" + ip + ":" + port + path + "/swagger-ui/index.html\n" +
                 "----------------------------------------------------------");
-        action();
+       // action();
         //scheduledTasks.taskWithCronExpression();
     }
-     public static void action()  {SwingUtilities.invokeLater(() -> {
+/*     public static void action()  {SwingUtilities.invokeLater(() -> {
          logger.info("开始启动");
                 try {
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -93,7 +92,7 @@ public class ApiApplication extends SpringBootServletInitializer {
                 MainFrame frame = new MainFrame();
                 frame.setVisible(true);
                 });
-        }
+        }*/
 
 
 
