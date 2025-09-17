@@ -234,6 +234,16 @@ public class RoomLisitController {
                                     }else if(keylsjson.getString("type").equals("array")){
                                         mxlist.put(keyls,"生成的唯一的key");
 
+                                        JSONObject keyDate=new JSONObject();
+                                        keyDate.put("fdEntityKey",key);
+                                        keyDate.put("fdDownloadUrl","文件外部地址（如果传递fgId则不用传这个）");
+                                        keyDate.put("fdFileName","文件名称");
+                                        keyDate.put("fdFileSize",23);
+                                        keyDate.put("fdBindType","ADD");
+                                        keyDate.put("fdExternalPreviewUrl","文件预览地址（如果传递fgId则不用传这个）");
+                                        keyDate.put("fdId","文件上传返回的参数");
+                                        attachment.put(keyDate);
+
                                     }
                                   //  mxlist.put(keyls,keylsjson.getString("description"));
                                 }
@@ -296,7 +306,7 @@ public class RoomLisitController {
                     mainData.put("fdMianDate",mainArr);
 
                     // 7. 生成Excel文件
-                    createExcelFromJson(mainData, dateName+".xlsx");
+                  //  createExcelFromJson(mainData, dateName+".xlsx");
                     System.out.println("Excel文件已生成!");
                     return chanegDate(main,detailData,attachment,id).toString();
 
