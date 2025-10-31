@@ -1,13 +1,10 @@
 spring:
-  elasticsearch:
-    uris: http://localhost:9200
-    connection-timeout: 5s
-    socket-timeout: 30s
   rabbitmq:
-    host: localhost
+    #host: http://122.51.246.240/
+    host: http://127.0.0.1/
     port: 15672
-    username: guest
-    password: guest
+    username: admin
+    password: 1225dmf1212.
     virtual-host: /
     # 开启发送方确认机制
     publisher-confirms: true
