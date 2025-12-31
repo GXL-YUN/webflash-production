@@ -1,0 +1,65 @@
+npm start  --- 项目启动
+项目打包 ---  npm run build
+
+
+
+
+
+
+
+# 创建 TypeScript React 项目
+npx create-react-app my-antd-app --template typescript
+
+# 进入项目目录
+cd my-antd-app
+
+# 安装 Ant Design
+npm install antd
+
+# 安装图标库
+npm install @ant-design/icons
+
+# 安装开发依赖
+npm install --save-dev @types/node @types/react @types/react-dom
+
+
+
+
+
+
+
+
+
+
+我来帮你创建一个基于 React + Ant Design + TypeScript + Webpack 的项目。
+
+# 创建项目目录
+mkdir react-antd-ts-webpack
+cd react-antd-ts-webpack
+
+# 初始化 package.json
+npm init -y
+
+# React 相关
+npm install react react-dom
+npm install -D @types/react @types/react-dom
+
+# TypeScript
+npm install -D typescript ts-loader
+
+# Ant Design
+npm install antd
+
+# Webpack 相关
+npm install -D webpack webpack-cli webpack-dev-server html-webpack-plugin
+
+# Babel (可选，用于兼容性)
+npm install -D @babel/core @babel/preset-env @babel/preset-react babel-loader
+
+# CSS 和样式处理
+npm install -D style-loader css-loader less less-loader
+
+# 其他工具
+npm install -D clean-webpack-plugin copy-webpack-plugin
+
+

@@ -12,7 +12,7 @@ const api = axios.create({
 // 请求拦截器
 api.interceptors.request.use(
     (config) => {
-        // 在发送请求前做些什么，如添加token
+        // 在发送请求前做些什么，如添加tokenclea
         const token = localStorage.getItem('token');
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
