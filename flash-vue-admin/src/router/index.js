@@ -80,7 +80,7 @@ export const constantRoutes = [
     hidden: true
   },
 
-  {
+/*  {
     path: '/three',
     name: 'three',
     meta: {
@@ -88,7 +88,7 @@ export const constantRoutes = [
     },
     component: () => import('@/views/protal/three'),
     hidden: true
-  },
+  },*/
   {
     path: '/dashboard',
     component: Layout,

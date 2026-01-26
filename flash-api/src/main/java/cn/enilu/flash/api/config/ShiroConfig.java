@@ -93,6 +93,7 @@ public class ShiroConfig {
         filterRuleMap.put("/fileUtil/**", "anon");
         filterRuleMap.put("/test/**", "anon");
         filterRuleMap.put("/message/sendYj", "anon");
+        filterRuleMap.put("/api/**", "anon");
         //工作流定义文件流
         filterRuleMap.put("/workflow/process/definition/getDefinitionXML", "anon");
         //druid监控地址不拦截
@@ -102,6 +103,7 @@ public class ShiroConfig {
 
         filterRuleMap.put("/rabbit/*", "anon");
         filterRuleMap.put("/room/**", "anon");
+        filterRuleMap.put("/api/**", "anon");
         filterRuleMap.put("/account/login", "anon");
         filterRuleMap.put("/account/qrcode/**", "anon");
         filterRuleMap.put("/logout", "logout");

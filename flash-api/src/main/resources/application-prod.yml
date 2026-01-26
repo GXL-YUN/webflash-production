@@ -7,7 +7,7 @@ spring:
   redis:
     host: 122.51.246.240
     port: 6379
-    password:   # 如果没有密码可以省略
+    password:  123qweasd. # 如果没有密码可以省略
     database: 0             # 默认数据库索引
     timeout: 3000          # 连接超时时间(毫秒)
     lettuce:
@@ -31,3 +31,6 @@ server:
   tomcat:
     basedir: /data/app/web-flash/runtime/tmp
 urlpath: /data/app/web-flash/runtime/tmp
+
+#数据源配置
+DB_mk_oralce: ekp_mid_mysql_test

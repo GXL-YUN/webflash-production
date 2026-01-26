@@ -42,11 +42,12 @@
             </dependency>
 
             <!-- POI-OOXML-Schemas -->
-            <dependency>
-                <groupId>org.apache.poi</groupId>
-                <artifactId>poi-ooxml-schemas</artifactId>
-                <version>5.2.3</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.apache.poi</groupId>-->
+<!--                <artifactId>poi-ooxml-schemas</artifactId>-->
+<!--                <version>5.2.3</version>-->
+<!--            </dependency>-->
+
 
 
         <!-- 腾讯文档集成-->
@@ -57,18 +58,18 @@
         </dependency>-->
 
         <!-- 腾讯云核心库 -->
-        <dependency>
-            <groupId>com.tencentcloudapi</groupId>
-            <artifactId>tencentcloud-sdk-java-common</artifactId>
-            <version>3.1.270</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.tencentcloudapi</groupId>-->
+<!--            <artifactId>tencentcloud-sdk-java-common</artifactId>-->
+<!--            <version>3.1.270</version>-->
+<!--        </dependency>-->
 
 
-        <dependency>
-            <groupId>com.tencentcloudapi</groupId>
-            <artifactId>tencentcloud-sdk-java-docs</artifactId>  <!-- 注意这个artifactId不同 -->
-            <version>3.1.270</version>  <!-- 使用最新版本 -->
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.tencentcloudapi</groupId>-->
+<!--            <artifactId>tencentcloud-sdk-java-docs</artifactId>  &lt;!&ndash; 注意这个artifactId不同 &ndash;&gt;-->
+<!--            <version>3.1.270</version>  &lt;!&ndash; 使用最新版本 &ndash;&gt;-->
+<!--        </dependency>-->
         <!-- 腾讯文档专用SDK -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -300,8 +301,7 @@
             <groupId>javax.persistence</groupId>
             <artifactId>javax.persistence-api</artifactId>
         </dependency>
-
-    </dependencies>
+                               </dependencies>
 
     <repositories>
         <repository>

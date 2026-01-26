@@ -54,14 +54,26 @@ public class RedisConfig {
         om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
         jackson2JsonRedisSerializer.setObjectMapper(om);
         StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
-        // key采用String的序列化方式
-        template.setKeySerializer(stringRedisSerializer);
-        // hash的key也采用String的序列化方式
-        template.setHashKeySerializer(stringRedisSerializer);
-        // value序列化方式采用jackson
-        template.setValueSerializer(stringRedisSerializer);
-        // hash的value序列化方式采用jackson
-        template.setHashValueSerializer(stringRedisSerializer);
+
+
+        // 使用String序列化器序列化key
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setHashKeySerializer(new StringRedisSerializer());
+
+        // 使用Jackson序列化器序列化value
+        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+        template.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
+
+
+
+//        // key采用String的序列化方式
+//        template.setKeySerializer(stringRedisSerializer);
+//        // hash的key也采用String的序列化方式
+//        template.setHashKeySerializer(stringRedisSerializer);
+//        // value序列化方式采用jackson
+//        template.setValueSerializer(stringRedisSerializer);
+//        // hash的value序列化方式采用jackson
+//        template.setHashValueSerializer(stringRedisSerializer);
         template.afterPropertiesSet();
         log.info("Redis启动成功{}","配置");
         return template;
