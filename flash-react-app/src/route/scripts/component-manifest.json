@@ -1,0 +1,284 @@
+{
+  "scanTime": "2026-02-05T03:34:54.395Z",
+  "scanPath": "D:\\project\\web-flash-master\\web-flash-master\\flash-react-app\\src",
+  "projectRoot": "D:\\project\\web-flash-master\\web-flash-master\\flash-react-app\\src",
+  "components": [
+    {
+      "name": "App",
+      "filePath": "App.tsx",
+      "hasDefaultExport": true,
+      "exports": [],
+      "hasReactImport": true,
+      "hasJSX": true
+    },
+    {
+      "name": "DemandDetail",
+      "filePath": "components/DemandManagement/DemandDetail.tsx",
+      "hasDefaultExport": true,
+      "exports": [],
+      "hasReactImport": true,
+      "hasJSX": true
+    },
+    {
+      "name": "DemandList",
+      "filePath": "components/DemandManagement/DemandList.tsx",
+      "hasDefaultExport": true,
+      "exports": [],
+      "hasReactImport": true,
+      "hasJSX": true
+    },
+    {
+      "name": "ImportExport",
+      "filePath": "components/DemandManagement/ImportExport.tsx",
+      "hasDefaultExport": true,
+      "exports": [],
+      "hasReactImport": true,
+      "hasJSX": true
+    },
+    {
+      "name": "index",
+      "filePath": "components/DemandManagement/index.tsx",
+      "hasDefaultExport": true,
+      "exports": [],
+      "hasReactImport": true,
+      "hasJSX": true
+    },
+    {
+      "name": "StatusTag",
+      "filePath": "components/DemandManagement/StatusTag.tsx",
+      "hasDefaultExport": true,
+      "exports": [],
+      "hasReactImport": true,
+      "hasJSX": true
+    },
+    {
+      "name": "index",
+      "filePath": "components/Layout/index.tsx",
+      "hasDefaultExport": true,
+      "exports": [],
+      "hasReactImport": true,
+      "hasJSX": true
+    },
+    {
+      "name": "DataListTable",
+      "filePath": "components/MkFromDate/components/DataListTable.tsx",
+      "hasDefaultExport": true,
+      "exports": [],
+      "hasReactImport": true,
+      "hasJSX": true
+    },
+    {
+      "name": "FieldDefinitionTable",
+      "filePath": "components/MkFromDate/components/FieldDefinitionTable.tsx",
+      "hasDefaultExport": true,
+      "exports": [],
+      "hasReactImport": true,
+      "hasJSX": true
+    },
+    {
+      "name": "SearchPanel",
+      "filePath": "components/MkFromDate/components/SearchPanel.tsx",
+      "hasDefaultExport": true,
+      "exports": [],
+      "hasReactImport": true,
+      "hasJSX": true
+    },
+    {
+      "name": "ThreeLayerPage",
+      "filePath": "components/MkFromDate/page/ThreeLayerPage.tsx",
+      "hasDefaultExport": true,
+      "exports": [],
+      "hasReactImport": true,
+      "hasJSX": true
+    },
+    {
+      "name": "index",
+      "filePath": "components/MkReview/ApiConfigPanel/index.tsx",
+      "hasDefaultExport": true,
+      "exports": [],
+      "hasReactImport": true,
+      "hasJSX": true
+    },
+    {
+      "name": "index",
+      "filePath": "components/MkReview/DataDisplayPanel/index.tsx",
+      "hasDefaultExport": true,
+      "exports": [],
+      "hasReactImport": true,
+      "hasJSX": true
+    },
+    {
+      "name": "index",
+      "filePath": "components/MkReview/FieldSelectorPanel/index.tsx",
+      "hasDefaultExport": true,
+      "exports": [],
+      "hasReactImport": true,
+      "hasJSX": true
+    },
+    {
+      "name": "index",
+      "filePath": "components/MkReview/index.tsx",
+      "hasDefaultExport": true,
+      "exports": [],
+      "hasReactImport": true,
+      "hasJSX": true
+    },
+    {
+      "name": "SearchLTest",
+      "filePath": "components/Search/SearchLTest.tsx",
+      "hasDefaultExport": true,
+      "exports": [],
+      "hasReactImport": true,
+      "hasJSX": true
+    },
+    {
+      "name": "DataForm",
+      "filePath": "components/Table/components/DataForm.tsx",
+      "hasDefaultExport": true,
+      "exports": [],
+      "hasReactImport": true,
+      "hasJSX": true
+    },
+    {
+      "name": "SearchTable",
+      "filePath": "components/Table/components/SearchTable.tsx",
+      "hasDefaultExport": true,
+      "exports": [],
+      "hasReactImport": true,
+      "hasJSX": true
+    },
+    {
+      "name": "DataTablePage",
+      "filePath": "components/Table/DataTablePage.tsx",
+      "hasDefaultExport": true,
+      "exports": [],
+      "hasReactImport": true,
+      "hasJSX": true
+    },
+    {
+      "name": "index",
+      "filePath": "components/Table/index.tsx",
+      "hasDefaultExport": true,
+      "exports": [],
+      "hasReactImport": true,
+      "hasJSX": true
+    },
+    {
+      "name": "index",
+      "filePath": "components/TableGlobbing/index.tsx",
+      "hasDefaultExport": true,
+      "exports": [],
+      "hasReactImport": true,
+      "hasJSX": true
+    },
+    {
+      "name": "RoomForm",
+      "filePath": "components/TableGlobbing/RoomForm.tsx",
+      "hasDefaultExport": true,
+      "exports": [],
+      "hasReactImport": true,
+      "hasJSX": true
+    },
+    {
+      "name": "RoomTable",
+      "filePath": "components/TableGlobbing/RoomTable.tsx",
+      "hasDefaultExport": true,
+      "exports": [
+        "ChildMethods"
+      ],
+      "hasReactImport": true,
+      "hasJSX": true
+    },
+    {
+      "name": "index",
+      "filePath": "index.tsx",
+      "hasDefaultExport": false,
+      "exports": [],
+      "hasReactImport": true,
+      "hasJSX": true
+    },
+    {
+      "name": "index",
+      "filePath": "operation/Knowledge/components/CodeHighlighter/index.tsx",
+      "hasDefaultExport": true,
+      "exports": [],
+      "hasReactImport": true,
+      "hasJSX": true
+    },
+    {
+      "name": "index",
+      "filePath": "operation/Knowledge/components/MarkdownEditor/index.tsx",
+      "hasDefaultExport": true,
+      "exports": [],
+      "hasReactImport": true,
+      "hasJSX": true
+    },
+    {
+      "name": "index",
+      "filePath": "operation/Knowledge/pages/KnowledgeList/index.tsx",
+      "hasDefaultExport": true,
+      "exports": [],
+      "hasReactImport": true,
+      "hasJSX": true
+    },
+    {
+      "name": "index",
+      "filePath": "operation/Knowledge/pages/NoteCreate/index.tsx",
+      "hasDefaultExport": true,
+      "exports": [],
+      "hasReactImport": true,
+      "hasJSX": true
+    },
+    {
+      "name": "index",
+      "filePath": "operation/Knowledge/pages/NoteDetail/index.tsx",
+      "hasDefaultExport": true,
+      "exports": [],
+      "hasReactImport": true,
+      "hasJSX": true
+    },
+    {
+      "name": "BarChart",
+      "filePath": "pages/echartList/BarChart/BarChart.tsx",
+      "hasDefaultExport": true,
+      "exports": [
+        "BarChartProps",
+        "BarChartRef"
+      ],
+      "hasReactImport": true,
+      "hasJSX": true
+    },
+    {
+      "name": "index",
+      "filePath": "pages/Home/index.tsx",
+      "hasDefaultExport": true,
+      "exports": [],
+      "hasReactImport": true,
+      "hasJSX": true
+    },
+    {
+      "name": "index",
+      "filePath": "pages/Index/index.tsx",
+      "hasDefaultExport": true,
+      "exports": [],
+      "hasReactImport": true,
+      "hasJSX": true
+    },
+    {
+      "name": "ComponentScannerView",
+      "filePath": "route/scripts/ComponentScannerView.tsx",
+      "hasDefaultExport": true,
+      "exports": [],
+      "hasReactImport": true,
+      "hasJSX": true
+    },
+    {
+      "name": "routes",
+      "filePath": "routes.tsx",
+      "hasDefaultExport": true,
+      "exports": [],
+      "hasReactImport": true,
+      "hasJSX": true
+    }
+  ]
+}

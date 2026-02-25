@@ -10,7 +10,7 @@ const name = defaultSettings.title || 'web-flash后台管理系统' // page titl
 // If your port is set to 80,
 // use administrator privileges to execute the command line.
 // For example, Mac: sudo npm run
-const port = 8082 // dev port
+const port = 8082 // dev port  可以对于这个接口进行代理处理
 
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
@@ -37,7 +37,7 @@ module.exports = {
     },
     proxy: {
       [process.env.VUE_APP_BASE_API]: {
-        target: `http://83.147.43.63:8082`,//后端调用接口
+        target: `http://127.0.0.1:9528`,//后端调用接口
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: ''

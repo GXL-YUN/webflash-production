@@ -7,10 +7,16 @@ import {getToken} from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
 import i18n from '@/lang'
 
+
+/**
+ * 全局监听 判断是否需要登录
+ */
+
+debugger
 NProgress.configure({showSpinner: false}) // NProgress Configuration
 
-const whiteList = ['/login' ,'/index','/'] //  无定向白名单 no redirect whitelist
-
+//const whiteList = ['/login' ,'/index','/'] //  无定向白名单 no redirect whitelist
+const whiteList =['/login']
 router.beforeEach(async (to, from, next) => {
   // start progress bar
   NProgress.start()
@@ -20,12 +26,7 @@ router.beforeEach(async (to, from, next) => {
 
   // determine whether the user has logged in
   const hasToken = getToken()
-
-
-
-
   if (hasToken) {
-    debugger
     if (to.path === '/login') {
       // if is logged in, redirect to the home page
       next({path: '/'})
@@ -50,7 +51,7 @@ router.beforeEach(async (to, from, next) => {
       }
     }
   } else {
-    /* has no token*/
+    /* has no token 不需要拦截*/
     if (whiteList.indexOf(to.path) !== -1) {
       // in the free login whitelist, go directly
       next()

@@ -1,8 +1,10 @@
 package cn.enilu.flash.bean.entity;
 
+import cn.enilu.flash.bean.entity.att.AttachmentInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -10,6 +12,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -22,7 +25,16 @@ import java.util.Date;
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 public abstract class BaseEntity implements Serializable {
 
+
     @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(name = "fd_id", updatable = false, nullable = false)
+    private String fdId;
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @CreationTimestamp
@@ -37,5 +49,10 @@ public abstract class BaseEntity implements Serializable {
     @LastModifiedBy
     @Column(name = "modify_by", columnDefinition = "bigint COMMENT '最后更新人'")
     private Long modifyBy;
+
+
+
+
+
 
 }

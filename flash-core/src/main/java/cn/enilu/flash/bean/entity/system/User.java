@@ -58,4 +58,15 @@ public class User extends BaseEntity {
     @JoinColumn(name = "deptid", insertable = false, updatable = false, foreignKey = @ForeignKey(name = "none", value = ConstraintMode.NO_CONSTRAINT))
     @ManyToOne(fetch = FetchType.EAGER)
     private Dept dept;
+
+    //微信id
+    @Column(columnDefinition = "VARCHAR(100) COMMENT '微信session_key'")
+    private String session_key;
+
+    @Column(columnDefinition = "VARCHAR(100) COMMENT '微信session_key'")
+    private String openid;
+
+
+
+
 }

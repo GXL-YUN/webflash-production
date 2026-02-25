@@ -7,6 +7,7 @@ import cn.enilu.flash.bean.constant.state.ManagerStatus;
 import cn.enilu.flash.bean.core.ShiroUser;
 import cn.enilu.flash.bean.dto.LoginDto;
 import cn.enilu.flash.bean.entity.system.User;
+import cn.enilu.flash.bean.util.WxBean;
 import cn.enilu.flash.bean.vo.front.Ret;
 import cn.enilu.flash.bean.vo.front.Rets;
 import cn.enilu.flash.bean.vo.node.RouterMenu;
@@ -22,21 +23,29 @@ import cn.enilu.flash.service.system.UserService;
 import cn.enilu.flash.utils.*;
 import cn.enilu.flash.utils.factory.Page;
 import cn.enilu.kmss.bean.entity.AnnouncementBean;
+
+import cn.enilu.wx.util.WxUtil;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
+import org.json.JSONObject;
 import org.nutz.aop.interceptor.async.Async;
 import org.nutz.json.Json;
 import org.nutz.mapl.Mapl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -59,11 +68,21 @@ public class AccountController extends BaseController {
     @Autowired
     QrcodeService qrcodeService;
 
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
+    @Value("${spring.wx.appid}")
+    private  String appid;
+
+    @Value("${spring.wx.secret}")
+    private  String secret;
+    private   String GXL_USER_LOGIN_TOKE="GXL:USER:LOGIN:TOKE:PREVIEW:";
 
     /*新增用户，更新用户
      */
     @PostMapping(value = "/verifyUser")
-    public Object verifyUser(@RequestBody @Valid UserWxml userWxml) {
+    public Object verifyUser(@RequestBody @Valid UserWxml userWxml) throws SQLException {
+
         //根据唯一编码查询数据
         Page<User> page = new PageFactory<User>().defaultPage();
         page.addFilter("phone", SearchFilter.Operator.EQ, userWxml.getFdPhone(), SearchFilter.Join.and);
@@ -71,7 +90,7 @@ public class AccountController extends BaseController {
         //roomListService.queryIndexNews();
         List<User> list = page.getRecords();
         //判断是否存在
-        if(list.isEmpty()||list.size()>0){
+        if(list.size()>0){
                 return Rets.failure("手机号重复");
         }else{
             User user=new User();
@@ -85,6 +104,10 @@ public class AccountController extends BaseController {
             user.setRoleid(",");
             user.setPhone(userWxml.getFdPhone());//手机号
             user.setEmail(userWxml.getFdEmail());//邮箱
+            WxBean wx= new WxUtil().getAppId(userWxml.getWxmlCode(),appid,secret);
+
+            user.setSession_key(wx.getSession_key());
+            user.setOpenid(wx.getOpenid());
             List<User> listUser =new ArrayList<User>();
             listUser.add(user);
             userService.insert(user);
@@ -147,6 +170,11 @@ public class AccountController extends BaseController {
      * @return
      */
 
+
+
+
+
+
     @PostMapping(value = "/loginWxml")
     public Object loginWxml(@RequestBody @Valid UserWxml loginDto) {
         try {
@@ -170,8 +198,14 @@ public class AccountController extends BaseController {
             }
             String token = userService.loginForToken(user);
             ShiroFactroy.me().shiroUser(token, user);
-            Map<String, String> result = new HashMap<>(1);
+            Map<String, Object> result = new HashMap<>(1);
             result.put("token", token);
+            result.put("user", user);
+            Object wx= new WxUtil().getAppId(loginDto.getWxmlCode());
+            result.put("boby",wx );
+            result.put("wxCode",loginDto.getWxmlCode() );
+            //存储登录用户
+            redisTemplate.opsForValue().set(GXL_USER_LOGIN_TOKE+user.getId(), result);
 
             //判断是否是管理员
             if(user.getAccount().equals("admin")){
@@ -373,5 +407,8 @@ public class AccountController extends BaseController {
 
 
     }
+
+
+
 
 }

@@ -35,5 +35,23 @@ public class FileInfo extends BaseEntity {
 
 
 
+    @Column(columnDefinition = "VARCHAR(64) COMMENT '文件名称'")
+    private String name;
+
+
+    @Column(columnDefinition = "VARCHAR(64) COMMENT '大小'")
+    private long size;
+
+    @Column(columnDefinition = "VARCHAR(64) COMMENT 'uuid'")
+    private String uid;
+
+    @Column(columnDefinition = "VARCHAR(64) COMMENT '文件类型'")
+    private String type;
+
+    @Column(columnDefinition = "VARCHAR(1000) COMMENT '实际地址'")
+    private String url;
+
+    @Column(columnDefinition = "VARCHAR(64) COMMENT '类型'")
+    private String status;
 
 }

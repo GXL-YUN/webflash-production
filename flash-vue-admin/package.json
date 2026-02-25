@@ -23,6 +23,7 @@
     "element-ui": "2.12.0",
     "fuse.js": "3.4.4",
     "js-cookie": "2.2.0",
+    "lru-cache": "^11.1.0",
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",
     "path-to-regexp": "2.4.0",
@@ -36,7 +37,7 @@
     "webpack-dev-server": "^4.7.3"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0",
+    "@babel/core": "^7.28.0",
     "@babel/register": "7.0.0",
     "@vue/cli-plugin-babel": "3.6.0",
     "@vue/cli-plugin-eslint": "3.6.0",

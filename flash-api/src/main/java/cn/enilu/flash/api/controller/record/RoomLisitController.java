@@ -22,6 +22,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -50,6 +51,9 @@ public class RoomLisitController {
     @Autowired
     private RoomListService roomListService;
 
+
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Autowired
     private AnnouncementService announcementService;
@@ -117,7 +121,19 @@ public class RoomLisitController {
         }
         return Rets.success();
     }
+    @PostMapping("/card/getCardSelectList")
+    public Object getCardSelectList(
+            @RequestParam(value = "inputs.fdAssetStatus",required = false) String  fdAssetStatus,
+            @RequestParam(value = "inputs.fdCode",required = false) String  fdCode,
+            @RequestParam(value = "inputs.fdName",required = false) String  fdName,
+            @RequestParam(value = "inputs.fdTime",required = false) String  fdTime
+    ) throws Exception {
 
+
+        System.out.println("测试");
+
+    return null;
+    }
 
 
     @PostMapping("/UtilGetModelMk")
@@ -251,7 +267,9 @@ public class RoomLisitController {
                                 detailData.put(key,mxArr);
                             }else{
                                 //主表字段封装
-                                JSONObject json = properties.getJSONObject(key);
+                                JSONObject json = properties
+
+                                        .getJSONObject(key);
                                 JSONObject  massage=new JSONObject();
                                 //System.out.println(json.getString("description"));
                                 massage.put("fdKey",key);
@@ -308,6 +326,9 @@ public class RoomLisitController {
                     // 7. 生成Excel文件
                   //  createExcelFromJson(mainData, dateName+".xlsx");
                     System.out.println("Excel文件已生成!");
+                    redisTemplate.opsForValue().set("test", "Hello Redis");
+                    redisTemplate.opsForValue().set("TEST:EDIS:DATA:name", "测试书");
+                    redisTemplate.opsForValue().set("name", "测试书");
                     return chanegDate(main,detailData,attachment,id).toString();
 
                 }
@@ -315,6 +336,8 @@ public class RoomLisitController {
                 e.printStackTrace();
             }
 
+      //  redisTemplate.opsForValue().set("test", "Hello Redis");
+        System.out.println("Redis Test: " + redisTemplate.opsForValue().get("test"));
         return boby.toString();
     }
 

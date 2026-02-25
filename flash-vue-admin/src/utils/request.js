@@ -4,6 +4,11 @@ import store from '@/store'
 import {getToken} from '@/utils/auth'
 import router from '@/router'
 
+/**
+ * 对于请求数据进行封装接口入参
+ * @type {AxiosInstance}
+ */
+
 // create an axios instance
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url

@@ -1,32 +1,44 @@
 spring:
-  elasticsearch:
-    uris: http://localhost:9200
-    connection-timeout: 5s
-    socket-timeout: 30s
   rabbitmq:
-    host: localhost
-    port: 15672
-    username: guest
-    password: guest
-    virtual-host: /
-    # 开启发送方确认机制
-    publisher-confirms: true
-    # 开启发送方返回机制
-    publisher-returns: true
-    listener:
-      simple:
-        # 消费者最小数量
-        concurrency: 1
-        # 消费者最大数量
-        max-concurrency: 10
-        # 每次从队列中获取的消息数量
-        prefetch: 1
-        # 消费者自动启动
-        auto-startup: true
-        # 被拒绝的消息重新进入队列
-        default-requeue-rejected: true
-        # 签收模式：手动签收
-        acknowledge-mode: manual
+      host: 122.51.246.240
+      # host: http://127.0.0.1/http://122.51.246.240:15672/
+      port: 5672
+      username: admin
+      password: 1225dmf1212.
+      virtual-host: /
+      # 开启发送方确认机制
+      #publisher-confirms: true
+      # 连接池配置
+      connection-timeout: 5000
+      cache:
+        channel:
+          size: 25
+        connection:
+          mode: channel
+      # 发布确认      # 开启发送方返回机制
+      publisher-confirm-type: correlated
+      publisher-returns: true
+      # 消费者配置
+      listener:
+        simple:
+          # 消费者最小数量
+          concurrency: 1
+          # 消费者最大数量
+          max-concurrency: 20
+          # 每次从队列中获取的消息数量
+          prefetch: 50
+          # 消费者自动启动
+          auto-startup: true
+          # 被拒绝的消息重新进入队列
+          default-requeue-rejected: true
+          # 签收模式：手动签收
+          acknowledge-mode: manual
+          retry:
+            enabled: true
+            max-attempts: 3
+            initial-interval: 1000ms
+            multiplier: 2.0
+            max-interval: 10000ms
   profiles:
     active: prod
   cache:
@@ -63,6 +75,9 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
+  wx:
+    secret: 0448e47a39650a17da133394ee393b81
+    appid: wx2224ac6c80008d91
 jwt:
   token:
     expire:
