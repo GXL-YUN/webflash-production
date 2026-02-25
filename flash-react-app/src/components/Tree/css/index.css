@@ -1,0 +1,24 @@
+/* 可以添加一些自定义样式 */
+.ant-table-cell {
+    transition: all 0.3s;
+}
+
+.ant-table-row-expand-icon {
+    cursor: pointer;
+}
+
+.ant-table-row-level-0 {
+    background-color: #fafafa;
+}
+
+.ant-table-row-level-1 {
+    background-color: #f6ffed;
+}
+
+.ant-table-row-level-2 {
+    background-color: #e6f7ff;
+}
+
+.ant-table-row-level-3 {
+    background-color: #fff7e6;
+}

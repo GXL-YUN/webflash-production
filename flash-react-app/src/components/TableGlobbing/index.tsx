@@ -4,6 +4,10 @@ import {RoomItem} from "./types/room";
 import { BrowserRouter as Router, Routes, Route,Navigate } from 'react-router-dom';
 import RoomTable ,{ChildMethods}  from './RoomTable';
 import RoomForm from './RoomForm';
+import AttachmentDemo from '../../components/File/AttachmentDemo';
+
+import FileListDemo from '../../components/File/FileListDemo';
+
 import {
     Table,
     Button,
@@ -15,16 +19,30 @@ import {
     Popconfirm,
     Card,
     Descriptions,
-    Dropdown,
+    Drawer,
+    Dropdown, Radio,
     Menu
 } from 'antd';
 
+
+import type { DrawerProps, RadioChangeEvent } from 'antd';
+
 import {DeleteOutlined, EditOutlined, EyeOutlined} from "@ant-design/icons";
 import {roomService} from "./services/roomService";
+import CodeHighlighter from "../../operation/Knowledge/components/CodeHighlighter";
+import MarkdownEditor from '../../components/MarkDownEdit/view';
 const TableGlobbings: React.FC = () => {
 
-
-
+    const [viewopen, setViewOpen] = useState(false);
+    const [placement, setPlacement] = useState<DrawerProps['placement']>('right');
+   // const [size, setSize] = useState('256');
+    const [size, setSize] = useState<string>('default'); // 改为字符串类型
+    const [drawerSize, setDrawerSize] = useState<number>(1000); // 改为数字类型
+    const onChange = (e: RadioChangeEvent) => {
+        setSize('256');
+        setPlacement(e.target.value);
+    };
+    const [editopen, setEditOpen] = useState(false);
     const [data, setData] = useState<RoomItem[]>([]);
     const [loading, setLoading] = useState(false);
     const [selectedRow, setSelectedRow] = useState<RoomItem | null>(null);
@@ -33,11 +51,16 @@ const TableGlobbings: React.FC = () => {
     const [form] = Form.useForm();
     const [modalType, setModalType] = useState<'create' | 'edit'>('create');
     const childRef = useRef<ChildMethods>(null);
+
+
+    const url="/api/project/";
     // 表单提交
     const handleSubmit =  useCallback(async (values: any) => {
+        debugger
         try {
             if (modalType === 'create') {
-                await roomService.createRoom(values);
+                await roomService.createRoom(url,values);
+                setEditOpen(false);
                 message.success('新增成功');
             } else {
                 // 编辑逻辑
@@ -66,7 +89,8 @@ const TableGlobbings: React.FC = () => {
                 form.resetFields();
                 setModalType('create');
                 setSelectedRow(null);
-                setModalVisible(true);
+               // setModalVisible(true);
+                setEditOpen(true);
                 // 可以返回结果给子组件
                 //return { success: true, receivedData: data };
         },
@@ -83,7 +107,9 @@ const TableGlobbings: React.FC = () => {
     // 查看详情
     const handleViewDetail = (record: RoomItem) => {
         setSelectedRow(record);
-        setDetailVisible(true);
+        debugger
+        setViewOpen(true)  //抽屉
+       // setDetailVisible(true);   //弹框
     };
 
     // 编辑记录
@@ -91,7 +117,9 @@ const TableGlobbings: React.FC = () => {
         form.setFieldsValue(record);
         setModalType('edit');
         setSelectedRow(record);
-        setModalVisible(true);
+       // setModalVisible(true);
+
+        setEditOpen(true);
     };
 
     // 删除记录
@@ -194,7 +222,11 @@ const TableGlobbings: React.FC = () => {
             )
         }
     ];
-    return <div><RoomTable col={columns} url="/api/project/" ref={methods} />
+    return <div>
+        <RoomTable col={columns} url={url} ref={methods} />
+
+
+
         {/* 新增/编辑弹窗 */}
         <Modal
             title={modalType === 'create' ? '新增房间' : '编辑房间'}
@@ -210,9 +242,64 @@ const TableGlobbings: React.FC = () => {
                 initialValues={selectedRow || {}}
             />
         </Modal>
-
+        {/*编辑页面*/}
+        <Drawer
+            title="列表详情数据"
+            placement={placement}
+            onClose={() => setEditOpen(false)}
+            open={editopen}
+            width={drawerSize}
+        >
+            <RoomForm
+                form={form}
+                onSubmit={handleSubmit}
+                initialValues={selectedRow || {}}
+            />
+        </Drawer>
         {/* 详情弹窗 */}
-        <Modal
+        <Drawer
+            title="列表详情数据"
+            placement={placement}
+            onClose={() => setViewOpen(false)}
+            open={viewopen}
+            key={placement}
+            width={drawerSize}
+        >
+            {selectedRow && (
+                <Descriptions column={2} bordered>
+                    <Descriptions.Item label="ID">{selectedRow.id}</Descriptions.Item>
+                    <Descriptions.Item label="需求名称">{selectedRow.fdName}</Descriptions.Item>
+                    <Descriptions.Item label="需求描述">{selectedRow.fdMassage}</Descriptions.Item>
+                    <Descriptions.Item label="项目状态">{selectedRow.fdType}</Descriptions.Item>
+                    <Descriptions.Item label="负责人">{selectedRow.fdUserName}</Descriptions.Item>
+                    <Descriptions.Item label="创建时间">{selectedRow.createTime}</Descriptions.Item>
+                    {/*<Descriptions.Item label="更新时间">{selectedRow.modifyTime}</Descriptions.Item>*/}
+
+
+                        <Descriptions.Item label="内容" span={2}>
+                            <MarkdownEditor
+                                value={selectedRow.richTextContent_long}
+                            />
+                        </Descriptions.Item>
+
+
+
+
+
+
+                    <Descriptions.Item label="备注" span={2}>
+                        {selectedRow.fdbz}
+                    </Descriptions.Item>
+             
+                        <Descriptions.Item label="图片" span={2}>
+  
+                            <FileListDemo/>
+                        </Descriptions.Item>
+                
+                </Descriptions>
+            )}
+        </Drawer>
+{/*        <Modal
             title="详情"
             open={detailVisible}
             onCancel={() => setDetailVisible(false)}
@@ -246,7 +333,7 @@ const TableGlobbings: React.FC = () => {
                     )}
                 </Descriptions>
             )}
-        </Modal>
+        </Modal>*/}
     </div>
 };
 export default TableGlobbings;

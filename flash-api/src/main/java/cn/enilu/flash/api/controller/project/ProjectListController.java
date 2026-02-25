@@ -1,15 +1,16 @@
 package cn.enilu.flash.api.controller.project;
 
-import cn.enilu.flash.bean.entity.system.FileInfo;
+import cn.enilu.flash.bean.constant.factory.PageFactory;
 import cn.enilu.flash.bean.vo.front.Rets;
-import cn.enilu.project.bean.ProjectModel;
-import cn.enilu.project.dao.ProjectDao;
+import cn.enilu.flash.bean.vo.query.SearchFilter;
+import cn.enilu.flash.service.system.FileService;
+import cn.enilu.flash.utils.factory.Page;
+import cn.enilu.project.bean.model.ProjectModel;
 import cn.enilu.project.service.ProjectServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,13 +22,17 @@ public class ProjectListController {
     @Autowired
     private ProjectServiceImpl projectServiceImpl;
 
-
     //项目查询
     @PostMapping(value = "/list")
     // @RequiresPermissions(value = {Permission.FILE_UPLOAD})
     public Object list() {
         try {
-            List<ProjectModel> list=projectServiceImpl.queryAll();
+            Page<ProjectModel> page = new PageFactory<ProjectModel>().defaultPage();
+            Sort sort = Sort.by(Sort.Direction.DESC, "createTime");
+            page.setSort(sort);
+            page = projectServiceImpl.queryPage(page);
+            page.getRecords();
+            List<ProjectModel> list= projectServiceImpl.queryAll((List<SearchFilter>) null,sort);
             return Rets.success(list);
         } catch (Exception e) {
             log.error("查询全部异常", e);
@@ -35,12 +40,18 @@ public class ProjectListController {
         }
     }
 
+
+    @Autowired
+    private FileService fileService;
     //项目查询
     @PostMapping(value = "/add")
     // @RequiresPermissions(value = {Permission.FILE_UPLOAD})
     public Object add(@RequestBody ProjectModel date) {
         try {
             projectServiceImpl.insert(date);
+            //fileService.updateList(date.geta);
+
+            //修改附件
             //List<ProjectModel> list=projectServiceImpl.queryAll();
             return Rets.success("成功");
         } catch (Exception e) {

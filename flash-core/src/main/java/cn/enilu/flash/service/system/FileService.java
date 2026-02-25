@@ -25,6 +25,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -40,6 +41,19 @@ public class FileService extends BaseService<FileInfo, Long, FileInfoRepository>
 
     @Value("${urlpath}")
     private String configValue;
+
+    /**
+     * 批量上传上传附件
+     */
+
+    public void addAttList(List<MultipartFile> multipartFile, String fdKey, String fdModelId) {
+        if(multipartFile.size()>0){
+            for (MultipartFile mul:multipartFile){
+                this.upload(mul,fdKey,fdModelId);
+            }
+        }
+    }
+
     /**
      * 文件上传
      *
@@ -180,7 +194,7 @@ public class FileService extends BaseService<FileInfo, Long, FileInfoRepository>
             //doc转换为pdf
             //判断类型
             insert(fileInfo);
-            docToPdf(fileInfo.getId());
+            //docToPdf(fileInfo.getId());
             return fileInfo;
         } catch (Exception e) {
             e.printStackTrace();

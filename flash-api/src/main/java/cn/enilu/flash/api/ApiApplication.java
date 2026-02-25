@@ -44,6 +44,9 @@ import java.util.Map;
 @EnableAsync  //开启Spring异步线程@Async//需要使用异步处理的方法名
 @ComponentScan(basePackages = "cn.*.*")
 @EntityScan(basePackages = "cn.enilu.*.*")  //扫描bean包
+
+//@EntityScan(basePackages = {"cn.enilu.log", "cn.enilu.flash.bean.entity"})
+//@EnableJpaRepositories(basePackages = {"cn.enilu.log.dao", "cn.enilu.flash.dao"})
 @EnableJpaRepositories(basePackages = "cn.enilu.*.dao", repositoryFactoryBeanClass = BaseRepositoryFactoryBean.class)
 @EnableJpaAuditing
 @EnableOpenApi
@@ -54,9 +57,6 @@ public class ApiApplication extends SpringBootServletInitializer {
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(ApiApplication.class);
     }
-    @Autowired
-    private static RedisTemplate<String, Object> redisTemplate;
-
     private static String GXL_USER_LOGIN_TOKE="GXL:APP:CONFIG:MASSAGE:";
     public static void main(String[] args) throws UnknownHostException {
         System.out.println("开始启动");
@@ -76,5 +76,5 @@ public class ApiApplication extends SpringBootServletInitializer {
                 "外部访问地址 : \thttp://" + ip + ":" + port + path + "/\n\t" +
                 "在线文档地址 : \thttp://" + ip + ":" + port + path + "/swagger-ui/index.html\n" +
                 "----------------------------------------------------------");
-                }
+        }
 }

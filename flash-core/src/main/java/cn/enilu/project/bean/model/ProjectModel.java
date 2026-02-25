@@ -1,7 +1,8 @@
-package cn.enilu.project.bean;
+package cn.enilu.project.bean.model;
 
 
 import cn.enilu.flash.bean.entity.BaseEntity;
+import cn.enilu.flash.bean.entity.att.AttachmentInfo;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Table;
@@ -11,6 +12,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.sql.Date;
+import java.util.List;
 
 @Entity(name = "t_project_list")
 @Table(appliesTo = "t_project_list", comment = "项目管理")
@@ -47,5 +49,15 @@ public class ProjectModel extends BaseEntity  {
         @Column(columnDefinition = "DATETIME COMMENT '项目结束时间'")
         private Date fdEndTime;
 
+
+        @Column(columnDefinition = "TEXT")
+        private String richTextContent;
+//1.2 使用 LONGTEXT类型（支持更大内容）
+        @Column(columnDefinition = "LONGTEXT")
+        private String richTextContent_long;
+
+        @ElementCollection
+        @CollectionTable(name = "t_sys_file_info", joinColumns = @JoinColumn(name = "fd_id"))
+        private List<String>  fdListAtt;
 
 }

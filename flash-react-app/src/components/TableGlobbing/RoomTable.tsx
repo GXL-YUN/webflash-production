@@ -82,19 +82,6 @@ const RoomTable: React.FC<DataFormProps> = (props) => {
         props.ref.addDate();
         //调用父组件函数
     };
-
-    // 暴露给父组件的方法
-    // useImperativeHandle(ref, () => ({
-    //     // 刷新数据
-    //     refreshData: () => {
-    //         fetchData();
-    //     },
-    //     // 自定义消息
-    //     showMessage: (msg: string) => {
-    //         alert(`来自父组件的消息: ${msg}`);
-    //     }
-    // }));
-    // 导出菜单
     const exportMenu = (
         <Menu
             items={[

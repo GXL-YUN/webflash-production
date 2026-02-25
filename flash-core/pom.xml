@@ -71,6 +71,11 @@
 <!--            <version>3.1.270</version>  &lt;!&ndash; 使用最新版本 &ndash;&gt;-->
 <!--        </dependency>-->
         <!-- 腾讯文档专用SDK -->
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>

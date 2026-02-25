@@ -1,7 +1,13 @@
 // components/RoomForm.tsx
-import React from 'react';
-import { Form, Input, Row, Col, Select, Upload } from 'antd';
+import React, {useState} from 'react';
+import { Form, Input, Row, Col, Select, Upload, Button, DatePicker } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import CodeHighlighter from "../../operation/Knowledge/components/CodeHighlighter";
+import MarkdownEditor from "../../operation/Knowledge/components/MarkdownEditor";
+
+import FileUpdate  from "../File/components/FileUploadDisplay"
+
+import FileUploadWithAction from "../../components/File/components/action/FileUploadWithAction"
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -11,25 +17,34 @@ interface RoomFormProps {
     onSubmit: (values: any) => void;
     initialValues?: any;
 }
+
 const RoomForm: React.FC<RoomFormProps> = ({ form, onSubmit, initialValues }) => {
-    const normFile = (e: any) => {
-        if (Array.isArray(e)) {
-            return e;
-        }
-        return e?.fileList;
+    // 直接使用，DatePicker 返回的就是时间戳
+    const [activeTab, setActiveTab] = useState<'markdown' | 'code'>('markdown');
+
+
+    const handleSubmit = (values: any) => {
+        const submitData = {
+            ...values,
+            // 确保转换为时间戳（毫秒）
+            fdActoinTime: values.fdActoinTime ? values.fdActoinTime.valueOf() : null,
+            fdEndTime: values.fdEndTime ? values.fdEndTime.valueOf() : null
+        };
+        // values 中的 fdActoinTime 和 fdEndTime 已经是时间戳格式
+        onSubmit(submitData);
     };
 
     return (
         <Form
             form={form}
             layout="vertical"
-            onFinish={onSubmit}
+            onFinish={handleSubmit}
             initialValues={initialValues}
         >
             <Row gutter={16}>
                 <Col span={12}>
                     <Form.Item
-                        label="名称"
+                        label="项目名称"
                         name="fdName"
                         rules={[{ required: true, message: '请输入名称' }]}
                     >
@@ -38,65 +53,9 @@ const RoomForm: React.FC<RoomFormProps> = ({ form, onSubmit, initialValues }) =>
                 </Col>
                 <Col span={12}>
                     <Form.Item
-                        label="房间名称"
-                        name="fdRoomName"
-                        rules={[{ required: true, message: '请输入房间名称' }]}
-                    >
-                        <Input placeholder="请输入房间名称" />
-                    </Form.Item>
-                </Col>
-            </Row>
-
-            <Row gutter={16}>
-                <Col span={12}>
-                    <Form.Item
-                        label="房间电话"
-                        name="fdRoomPhone"
-                        rules={[
-                            { required: true, message: '请输入房间电话' },
-                            { pattern: /^1\d{10}$/, message: '请输入正确的手机号' }
-                        ]}
-                    >
-                        <Input placeholder="请输入房间电话" />
-                    </Form.Item>
-                </Col>
-                <Col span={12}>
-                    <Form.Item
-                        label="负责人电话"
-                        name="fdPrincipalPhone"
-                        rules={[{ pattern: /^1\d{10}$/, message: '请输入正确的手机号' }]}
-                    >
-                        <Input placeholder="请输入负责人电话" />
-                    </Form.Item>
-                </Col>
-            </Row>
-
-            <Row gutter={16}>
-                <Col span={12}>
-                    <Form.Item
-                        label="地址"
-                        name="fdAddres"
-                        rules={[{ required: true, message: '请输入地址' }]}
-                    >
-                        <Input placeholder="请输入地址" />
-                    </Form.Item>
-                </Col>
-                <Col span={12}>
-                    <Form.Item
-                        label="负责人"
-                        name="fdPrincipal"
-                        rules={[{ required: true, message: '请输入负责人' }]}
-                    >
-                        <Input placeholder="请输入负责人" />
-                    </Form.Item>
-                </Col>
-            </Row>
-
-            <Row gutter={16}>
-                <Col span={12}>
-                    <Form.Item
-                        label="是否整体出租"
-                        name="fdIsWhole"
+                        label="项目状态"
+                        name="fdType"
+                        rules={[{ required: true, message: '请选择' }]}
                     >
                         <Select placeholder="请选择">
                             <Option value="是">是</Option>
@@ -104,67 +63,115 @@ const RoomForm: React.FC<RoomFormProps> = ({ form, onSubmit, initialValues }) =>
                         </Select>
                     </Form.Item>
                 </Col>
-                <Col span={12}>
-                    <Form.Item
-                        label="ABCDE分类"
-                        name="fdAbcde"
-                    >
-                        <Select placeholder="请选择分类">
-                            <Option value="A">A类</Option>
-                            <Option value="B">B类</Option>
-                            <Option value="C">C类</Option>
-                            <Option value="D">D类</Option>
-                            <Option value="E">E类</Option>
-                        </Select>
-                    </Form.Item>
-                </Col>
             </Row>
-
             <Row gutter={16}>
                 <Col span={12}>
                     <Form.Item
-                        label="租赁状态"
-                        name="fdlease"
+                        label="需求描述"
+                        name="fdMassage"
+                        rules={[{ required: true, message: '请输入需求描述' }]}
                     >
-                        <Select placeholder="请选择状态">
-                            <Option value="在租">在租</Option>
-                            <Option value="空置">空置</Option>
-                            <Option value="待租">待租</Option>
-                            <Option value="装修中">装修中</Option>
-                        </Select>
+                        <Input placeholder="请输入需求描述" />
                     </Form.Item>
                 </Col>
                 <Col span={12}>
                     <Form.Item
-                        label="上传图片"
-                        name="img"
-                        valuePropName="fileList"
-                        getValueFromEvent={normFile}
+                        label="需求负责人"
+                        name="fdUserName"
+                        rules={[{ required: true, message: '请输入需求负责人' }]}>
+                        <Input placeholder="请输入需求负责人" />
+                    </Form.Item>
+                </Col>
+            </Row>
+            <Row gutter={16}>
+                <Col span={12}>
+                    <Form.Item
+                        label="项目开始时间"
+                        name="fdActoinTime"
+                        rules={[{ required: true, message: '请选择开始时间' }]}
                     >
-                        <Upload
-                            listType="picture-card"
-                            maxCount={1}
-                            beforeUpload={() => false}
-                        >
-                            <div>
-                                <PlusOutlined />
-                                <div style={{ marginTop: 8 }}>上传</div>
-                            </div>
-                        </Upload>
+                        <DatePicker
+                            showTime
+                            format="YYYY-MM-DD HH:mm:ss"
+                            style={{ width: '100%' }}
+                            placeholder="请选择开始时间"
+                        />
+                    </Form.Item>
+                </Col>
+                <Col span={12}>
+                    <Form.Item
+                        label="项目结束时间"
+                        name="fdEndTime"
+                        rules={[{ required: true, message: '请选择结束时间' }]}
+                    >
+                        <DatePicker
+                            showTime
+                            format="YYYY-MM-DD HH:mm:ss"
+                            style={{ width: '100%' }}
+                            placeholder="请选择结束时间"
+                        />
                     </Form.Item>
                 </Col>
             </Row>
 
+
+            {activeTab === 'markdown' ? (
+                <Form.Item
+                    name="richTextContent_long"
+                    label="内容"
+                    rules={[{ required: true, message: '请输入内容' }]}
+                >
+                    <MarkdownEditor />
+                </Form.Item>
+            ) : (
+                <>
+
+                    <Form.Item
+                        name="richTextContent_long"
+                        label="说明"
+                        rules={[{ required: true, message: '请输入说明' }]}
+                    >
+                        <CodeHighlighter language='markdown'/>
+                    </Form.Item>
+                </>
+            )}
+                {/* <Form.Item name="attachments">
+                    <FileUploadWithAction />
+                </Form.Item> */}
+
+
+                <Form.Item
+                    name="attacherList"
+                    label="附件"
+                >
+                    <FileUploadWithAction/>
+                </Form.Item>
+
+            {/*<Form.Item*/}
+            {/*    name="richTextContent_long"*/}
+            {/*    label="代码"*/}
+            {/*    rules={[{ required: true, message: '需求说明' }]}*/}
+            {/*>*/}
+            {/*    <CodeHighlighter language= 'markdown' />*/}
+            {/*</Form.Item>*/}
+
             <Form.Item
-                label="备注"
-                name="fdbz"
+                label="需求说明"
+                name="fdBz"
             >
                 <TextArea
                     rows={4}
-                    placeholder="请输入备注信息"
+                    placeholder="请输入需求说明"
                     maxLength={500}
                     showCount
                 />
+            </Form.Item>
+            <Form.Item label={null}>
+                <div>
+                    <Button type="primary" htmlType="submit">
+                        提交
+                    </Button>
+                </div>
             </Form.Item>
         </Form>
     );

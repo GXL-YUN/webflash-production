@@ -1,8 +1,7 @@
 package cn.enilu.project.dao;
 
 import cn.enilu.flash.dao.BaseRepository;
-import cn.enilu.kmss.bean.entity.RecordBean;
-import cn.enilu.project.bean.ProjectModel;
+import cn.enilu.project.bean.model.ProjectModel;
 import org.springframework.stereotype.Repository;
 
 @Repository

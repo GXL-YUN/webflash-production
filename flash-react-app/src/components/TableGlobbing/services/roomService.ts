@@ -5,21 +5,21 @@ import { ApiResponse, RoomItem, CreateRoomDto } from '../types/room';
 const API_BASE_URL = '/date';
 
 export const roomService = {
-    // 获取房间列表
+    // 获取列表
     async getRoomList(url:string): Promise<ApiResponse> {
         const response = await axios.post<ApiResponse>(`${API_BASE_URL}`+url+"/list");
         return response.data;
     },
 
-    // 新增房间
-    async createRoom(data: CreateRoomDto): Promise<ApiResponse> {
-        const response = await axios.post<ApiResponse>(`${API_BASE_URL}/add`, data);
+    // 新增
+    async createRoom(url:string,data: CreateRoomDto): Promise<ApiResponse> {
+        const response = await axios.post<ApiResponse>(`${API_BASE_URL}`+url+`/add`, data);
         return response.data;
     },
 
-    // 查看房间详情
-    async getRoomDetail(id: number): Promise<ApiResponse> {
-        const response = await axios.post<ApiResponse>(`${API_BASE_URL}/view`, { id });
+    // 查看详情
+    async getRoomDetail(url:string,id: number): Promise<ApiResponse> {
+        const response = await axios.post<ApiResponse>(`${API_BASE_URL}`+url+`/view`, { id });
         return response.data;
     },
 

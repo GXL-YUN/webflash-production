@@ -13,6 +13,7 @@ export interface RoomItem {
     fdActoinTime:string;
     fdEndTime:string;
     img:string;
+    richTextContent_long:string;
 
     fdbz: string;
 }

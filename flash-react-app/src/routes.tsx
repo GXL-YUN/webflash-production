@@ -11,13 +11,33 @@ import MkFromDate from "../src/components/MkFromDate/page/ThreeLayerPage";
 import DemandList from '../src/components/DemandManagement/DemandList';
 import DemandDetail from '../src/components/DemandManagement/DemandDetail';
 import TableGlobbing from '../src/components/TableGlobbing/index';
+//路由日志
+import ComponentScannerView from './route/scripts/ComponentScannerView';
+import KnowledgeList from '../src/operation/Knowledge/pages/KnowledgeList/index';
+import NoteCreate from '../src/operation/Knowledge/pages/NoteCreate/index';
+import NoteDetail from '../src/operation/Knowledge/pages/NoteDetail/index';
+
+
+//多层
+
+import TreeApp from '../src/components/Tree/index2';
 
 // 页面组件
 const Dashboard = () => <div><Home/></div>;
 //路由地址
 const App = () => {
+    // @ts-ignore
     return (
                 <Routes>
+
+                    <Route path="/route/View" element={
+                        <AppLayout>
+                            <ComponentScannerView/>
+                        </AppLayout>
+                    } />
+
+                    {/* 其他路由 */}
+
                     <Route path="/" element={<Home />} />
                     <Route path="/data/adout" element={<AppLayout><Index /></AppLayout>} />
                     <Route path="/table/RoomTable" element={<AppLayout><TableGlobbing/></AppLayout>} />
@@ -29,7 +49,13 @@ const App = () => {
                     <Route path="/demand/list" element={<DemandList />} />
                     <Route path="/demand/detail/:id" element={<DemandDetail />} />
                     <Route path="/" element={<Navigate to="/demand/list" replace />} />
-                    <Route path="/" element={<Navigate to="/demand/list" replace />} />
+
+                    <Route path="/Knowledge/list" element={<AppLayout><KnowledgeList/></AppLayout>} />
+                    <Route path="/Knowledge/add" element={<NoteCreate />} />
+                    <Route path="/Knowledge/view/1" element={<NoteDetail />} />
+
+                    <Route path="/TreeApp/all" element={<AppLayout><TreeApp/></AppLayout>} />
+
                 </Routes>
     );
 };

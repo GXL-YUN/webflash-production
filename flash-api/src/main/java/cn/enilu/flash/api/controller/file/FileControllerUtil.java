@@ -2,13 +2,17 @@ package cn.enilu.flash.api.controller.file;
 
 import cn.enilu.flash.api.controller.BaseController;
 import cn.enilu.flash.api.controller.FileController;
+import cn.enilu.flash.bean.constant.factory.PageFactory;
 import cn.enilu.flash.bean.entity.system.FileInfo;
 import cn.enilu.flash.bean.enumeration.ConfigKeyEnum;
 import cn.enilu.flash.bean.enumeration.Permission;
 import cn.enilu.flash.bean.vo.front.Rets;
+import cn.enilu.flash.bean.vo.query.SearchFilter;
 import cn.enilu.flash.cache.ConfigCache;
 import cn.enilu.flash.service.system.FileService;
 import cn.enilu.flash.utils.*;
+import cn.enilu.flash.utils.factory.Page;
+import cn.enilu.kmss.bean.entity.RoomList;
 import cn.enilu.util.PdfUtil;
 import cn.enilu.util.PicUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -40,18 +44,35 @@ public class FileControllerUtil {
      * @param multipartFile
      * @return
      */
-    @PostMapping
-   // @RequiresPermissions(value = {Permission.FILE_UPLOAD})
-    public Object upload(@RequestPart("file") MultipartFile multipartFile,@RequestPart("fdKey") String fdKey,@RequestPart("fdModelId") String  fdModelId) {
+    @PostMapping("upLoder")
+    public Object upload(@RequestPart("file") MultipartFile multipartFile) {
 
         try {
-            FileInfo fileInfo = fileService.upload(multipartFile,fdKey,fdModelId);
+            FileInfo fileInfo = fileService.upload(multipartFile,"","");
             return Rets.success(fileInfo);
         } catch (Exception e) {
             logger.error("上传文件异常", e);
             return Rets.failure("上传文件失败");
         }
     }
+
+
+
+
+
+    /**
+     * 获取文件列表数据
+     */
+    @GetMapping(value = "getList")
+    public Object list(@RequestParam("fdKey") String fdKey,
+                     @RequestParam(value = "fdMainId", required = false) String fdMainId) {
+        Page<FileInfo> page = new PageFactory<FileInfo>().defaultPage();
+        page.addFilter("fdModelId", SearchFilter.Operator.EQ, fdMainId, SearchFilter.Join.and);
+        page.addFilter("fdKey", SearchFilter.Operator.EQ, fdKey, SearchFilter.Join.and);
+        Page<FileInfo> date= fileService.queryPage(page);
+        return Rets.success(date.getRecords());
+    }
+
 
     /**
      * 下载文件

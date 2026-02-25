@@ -181,32 +181,20 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
             ]
         },
         {
-            key: '/system',
-            label: '系统设置',
+            key: '/Knowledge',
+            label: '知识中心',
             icon: <SettingOutlined style={{ fontSize: '18px' }} />,
             className: 'main-menu-item',
             children: [
                 {
-                    key: '/system/user',
-                    label: '用户管理',
+                    key: '/Knowledge/list',
+                    label: '知识管理',
                     icon: <TeamOutlined />,
                     className: 'sub-menu-item'
                 },
                 {
-                    key: '/system/role',
-                    label: '角色权限',
-                    icon: <UnorderedListOutlined />,
-                    className: 'sub-menu-item'
-                },
-                {
-                    key: '/system/config',
-                    label: '系统配置',
-                    icon: <SettingOutlined />,
-                    className: 'sub-menu-item'
-                },
-                {
-                    key: '/system/log',
-                    label: '操作日志',
+                    key: '/route/View',
+                    label: '路由日志',
                     icon: <AuditOutlined />,
                     className: 'sub-menu-item'
                 }
