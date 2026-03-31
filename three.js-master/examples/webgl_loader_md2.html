@@ -146,17 +146,17 @@
 
 				gui = new GUI();
 
-				gui.add( playbackConfig, 'speed', 0, 2 ).onChange( function () {
+				gui.add( playbackConfig, 'speed', 0, 2 ).onChange(function () {
 
-					character.setPlaybackRate( playbackConfig.speed );
+                    character.setPlaybackRate(playbackConfig.speed);
 
-				} );
+                });
 
-				gui.add( playbackConfig, 'wireframe' ).onChange( function () {
+				gui.add( playbackConfig, 'wireframe' ).onChange(function () {
 
-					character.setWireframe( playbackConfig.wireframe );
+                    character.setWireframe(playbackConfig.wireframe);
 
-				} );
+                });
 
 				// CHARACTER
 

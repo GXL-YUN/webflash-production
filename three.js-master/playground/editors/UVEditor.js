@@ -10,13 +10,13 @@ export class UVEditor extends BaseNodeEditor {
 
 		super( 'UV', node, 200 );
 
-		const optionsField = new SelectInput( [ '0', '1', '2', '3' ], 0 ).onChange( () => {
+		const optionsField = new SelectInput( [ '0', '1', '2', '3' ], 0 ).onChange(() => {
 
-			node.index = Number( optionsField.getValue() );
+            node.index = Number(optionsField.getValue());
 
-			this.invalidate();
+            this.invalidate();
 
-		} );
+        });
 
 		this.add( new LabelElement( 'Channel' ).add( optionsField ) );
 

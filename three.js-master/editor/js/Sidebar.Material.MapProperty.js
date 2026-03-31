@@ -14,10 +14,10 @@ function SidebarMaterialMapProperty( editor, property, name ) {
 	const container = new UIRow();
 	container.add( new UIText( name ).setClass( 'Label' ) );
 
-	const enabled = new UICheckbox( false ).setMarginRight( '8px' ).onChange( onChange );
+	const enabled = new UICheckbox( false ).setMarginRight( '8px' ).onChange(onChange);
 	container.add( enabled );
 
-	const map = new UITexture( editor ).onChange( onMapChange );
+	const map = new UITexture( editor ).onChange(onMapChange);
 	container.add( map );
 
 	const mapType = property.replace( 'Map', '' );
@@ -28,7 +28,7 @@ function SidebarMaterialMapProperty( editor, property, name ) {
 
 	if ( property === 'aoMap' ) {
 
-		intensity = new UINumber( 1 ).setWidth( '30px' ).setRange( 0, 1 ).onChange( onIntensityChange );
+		intensity = new UINumber( 1 ).setWidth( '30px' ).setRange( 0, 1 ).onChange(onIntensityChange);
 		container.add( intensity );
 
 	}
@@ -37,7 +37,7 @@ function SidebarMaterialMapProperty( editor, property, name ) {
 
 	if ( property === 'bumpMap' || property === 'displacementMap' ) {
 
-		scale = new UINumber().setWidth( '30px' ).onChange( onScaleChange );
+		scale = new UINumber().setWidth( '30px' ).onChange(onScaleChange);
 		container.add( scale );
 
 	}
@@ -46,10 +46,10 @@ function SidebarMaterialMapProperty( editor, property, name ) {
 
 	if ( property === 'normalMap' || property === 'clearcoatNormalMap' ) {
 
-		scaleX = new UINumber().setWidth( '30px' ).onChange( onScaleXYChange );
+		scaleX = new UINumber().setWidth( '30px' ).onChange(onScaleXYChange);
 		container.add( scaleX );
 
-		scaleY = new UINumber().setWidth( '30px' ).onChange( onScaleXYChange );
+		scaleY = new UINumber().setWidth( '30px' ).onChange(onScaleXYChange);
 		container.add( scaleY );
 
 	}
@@ -66,7 +66,7 @@ function SidebarMaterialMapProperty( editor, property, name ) {
 
 		rangeMinRow.add( new UIText( 'min:' ).setWidth( '35px' ) );
 
-		rangeMin = new UINumber().setWidth( '40px' ).onChange( onRangeChange );
+		rangeMin = new UINumber().setWidth( '40px' ).onChange(onRangeChange);
 		rangeMinRow.add( rangeMin );
 
 		const rangeMaxRow = new UIRow().setMarginBottom( '6px' ).setStyle( 'min-height', '0px' );
@@ -74,7 +74,7 @@ function SidebarMaterialMapProperty( editor, property, name ) {
 
 		rangeMaxRow.add( new UIText( 'max:' ).setWidth( '35px' ) );
 
-		rangeMax = new UINumber().setWidth( '40px' ).onChange( onRangeChange );
+		rangeMax = new UINumber().setWidth( '40px' ).onChange(onRangeChange);
 		rangeMaxRow.add( rangeMax );
 
 		// Additional settings for iridescenceThicknessMap

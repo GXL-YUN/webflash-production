@@ -142,12 +142,12 @@
 				//
 
 				const gui = new GUI();
-				gui.add( api, 'count', 0, count ).onChange( function () {
+				gui.add( api, 'count', 0, count ).onChange(function () {
 
-					stemMesh.count = api.count;
-					blossomMesh.count = api.count;
+                    stemMesh.count = api.count;
+                    blossomMesh.count = api.count;
 
-				} );
+                });
 
 				// gui.addColor( api, 'backgroundColor' ).onChange( function () {
 
@@ -161,7 +161,7 @@
 
 				// } );
 
-				gui.add( api, 'distribution' ).options( [ 'random', 'weighted' ] ).onChange( resample );
+				gui.add( api, 'distribution' ).options( [ 'random', 'weighted' ] ).onChange(resample);
 				gui.add( api, 'resample' );
 
 				//

@@ -59,6 +59,7 @@ public interface BaseRepository<T, ID extends Serializable> extends JpaRepositor
 
     T getOne(ID id);
 
+
     /**
      * 执行sql
      *
@@ -78,4 +79,6 @@ public interface BaseRepository<T, ID extends Serializable> extends JpaRepositor
      * 使用truncate table 清空数据
      */
     int truncate();
+
+    <T> T getOneById(ID id);
 }

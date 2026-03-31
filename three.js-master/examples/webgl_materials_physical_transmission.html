@@ -122,93 +122,93 @@
 				const gui = new GUI();
 
 				gui.addColor( params, 'color' )
-					.onChange( function () {
+					.onChange(function () {
 
-						material.color.set( params.color );
-						render();
+                        material.color.set(params.color);
+                        render();
 
-					} );
+                    });
 
 				gui.add( params, 'transmission', 0, 1, 0.01 )
-					.onChange( function () {
+					.onChange(function () {
 
-						material.transmission = params.transmission;
-						render();
+                        material.transmission = params.transmission;
+                        render();
 
-					} );
+                    });
 
 				gui.add( params, 'opacity', 0, 1, 0.01 )
-					.onChange( function () {
+					.onChange(function () {
 
-						material.opacity = params.opacity;
-						render();
+                        material.opacity = params.opacity;
+                        render();
 
-					} );
+                    });
 
 				gui.add( params, 'metalness', 0, 1, 0.01 )
-					.onChange( function () {
+					.onChange(function () {
 
-						material.metalness = params.metalness;
-						render();
+                        material.metalness = params.metalness;
+                        render();
 
-					} );
+                    });
 
 				gui.add( params, 'roughness', 0, 1, 0.01 )
-					.onChange( function () {
+					.onChange(function () {
 
-						material.roughness = params.roughness;
-						render();
+                        material.roughness = params.roughness;
+                        render();
 
-					} );
+                    });
 
 				gui.add( params, 'ior', 1, 2, 0.01 )
-					.onChange( function () {
+					.onChange(function () {
 
-						material.ior = params.ior;
-						render();
+                        material.ior = params.ior;
+                        render();
 
-					} );
+                    });
 
 				gui.add( params, 'thickness', 0, 5, 0.01 )
-					.onChange( function () {
+					.onChange(function () {
 
-						material.thickness = params.thickness;
-						render();
+                        material.thickness = params.thickness;
+                        render();
 
-					} );
+                    });
 
 				gui.add( params, 'specularIntensity', 0, 1, 0.01 )
-					.onChange( function () {
+					.onChange(function () {
 
-						material.specularIntensity = params.specularIntensity;
-						render();
+                        material.specularIntensity = params.specularIntensity;
+                        render();
 
-					} );
+                    });
 
 				gui.addColor( params, 'specularColor' )
-					.onChange( function () {
+					.onChange(function () {
 
-						material.specularColor.set( params.specularColor );
-						render();
+                        material.specularColor.set(params.specularColor);
+                        render();
 
-					} );
+                    });
 
 				gui.add( params, 'envMapIntensity', 0, 1, 0.01 )
 					.name( 'envMap intensity' )
-					.onChange( function () {
+					.onChange(function () {
 
-						material.envMapIntensity = params.envMapIntensity;
-						render();
+                        material.envMapIntensity = params.envMapIntensity;
+                        render();
 
-					} );
+                    });
 
 				gui.add( params, 'exposure', 0, 1, 0.01 )
-					.onChange( function () {
+					.onChange(function () {
 
-						renderer.toneMappingExposure = params.exposure;
-						render();
+                        renderer.toneMappingExposure = params.exposure;
+                        render();
 
-					} );
+                    });
 
 				gui.open();
 

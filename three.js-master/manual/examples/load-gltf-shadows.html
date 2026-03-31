@@ -122,9 +122,9 @@ function main() {
 		function makeXYZGUI( gui, vector3, name, onChangeFn ) {
 
 			const folder = gui.addFolder( name );
-			folder.add( vector3, 'x', vector3.x - 500, vector3.x + 500 ).onChange( onChangeFn );
-			folder.add( vector3, 'y', vector3.y - 500, vector3.y + 500 ).onChange( onChangeFn );
-			folder.add( vector3, 'z', vector3.z - 500, vector3.z + 500 ).onChange( onChangeFn );
+			folder.add( vector3, 'x', vector3.x - 500, vector3.x + 500 ).onChange(onChangeFn);
+			folder.add( vector3, 'y', vector3.y - 500, vector3.y + 500 ).onChange(onChangeFn);
+			folder.add( vector3, 'z', vector3.z - 500, vector3.z + 500 ).onChange(onChangeFn);
 			folder.open();
 
 		}
@@ -236,14 +236,14 @@ function main() {
 			folder.open();
 			folder.add( new DimensionGUIHelper( light.shadow.camera, 'left', 'right' ), 'value', 1, 4000 )
 				.name( 'width' )
-				.onChange( updateCamera );
+				.onChange(updateCamera);
 			folder.add( new DimensionGUIHelper( light.shadow.camera, 'bottom', 'top' ), 'value', 1, 4000 )
 				.name( 'height' )
-				.onChange( updateCamera );
+				.onChange(updateCamera);
 			const minMaxGUIHelper = new MinMaxGUIHelper( light.shadow.camera, 'near', 'far', 0.1 );
-			folder.add( minMaxGUIHelper, 'min', 1, 1000, 1 ).name( 'near' ).onChange( updateCamera );
-			folder.add( minMaxGUIHelper, 'max', 1, 4000, 1 ).name( 'far' ).onChange( updateCamera );
-			folder.add( light.shadow.camera, 'zoom', 0.01, 1.5, 0.01 ).onChange( updateCamera );
+			folder.add( minMaxGUIHelper, 'min', 1, 1000, 1 ).name( 'near' ).onChange(updateCamera);
+			folder.add( minMaxGUIHelper, 'max', 1, 4000, 1 ).name( 'far' ).onChange(updateCamera);
+			folder.add( light.shadow.camera, 'zoom', 0.01, 1.5, 0.01 ).onChange(updateCamera);
 
 		}
 

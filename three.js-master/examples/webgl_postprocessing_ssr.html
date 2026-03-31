@@ -192,62 +192,62 @@
 
 			gui = new GUI( { width: 260 } );
 			gui.add( params, 'enableSSR' ).name( 'Enable SSR' );
-			gui.add( params, 'groundReflector' ).onChange( () => {
+			gui.add( params, 'groundReflector' ).onChange(() => {
 
-				if ( params.groundReflector ) {
+                if (params.groundReflector) {
 
-					ssrPass.groundReflector = groundReflector,
-					ssrPass.selects = selects;
+                    ssrPass.groundReflector = groundReflector,
+                        ssrPass.selects = selects;
 
-				} else {
+                } else {
 
-					ssrPass.groundReflector = null,
-					ssrPass.selects = null;
+                    ssrPass.groundReflector = null,
+                        ssrPass.selects = null;
 
-				}
+                }
 
-			} );
+            });
 			ssrPass.thickness = 0.018;
 			gui.add( ssrPass, 'thickness' ).min( 0 ).max( .1 ).step( .0001 );
 			ssrPass.infiniteThick = false;
 			gui.add( ssrPass, 'infiniteThick' );
-			gui.add( params, 'autoRotate' ).onChange( () => {
+			gui.add( params, 'autoRotate' ).onChange(() => {
 
-				controls.enabled = ! params.autoRotate;
+                controls.enabled = !params.autoRotate;
 
-			} );
+            });
 
 			const folder = gui.addFolder( 'more settings' );
-			folder.add( ssrPass, 'fresnel' ).onChange( ()=>{
+			folder.add( ssrPass, 'fresnel' ).onChange(() => {
 
-				groundReflector.fresnel = ssrPass.fresnel;
+                groundReflector.fresnel = ssrPass.fresnel;
 
-			} );
-			folder.add( ssrPass, 'distanceAttenuation' ).onChange( ()=>{
+            });
+			folder.add( ssrPass, 'distanceAttenuation' ).onChange(() => {
 
-				groundReflector.distanceAttenuation = ssrPass.distanceAttenuation;
+                groundReflector.distanceAttenuation = ssrPass.distanceAttenuation;
 
-			} );
+            });
 			ssrPass.maxDistance = .1;
 			groundReflector.maxDistance = ssrPass.maxDistance;
-			folder.add( ssrPass, 'maxDistance' ).min( 0 ).max( .5 ).step( .001 ).onChange( ()=>{
+			folder.add( ssrPass, 'maxDistance' ).min( 0 ).max( .5 ).step( .001 ).onChange(() => {
 
-				groundReflector.maxDistance = ssrPass.maxDistance;
+                groundReflector.maxDistance = ssrPass.maxDistance;
 
-			} );
-			folder.add( params, 'otherMeshes' ).onChange( () => {
+            });
+			folder.add( params, 'otherMeshes' ).onChange(() => {
 
-				if ( params.otherMeshes ) {
+                if (params.otherMeshes) {
 
-					otherMeshes.forEach( mesh => mesh.visible = true );
+                    otherMeshes.forEach(mesh => mesh.visible = true);
 
-				} else {
+                } else {
 
-					otherMeshes.forEach( mesh => mesh.visible = false );
+                    otherMeshes.forEach(mesh => mesh.visible = false);
 
-				}
+                }
 
-			} );
+            });
 			folder.add( ssrPass, 'bouncing' );
 			folder.add( ssrPass, 'output', {
 				'Default': SSRPass.OUTPUT.Default,
@@ -256,18 +256,18 @@
 				'Depth': SSRPass.OUTPUT.Depth,
 				'Normal': SSRPass.OUTPUT.Normal,
 				'Metalness': SSRPass.OUTPUT.Metalness,
-			} ).onChange( function ( value ) {
+			} ).onChange(function (value) {
 
-				ssrPass.output = value;
+                ssrPass.output = value;
 
-			} );
+            });
 			ssrPass.opacity = 1;
 			groundReflector.opacity = ssrPass.opacity;
-			folder.add( ssrPass, 'opacity' ).min( 0 ).max( 1 ).onChange( ()=>{
+			folder.add( ssrPass, 'opacity' ).min( 0 ).max( 1 ).onChange(() => {
 
-				groundReflector.opacity = ssrPass.opacity;
+                groundReflector.opacity = ssrPass.opacity;
 
-			} );
+            });
 			folder.add( ssrPass, 'blur' );
 			// folder.open()
 			// gui.close()

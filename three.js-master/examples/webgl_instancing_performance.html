@@ -271,8 +271,8 @@
 			// gui
 
 			gui = new GUI();
-			gui.add( api, 'method', Method ).onChange( initMesh );
-			gui.add( api, 'count', 1, 10000 ).step( 1 ).onChange( initMesh );
+			gui.add( api, 'method', Method ).onChange(initMesh);
+			gui.add( api, 'count', 1, 10000 ).step( 1 ).onChange(initMesh);
 
 			const perfFolder = gui.addFolder( 'Performance' );
 

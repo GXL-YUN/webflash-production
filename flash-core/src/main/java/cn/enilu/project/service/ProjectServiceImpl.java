@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ProjectServiceImpl  extends BaseService<ProjectModel, Long, ProjectDao> {
+public class ProjectServiceImpl  extends BaseService<ProjectModel, String, ProjectDao> {
     @Autowired
     private ProjectDao projectDao;
 

@@ -308,54 +308,54 @@
 
 				gui = new GUI();
 
-				gui.add( params, 'line type', { 'LineGeometry': 0, 'LineSegmentsGeometry': 1 } ).onChange( function ( val ) {
+				gui.add( params, 'line type', { 'LineGeometry': 0, 'LineSegmentsGeometry': 1 } ).onChange(function (val) {
 
-					switchLine( val );
+                    switchLine(val);
 
-				} ).setValue( 1 );
+                }).setValue( 1 );
 
-				gui.add( params, 'world units' ).onChange( function ( val ) {
+				gui.add( params, 'world units' ).onChange(function (val) {
 
-					matLine.worldUnits = val;
-					matLine.needsUpdate = true;
+                    matLine.worldUnits = val;
+                    matLine.needsUpdate = true;
 
-					matThresholdLine.worldUnits = val;
-					matThresholdLine.needsUpdate = true;
+                    matThresholdLine.worldUnits = val;
+                    matThresholdLine.needsUpdate = true;
 
-				} );
+                });
 
-				gui.add( params, 'visualize threshold' ).onChange( function ( val ) {
+				gui.add( params, 'visualize threshold' ).onChange(function (val) {
 
-					matThresholdLine.visible = val;
+                    matThresholdLine.visible = val;
 
-				} );
+                });
 
-				gui.add( params, 'width', 1, 10 ).onChange( function ( val ) {
+				gui.add( params, 'width', 1, 10 ).onChange(function (val) {
 
-					matLine.linewidth = val;
-					matThresholdLine.linewidth = matLine.linewidth + raycaster.params.Line2.threshold;
+                    matLine.linewidth = val;
+                    matThresholdLine.linewidth = matLine.linewidth + raycaster.params.Line2.threshold;
 
-				} );
+                });
 
-				gui.add( params, 'alphaToCoverage' ).onChange( function ( val ) {
+				gui.add( params, 'alphaToCoverage' ).onChange(function (val) {
 
-					matLine.alphaToCoverage = val;
+                    matLine.alphaToCoverage = val;
 
-				} );
+                });
 
-				gui.add( params, 'threshold', 0, 10 ).onChange( function ( val ) {
+				gui.add( params, 'threshold', 0, 10 ).onChange(function (val) {
 
-					raycaster.params.Line2.threshold = val;
-					matThresholdLine.linewidth = matLine.linewidth + raycaster.params.Line2.threshold;
+                    raycaster.params.Line2.threshold = val;
+                    matThresholdLine.linewidth = matLine.linewidth + raycaster.params.Line2.threshold;
 
-				} );
+                });
 
-				gui.add( params, 'translation', 0, 10 ).onChange( function ( val ) {
+				gui.add( params, 'translation', 0, 10 ).onChange(function (val) {
 
-					line.position.x = val;
-					segments.position.x = val;
+                    line.position.x = val;
+                    segments.position.x = val;
 
-				} );
+                });
 
 				gui.add( params, 'animate' );
 

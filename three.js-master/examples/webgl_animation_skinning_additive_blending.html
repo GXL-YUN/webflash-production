@@ -216,16 +216,16 @@
 					const settings = additiveActions[ name ];
 
 					panelSettings[ name ] = settings.weight;
-					folder2.add( panelSettings, name, 0.0, 1.0, 0.01 ).listen().onChange( function ( weight ) {
+					folder2.add( panelSettings, name, 0.0, 1.0, 0.01 ).listen().onChange(function (weight) {
 
-						setWeight( settings.action, weight );
-						settings.weight = weight;
+                        setWeight(settings.action, weight);
+                        settings.weight = weight;
 
-					} );
+                    });
 
 				}
 
-				folder3.add( panelSettings, 'modify time scale', 0.0, 1.5, 0.01 ).onChange( modifyTimeScale );
+				folder3.add( panelSettings, 'modify time scale', 0.0, 1.5, 0.01 ).onChange(modifyTimeScale);
 
 				folder1.open();
 				folder2.open();

@@ -246,11 +246,11 @@
 
 				// gui
 				const gui = new GUI();
-				gui.add( api, 'count', 1, pointLightsMax ).step( 1 ).onChange( function () {
+				gui.add( api, 'count', 1, pointLightsMax ).step( 1 ).onChange(function () {
 
-					lightingUniformsGroup.uniforms[ 2 ].value = api.count;
+                    lightingUniformsGroup.uniforms[2].value = api.count;
 
-				} );
+                });
 
 			}
 

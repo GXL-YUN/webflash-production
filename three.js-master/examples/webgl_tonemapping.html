@@ -133,34 +133,34 @@
 
 				toneMappingFolder.add( params, 'toneMapping', Object.keys( toneMappingOptions ) )
 
-					.onChange( function () {
+					.onChange(function () {
 
-						updateGUI( toneMappingFolder );
+                        updateGUI(toneMappingFolder);
 
-						renderer.toneMapping = toneMappingOptions[ params.toneMapping ];
-						render();
+                        renderer.toneMapping = toneMappingOptions[params.toneMapping];
+                        render();
 
-					} );
+                    });
 
 				const backgroundFolder = gui.addFolder( 'background' );
 
 				backgroundFolder.add( params, 'blurriness', 0, 1 )
 
-					.onChange( function ( value ) {
+					.onChange(function (value) {
 
-						scene.backgroundBlurriness = value;
-						render();
+                        scene.backgroundBlurriness = value;
+                        render();
 
-					} );
+                    });
 
 				backgroundFolder.add( params, 'intensity', 0, 1 )
 
-					.onChange( function ( value ) {
+					.onChange(function (value) {
 
-						scene.backgroundIntensity = value;
-						render();
+                        scene.backgroundIntensity = value;
+                        render();
 
-					} );
+                    });
 
 				updateGUI( toneMappingFolder );
 
@@ -181,12 +181,12 @@
 
 					guiExposure = folder.add( params, 'exposure', 0, 2 )
 
-						.onChange( function () {
+						.onChange(function () {
 
-							renderer.toneMappingExposure = params.exposure;
-							render();
+                            renderer.toneMappingExposure = params.exposure;
+                            render();
 
-						} );
+                        });
 
 				}
 

@@ -152,22 +152,22 @@
 				}
 
 				let folder = gui.addFolder( 'Scene' );
-				folder.add( data, 'model', [ 'Icosahedron', 'Cylinder', 'TorusKnot', 'Teapot' ] ).onChange( generateGeometry );
-				folder.add( data, 'wireframe', false ).onChange( updateLineSegments );
-				folder.add( data, 'texture', false ).onChange( generateGeometry );
-				folder.add( data, 'detail', 1, 8, 1 ).onChange( generateGeometry );
+				folder.add( data, 'model', [ 'Icosahedron', 'Cylinder', 'TorusKnot', 'Teapot' ] ).onChange(generateGeometry);
+				folder.add( data, 'wireframe', false ).onChange(updateLineSegments);
+				folder.add( data, 'texture', false ).onChange(generateGeometry);
+				folder.add( data, 'detail', 1, 8, 1 ).onChange(generateGeometry);
 				folder.open();
 
 				folder = gui.addFolder( 'Position Compression' );
-				folder.add( data, 'QuantizePosEncoding', false ).onChange( generateGeometry );
+				folder.add( data, 'QuantizePosEncoding', false ).onChange(generateGeometry);
 				folder.open();
 
 				folder = gui.addFolder( 'Normal Compression' );
-				folder.add( data, 'NormEncodingMethods', [ 'None', 'DEFAULT', 'OCT1Byte', 'OCT2Byte', 'ANGLES' ] ).onChange( generateGeometry );
+				folder.add( data, 'NormEncodingMethods', [ 'None', 'DEFAULT', 'OCT1Byte', 'OCT2Byte', 'ANGLES' ] ).onChange(generateGeometry);
 				folder.open();
 
 				folder = gui.addFolder( 'UV Compression' );
-				folder.add( data, 'DefaultUVEncoding', false ).onChange( generateGeometry );
+				folder.add( data, 'DefaultUVEncoding', false ).onChange(generateGeometry);
 				folder.open();
 
 				folder = gui.addFolder( 'Memory Info' );

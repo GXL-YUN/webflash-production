@@ -17,7 +17,7 @@ function GeometryParametersPanel( editor, object ) {
 	// radius
 
 	const radiusRow = new UIRow();
-	const radius = new UINumber( parameters.radius ).onChange( update );
+	const radius = new UINumber( parameters.radius ).onChange(update);
 
 	radiusRow.add( new UIText( strings.getKey( 'sidebar/geometry/torusKnot_geometry/radius' ) ).setClass( 'Label' ) );
 	radiusRow.add( radius );
@@ -27,7 +27,7 @@ function GeometryParametersPanel( editor, object ) {
 	// tube
 
 	const tubeRow = new UIRow();
-	const tube = new UINumber( parameters.tube ).onChange( update );
+	const tube = new UINumber( parameters.tube ).onChange(update);
 
 	tubeRow.add( new UIText( strings.getKey( 'sidebar/geometry/torusKnot_geometry/tube' ) ).setClass( 'Label' ) );
 	tubeRow.add( tube );
@@ -37,7 +37,7 @@ function GeometryParametersPanel( editor, object ) {
 	// tubularSegments
 
 	const tubularSegmentsRow = new UIRow();
-	const tubularSegments = new UIInteger( parameters.tubularSegments ).setRange( 1, Infinity ).onChange( update );
+	const tubularSegments = new UIInteger( parameters.tubularSegments ).setRange( 1, Infinity ).onChange(update);
 
 	tubularSegmentsRow.add( new UIText( strings.getKey( 'sidebar/geometry/torusKnot_geometry/tubularsegments' ) ).setClass( 'Label' ) );
 	tubularSegmentsRow.add( tubularSegments );
@@ -47,7 +47,7 @@ function GeometryParametersPanel( editor, object ) {
 	// radialSegments
 
 	const radialSegmentsRow = new UIRow();
-	const radialSegments = new UIInteger( parameters.radialSegments ).setRange( 1, Infinity ).onChange( update );
+	const radialSegments = new UIInteger( parameters.radialSegments ).setRange( 1, Infinity ).onChange(update);
 
 	radialSegmentsRow.add( new UIText( strings.getKey( 'sidebar/geometry/torusKnot_geometry/radialsegments' ) ).setClass( 'Label' ) );
 	radialSegmentsRow.add( radialSegments );
@@ -57,7 +57,7 @@ function GeometryParametersPanel( editor, object ) {
 	// p
 
 	const pRow = new UIRow();
-	const p = new UIInteger( parameters.p ).onChange( update );
+	const p = new UIInteger( parameters.p ).onChange(update);
 
 	pRow.add( new UIText( strings.getKey( 'sidebar/geometry/torusKnot_geometry/p' ) ).setClass( 'Label' ) );
 	pRow.add( p );
@@ -67,7 +67,7 @@ function GeometryParametersPanel( editor, object ) {
 	// q
 
 	const qRow = new UIRow();
-	const q = new UIInteger( parameters.q ).onChange( update );
+	const q = new UIInteger( parameters.q ).onChange(update);
 
 	qRow.add( new UIText( strings.getKey( 'sidebar/geometry/torusKnot_geometry/q' ) ).setClass( 'Label' ) );
 	qRow.add( q );

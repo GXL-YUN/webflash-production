@@ -5,5 +5,5 @@ import cn.enilu.project.bean.model.ProjectModel;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProjectDao  extends BaseRepository<ProjectModel, Long> {
+public interface ProjectDao  extends BaseRepository<ProjectModel, String> {
 }

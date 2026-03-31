@@ -25,4 +25,5 @@ public class RecordService extends BaseService<RecordBean, Long, RecordDao> {
         List<RecordBean> bannerList = recordDao.findAll();
         return bannerList;
     }
+
 }

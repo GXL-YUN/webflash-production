@@ -33,7 +33,7 @@ function SidebarMaterial( editor ) {
 
 	materialSlotRow.add( new UIText( strings.getKey( 'sidebar/material/slot' ) ).setClass( 'Label' ) );
 
-	const materialSlotSelect = new UISelect().setWidth( '170px' ).setFontSize( '12px' ).onChange( update );
+	const materialSlotSelect = new UISelect().setWidth( '170px' ).setFontSize( '12px' ).onChange(update);
 	materialSlotSelect.setOptions( { 0: '' } ).setValue( 0 );
 	materialSlotRow.add( materialSlotSelect );
 
@@ -42,7 +42,7 @@ function SidebarMaterial( editor ) {
 	// type
 
 	const materialClassRow = new UIRow();
-	const materialClass = new UISelect().setWidth( '150px' ).setFontSize( '12px' ).onChange( update );
+	const materialClass = new UISelect().setWidth( '150px' ).setFontSize( '12px' ).onChange(update);
 
 	materialClassRow.add( new UIText( strings.getKey( 'sidebar/material/type' ) ).setClass( 'Label' ) );
 	materialClassRow.add( materialClass );
@@ -70,11 +70,11 @@ function SidebarMaterial( editor ) {
 	// name
 
 	const materialNameRow = new UIRow();
-	const materialName = new UIInput().setWidth( '150px' ).setFontSize( '12px' ).onChange( function () {
+	const materialName = new UIInput().setWidth( '150px' ).setFontSize( '12px' ).onChange(function () {
 
-		editor.execute( new SetMaterialValueCommand( editor, editor.selected, 'name', materialName.getValue(), currentMaterialSlot ) );
+        editor.execute(new SetMaterialValueCommand(editor, editor.selected, 'name', materialName.getValue(), currentMaterialSlot));
 
-	} );
+    });
 
 	materialNameRow.add( new UIText( strings.getKey( 'sidebar/material/name' ) ).setClass( 'Label' ) );
 	materialNameRow.add( materialName );
@@ -399,7 +399,7 @@ function SidebarMaterial( editor ) {
 	// userData
 
 	const materialUserDataRow = new UIRow();
-	const materialUserData = new UITextArea().setWidth( '150px' ).setHeight( '40px' ).setFontSize( '12px' ).onChange( update );
+	const materialUserData = new UITextArea().setWidth( '150px' ).setHeight( '40px' ).setFontSize( '12px' ).onChange(update);
 	materialUserData.onKeyUp( function () {
 
 		try {

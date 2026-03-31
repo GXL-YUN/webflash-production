@@ -26,7 +26,7 @@ function SidebarProjectImage( editor ) {
 	const shadingTypeSelect = new UISelect().setOptions( {
 		'solid': 'SOLID',
 		'realistic': 'REALISTIC'
-	} ).setWidth( '170px' ).onChange( refreshShadingRow ).setValue( 'solid' );
+	} ).setWidth( '170px' ).onChange(refreshShadingRow).setValue( 'solid' );
 	shadingRow.add( shadingTypeSelect );
 
 	const pathTracerMinSamples = 3;

@@ -147,23 +147,23 @@
 
 				const gui = new GUI();
 
-				gui.add( params, 'enabled' ).name( 'Grounded' ).onChange( function ( value ) {
+				gui.add( params, 'enabled' ).name( 'Grounded' ).onChange(function (value) {
 
-					if ( value ) {
+                    if (value) {
 
-						scene.add( skybox );
-						scene.background = null;
+                        scene.add(skybox);
+                        scene.background = null;
 
-					} else {
+                    } else {
 
-						scene.remove( skybox );
-						scene.background = scene.environment;
+                        scene.remove(skybox);
+                        scene.background = scene.environment;
 
-					}
+                    }
 
-					render();
+                    render();
 
-				} );
+                });
 
 				gui.open();
 			

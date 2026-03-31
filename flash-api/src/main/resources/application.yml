@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: thread-pool-demo
   rabbitmq:
       host: 122.51.246.240
       # host: http://127.0.0.1/http://122.51.246.240:15672/
@@ -75,9 +77,15 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
+  #微信凭证
   wx:
     secret: 0448e47a39650a17da133394ee393b81
     appid: wx2224ac6c80008d91
+  #飞书凭证
+  fs:
+    secret: urghgrrM5cTm6Edh1rwwrbLK4Zha1yTp
+    appid: cli_a93dc3cfdd385ceb
+    openAPUI: https://open.feishu.cn
 jwt:
   token:
     expire:
@@ -87,3 +95,34 @@ server:
 app:
   elasticsearch:
     index-name: articles
+
+
+
+# 线程池配置
+thread:
+  pool:
+    coreSize: 20                     # 核心线程数
+    maxSize: 100                     # 最大线程数
+    keepAliveTime: 120               # 线程空闲时间（秒）
+    queueCapacity: 2000             # 队列容量
+    threadPrefix: "business-thread"  # 线程名前缀
+
+# 日志配置
+logging:
+  level:
+    cn.enilu.Thread: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+# 监控端点（可选）
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,metrics,info"
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+  endpoint:
+    health:
+      show-details: always

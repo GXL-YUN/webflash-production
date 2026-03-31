@@ -17,7 +17,7 @@ function GeometryParametersPanel( editor, object ) {
 	// radius
 
 	const radiusRow = new UIRow();
-	const radius = new UINumber( parameters.radius ).onChange( update );
+	const radius = new UINumber( parameters.radius ).onChange(update);
 
 	radiusRow.add( new UIText( strings.getKey( 'sidebar/geometry/capsule_geometry/radius' ) ).setClass( 'Label' ) );
 	radiusRow.add( radius );
@@ -27,7 +27,7 @@ function GeometryParametersPanel( editor, object ) {
 	// length
 
 	const lengthRow = new UIRow();
-	const length = new UINumber( parameters.length ).onChange( update );
+	const length = new UINumber( parameters.length ).onChange(update);
 
 	lengthRow.add( new UIText( strings.getKey( 'sidebar/geometry/capsule_geometry/length' ) ).setClass( 'Label' ) );
 	lengthRow.add( length );
@@ -37,7 +37,7 @@ function GeometryParametersPanel( editor, object ) {
 	// capSegments
 
 	const capSegmentsRow = new UIRow();
-	const capSegments = new UIInteger( parameters.capSegments ).setRange( 1, Infinity ).onChange( update );
+	const capSegments = new UIInteger( parameters.capSegments ).setRange( 1, Infinity ).onChange(update);
 
 	capSegmentsRow.add( new UIText( strings.getKey( 'sidebar/geometry/capsule_geometry/capseg' ) ).setClass( 'Label' ) );
 	capSegmentsRow.add( capSegments );
@@ -47,7 +47,7 @@ function GeometryParametersPanel( editor, object ) {
 	// radialSegments
 
 	const radialSegmentsRow = new UIRow();
-	const radialSegments = new UIInteger( parameters.radialSegments ).setRange( 1, Infinity ).onChange( update );
+	const radialSegments = new UIInteger( parameters.radialSegments ).setRange( 1, Infinity ).onChange(update);
 
 	radialSegmentsRow.add( new UIText( strings.getKey( 'sidebar/geometry/capsule_geometry/radialseg' ) ).setClass( 'Label' ) );
 	radialSegmentsRow.add( radialSegments );

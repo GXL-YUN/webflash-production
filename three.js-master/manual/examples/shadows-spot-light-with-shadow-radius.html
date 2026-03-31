@@ -132,9 +132,9 @@ function main() {
 	function makeXYZGUI( gui, vector3, name, onChangeFn ) {
 
 		const folder = gui.addFolder( name );
-		folder.add( vector3, 'x', - 10, 10 ).onChange( onChangeFn );
-		folder.add( vector3, 'y', 0, 10 ).onChange( onChangeFn );
-		folder.add( vector3, 'z', - 10, 10 ).onChange( onChangeFn );
+		folder.add( vector3, 'x', - 10, 10 ).onChange(onChangeFn);
+		folder.add( vector3, 'y', 0, 10 ).onChange(onChangeFn);
+		folder.add( vector3, 'z', - 10, 10 ).onChange(onChangeFn);
 		// folder.open();
 
 	}
@@ -226,8 +226,8 @@ function main() {
 		const gui = new GUI();
 		gui.addColor( new ColorGUIHelper( light, 'color' ), 'value' ).name( 'color' );
 		gui.add( light, 'intensity', 0, 200 );
-		gui.add( light, 'distance', 0, 40 ).onChange( updateCamera );
-		gui.add( new DegRadHelper( light, 'angle' ), 'value', 0, 90 ).name( 'angle' ).onChange( updateCamera );
+		gui.add( light, 'distance', 0, 40 ).onChange(updateCamera);
+		gui.add( new DegRadHelper( light, 'angle' ), 'value', 0, 90 ).name( 'angle' ).onChange(updateCamera);
 		gui.add( light, 'penumbra', 0, 1, 0.01 );
 
 		gui.add( light.shadow, 'radius', 0, 50, 0.01 );
@@ -237,8 +237,8 @@ function main() {
 			const folder = gui.addFolder( 'Shadow Camera' );
 			folder.open();
 			const minMaxGUIHelper = new MinMaxGUIHelper( light.shadow.camera, 'near', 'far', 0.1 );
-			folder.add( minMaxGUIHelper, 'min', 0.1, 50, 0.1 ).name( 'near' ).onChange( updateCamera );
-			folder.add( minMaxGUIHelper, 'max', 0.1, 50, 0.1 ).name( 'far' ).onChange( updateCamera );
+			folder.add( minMaxGUIHelper, 'min', 0.1, 50, 0.1 ).name( 'near' ).onChange(updateCamera);
+			folder.add( minMaxGUIHelper, 'max', 0.1, 50, 0.1 ).name( 'far' ).onChange(updateCamera);
 
 		}
 

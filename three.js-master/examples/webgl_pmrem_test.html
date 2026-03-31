@@ -97,23 +97,23 @@
 				const gui = new GUI();
 				gui.add( { enabled: true }, 'enabled' )
 					.name( 'PMREM' )
-					.onChange( value => {
+					.onChange(value => {
 
-						directionalLight.intensity = value ? 0 : 1;
+                        directionalLight.intensity = value ? 0 : 1;
 
-						scene.traverse( function ( child ) {
+                        scene.traverse(function (child) {
 
-							if ( child.isMesh ) {
+                            if (child.isMesh) {
 
-								child.material.envMapIntensity = 1 - directionalLight.intensity;
+                                child.material.envMapIntensity = 1 - directionalLight.intensity;
 
-							}
+                            }
 
-						} );
+                        });
 
-						render();
+                        render();
 
-					} );
+                    });
 
 			}
 

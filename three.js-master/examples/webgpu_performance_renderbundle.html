@@ -239,17 +239,17 @@
 			// gui
 
 			gui = new GUI();
-			gui.add( api, 'renderBundle' ).onChange( () => {
+			gui.add( api, 'renderBundle' ).onChange(() => {
 
-				init( ! api.webgpu );
+                init(!api.webgpu);
 
-			} );
+            });
 
-			gui.add( api, 'webgpu' ).onChange( () => {
+			gui.add( api, 'webgpu' ).onChange(() => {
 
-				init( ! api.webgpu );
+                init(!api.webgpu);
 
-			} );
+            });
 
 			// listeners
 

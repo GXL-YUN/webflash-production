@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { ApiResponse, RoomItem, CreateRoomDto } from '../types/room';
 
-const API_BASE_URL = '/date';
+const API_BASE_URL = '';
 
 export const roomService = {
     // 获取列表
@@ -12,7 +12,7 @@ export const roomService = {
     },
 
     // 新增
-    async createRoom(url:string,data: CreateRoomDto): Promise<ApiResponse> {
+    async createRoom(url:string,data: any): Promise<ApiResponse> {
         const response = await axios.post<ApiResponse>(`${API_BASE_URL}`+url+`/add`, data);
         return response.data;
     },

@@ -233,22 +233,22 @@ output = vec4( finalColor, opacity );
 
 					const gui = new GUI();
 
-					gui.add( options, 'output', [ 'WGSL', 'GLSL ES 3.0' ] ).onChange( build );
-					gui.add( options, 'shader', [ 'vertex', 'fragment' ] ).onChange( showCode );
+					gui.add( options, 'output', [ 'WGSL', 'GLSL ES 3.0' ] ).onChange(build);
+					gui.add( options, 'shader', [ 'vertex', 'fragment' ] ).onChange(showCode);
 
-					gui.add( options, 'outputColorSpace', [ THREE.LinearSRGBColorSpace, THREE.SRGBColorSpace ] ).onChange( ( value ) => {
+					gui.add( options, 'outputColorSpace', [ THREE.LinearSRGBColorSpace, THREE.SRGBColorSpace ] ).onChange((value) => {
 
-						renderer.outputColorSpace = value;
+                        renderer.outputColorSpace = value;
 
-						build();
+                        build();
 
-					} );
+                    });
 
-					gui.add( options, 'preview' ).onChange( ( value ) => {
+					gui.add( options, 'preview' ).onChange((value) => {
 
-						rendererDOM.style.display = value ? '' : 'none';
+                        rendererDOM.style.display = value ? '' : 'none';
 
-					} );
+                    });
 
 				} );
 

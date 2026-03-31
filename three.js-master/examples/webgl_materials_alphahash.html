@@ -137,23 +137,23 @@
 
 				const gui = new GUI();
 
-				gui.add( params, 'alpha', 0, 1 ).onChange( onMaterialUpdate );
-				gui.add( params, 'alphaHash' ).onChange( onMaterialUpdate );
+				gui.add( params, 'alpha', 0, 1 ).onChange(onMaterialUpdate);
+				gui.add( params, 'alphaHash' ).onChange(onMaterialUpdate);
 
 				const taaFolder = gui.addFolder( 'Temporal Anti-Aliasing' );
 
-				taaFolder.add( params, 'taa' ).name( 'enabled' ).onChange( () => {
+				taaFolder.add( params, 'taa' ).name( 'enabled' ).onChange(() => {
 
-					renderPass.enabled = ! params.taa;
-					taaRenderPass.enabled = params.taa;
+                    renderPass.enabled = !params.taa;
+                    taaRenderPass.enabled = params.taa;
 
-					sampleLevelCtrl.enable( params.taa );
+                    sampleLevelCtrl.enable(params.taa);
 
-					needsUpdate = true;
+                    needsUpdate = true;
 
-				} );
+                });
 
-				const sampleLevelCtrl = taaFolder.add( params, 'sampleLevel', 0, 6, 1 ).onChange( () => ( needsUpdate = true ) );
+				const sampleLevelCtrl = taaFolder.add( params, 'sampleLevel', 0, 6, 1 ).onChange(() => (needsUpdate = true));
 
 				//
 

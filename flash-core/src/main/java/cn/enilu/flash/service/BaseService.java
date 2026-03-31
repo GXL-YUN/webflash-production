@@ -57,6 +57,13 @@ public abstract class BaseService<T, ID extends Serializable, R extends BaseRepo
         return dao.getOne(id);
     }
 
+
+    @Override
+    @Cacheable(value = Cache.APPLICATION, key = "#root.targetClass.simpleName+':'+#id")
+    public T getById(ID id) {
+        return dao.getOneById(id);
+    }
+
     @Override
     public T get(SearchFilter filter) {
         List<T> list = queryAll(filter);

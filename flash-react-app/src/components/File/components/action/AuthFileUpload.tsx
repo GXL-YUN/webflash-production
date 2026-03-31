@@ -14,16 +14,32 @@ const AuthFileUpload: React.FC = () => {
   };
 
   const uploadProps = {
-    action: '/api/upload',
+    action: '/date/fileUtil/upLoder',
     headers: {
       'Authorization': `Bearer ${getAuthToken()}`,
-      'X-Requested-With': null, // 解决某些框架的 CSRF 保护
+      //'X-Requested-With': null, // 解决某些框架的 CSRF 保护
     },
     name: 'file',
     onChange(info: any) {
+      let newFileList = [...info.fileList];
       if (info.file.status === 'done') {
         const response = info.file.response;
         if (response.code === 200) {
+          // 上传状态处理
+          const { file } = info;
+          // 更新文件列表，添加 fdId
+          const updatedFileList = newFileList.map(item =>
+              item.uid === file.uid
+                  ? {
+                    ...item,
+                    fdId: response.data.fdId,
+                    status: 'done',
+                    response: response
+                  }
+                  : item
+          );
+
+
           message.success('上传成功');
         } else {
           message.error(response.message || '上传失败');
@@ -35,10 +51,10 @@ const AuthFileUpload: React.FC = () => {
     // 自定义请求（更灵活的控制）
     customRequest: (options: any) => {
       const { action, data, file, filename, headers, onError, onProgress, onSuccess } = options;
-      
+
       const formData = new FormData();
       formData.append(filename || 'file', file);
-      
+
       // 添加其他表单数据
       if (data) {
         Object.keys(data).forEach(key => {
@@ -47,7 +63,7 @@ const AuthFileUpload: React.FC = () => {
       }
 
       const xhr = new XMLHttpRequest();
-      
+
       // 上传进度
       xhr.upload.onprogress = (event) => {
         if (event.lengthComputable) {
@@ -69,7 +85,7 @@ const AuthFileUpload: React.FC = () => {
       };
 
       xhr.open('POST', action, true);
-      
+
       // 设置请求头
       Object.keys(headers).forEach(key => {
         xhr.setRequestHeader(key, headers[key]);
@@ -80,10 +96,15 @@ const AuthFileUpload: React.FC = () => {
   };
 
   return (
-    // <Upload {...uploadProps}>
-     <Upload >
-      <Button icon={<UploadOutlined />}>上传文件（带认证）</Button>
-    </Upload>
+    //  <Upload {...uploadProps}>
+    //  {/*//<Upload >*/}
+    //   <Button icon={<UploadOutlined />}>上传文件（带认证）</Button>
+    // </Upload>
+
+
+  <Upload {...uploadProps}>
+    <Button icon={<UploadOutlined />}>选择文件</Button>
+  </Upload>
   );
 };
 

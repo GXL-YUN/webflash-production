@@ -61,37 +61,37 @@
 
 			const gui = new GUI( { width: 280 } );
 
-			gui.add( params, 'edgeStrength', 0.01, 10 ).onChange( function ( value ) {
+			gui.add( params, 'edgeStrength', 0.01, 10 ).onChange(function (value) {
 
-				outlinePass.edgeStrength = Number( value );
+                outlinePass.edgeStrength = Number(value);
 
-			} );
+            });
 
-			gui.add( params, 'edgeGlow', 0.0, 1 ).onChange( function ( value ) {
+			gui.add( params, 'edgeGlow', 0.0, 1 ).onChange(function (value) {
 
-				outlinePass.edgeGlow = Number( value );
+                outlinePass.edgeGlow = Number(value);
 
-			} );
+            });
 
-			gui.add( params, 'edgeThickness', 1, 4 ).onChange( function ( value ) {
+			gui.add( params, 'edgeThickness', 1, 4 ).onChange(function (value) {
 
-				outlinePass.edgeThickness = Number( value );
+                outlinePass.edgeThickness = Number(value);
 
-			} );
+            });
 
-			gui.add( params, 'pulsePeriod', 0.0, 5 ).onChange( function ( value ) {
+			gui.add( params, 'pulsePeriod', 0.0, 5 ).onChange(function (value) {
 
-				outlinePass.pulsePeriod = Number( value );
+                outlinePass.pulsePeriod = Number(value);
 
-			} );
+            });
 
 			gui.add( params, 'rotate' );
 
-			gui.add( params, 'usePatternTexture' ).onChange( function ( value ) {
+			gui.add( params, 'usePatternTexture' ).onChange(function (value) {
 
-				outlinePass.usePatternTexture = value;
+                outlinePass.usePatternTexture = value;
 
-			} );
+            });
 
 			function Configuration() {
 
@@ -102,17 +102,17 @@
 
 			const conf = new Configuration();
 
-			gui.addColor( conf, 'visibleEdgeColor' ).onChange( function ( value ) {
+			gui.addColor( conf, 'visibleEdgeColor' ).onChange(function (value) {
 
-				outlinePass.visibleEdgeColor.set( value );
+                outlinePass.visibleEdgeColor.set(value);
 
-			} );
+            });
 
-			gui.addColor( conf, 'hiddenEdgeColor' ).onChange( function ( value ) {
+			gui.addColor( conf, 'hiddenEdgeColor' ).onChange(function (value) {
 
-				outlinePass.hiddenEdgeColor.set( value );
+                outlinePass.hiddenEdgeColor.set(value);
 
-			} );
+            });
 
 			init();
 

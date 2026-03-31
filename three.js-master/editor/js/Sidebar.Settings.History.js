@@ -17,27 +17,27 @@ function SidebarSettingsHistory( editor ) {
 
 	const persistent = new UIBoolean( config.getKey( 'settings/history' ), strings.getKey( 'sidebar/history/persistent' ) );
 	persistent.setPosition( 'absolute' ).setRight( '8px' );
-	persistent.onChange( function () {
+	persistent.onChange(function () {
 
-		const value = this.getValue();
+        const value = this.getValue();
 
-		config.setKey( 'settings/history', value );
+        config.setKey('settings/history', value);
 
-		if ( value ) {
+        if (value) {
 
-			alert( strings.getKey( 'prompt/history/preserve' ) );
+            alert(strings.getKey('prompt/history/preserve'));
 
-			const lastUndoCmd = history.undos[ history.undos.length - 1 ];
-			const lastUndoId = ( lastUndoCmd !== undefined ) ? lastUndoCmd.id : 0;
-			editor.history.enableSerialization( lastUndoId );
+            const lastUndoCmd = history.undos[history.undos.length - 1];
+            const lastUndoId = (lastUndoCmd !== undefined) ? lastUndoCmd.id : 0;
+            editor.history.enableSerialization(lastUndoId);
 
-		} else {
+        } else {
 
-			signals.historyChanged.dispatch();
+            signals.historyChanged.dispatch();
 
-		}
+        }
 
-	} );
+    });
 	container.add( persistent );
 
 	container.add( new UIBreak(), new UIBreak() );
@@ -45,15 +45,15 @@ function SidebarSettingsHistory( editor ) {
 	let ignoreObjectSelectedSignal = false;
 
 	const outliner = new UIOutliner( editor );
-	outliner.onChange( function () {
+	outliner.onChange(function () {
 
-		ignoreObjectSelectedSignal = true;
+        ignoreObjectSelectedSignal = true;
 
-		editor.history.goToState( parseInt( outliner.getValue() ) );
+        editor.history.goToState(parseInt(outliner.getValue()));
 
-		ignoreObjectSelectedSignal = false;
+        ignoreObjectSelectedSignal = false;
 
-	} );
+    });
 	container.add( outliner );
 
 	container.add( new UIBreak() );

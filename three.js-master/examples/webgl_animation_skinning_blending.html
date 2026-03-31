@@ -190,8 +190,8 @@
 					'modify time scale': 1.0
 				};
 
-				folder1.add( settings, 'show model' ).onChange( showModel );
-				folder1.add( settings, 'show skeleton' ).onChange( showSkeleton );
+				folder1.add( settings, 'show model' ).onChange(showModel);
+				folder1.add( settings, 'show skeleton' ).onChange(showSkeleton);
 				folder2.add( settings, 'deactivate all' );
 				folder2.add( settings, 'activate all' );
 				folder3.add( settings, 'pause/continue' );
@@ -203,22 +203,22 @@
 				crossFadeControls.push( folder4.add( settings, 'from run to walk' ) );
 				folder4.add( settings, 'use default duration' );
 				folder4.add( settings, 'set custom duration', 0, 10, 0.01 );
-				folder5.add( settings, 'modify idle weight', 0.0, 1.0, 0.01 ).listen().onChange( function ( weight ) {
+				folder5.add( settings, 'modify idle weight', 0.0, 1.0, 0.01 ).listen().onChange(function (weight) {
 
-					setWeight( idleAction, weight );
+                    setWeight(idleAction, weight);
 
-				} );
-				folder5.add( settings, 'modify walk weight', 0.0, 1.0, 0.01 ).listen().onChange( function ( weight ) {
+                });
+				folder5.add( settings, 'modify walk weight', 0.0, 1.0, 0.01 ).listen().onChange(function (weight) {
 
-					setWeight( walkAction, weight );
+                    setWeight(walkAction, weight);
 
-				} );
-				folder5.add( settings, 'modify run weight', 0.0, 1.0, 0.01 ).listen().onChange( function ( weight ) {
+                });
+				folder5.add( settings, 'modify run weight', 0.0, 1.0, 0.01 ).listen().onChange(function (weight) {
 
-					setWeight( runAction, weight );
+                    setWeight(runAction, weight);
 
-				} );
-				folder6.add( settings, 'modify time scale', 0.0, 1.5, 0.01 ).onChange( modifyTimeScale );
+                });
+				folder6.add( settings, 'modify time scale', 0.0, 1.5, 0.01 ).onChange(modifyTimeScale);
 
 				folder1.open();
 				folder2.open();

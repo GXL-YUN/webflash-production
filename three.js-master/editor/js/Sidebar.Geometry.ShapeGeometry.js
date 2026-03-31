@@ -17,7 +17,7 @@ function GeometryParametersPanel( editor, object ) {
 	// curveSegments
 
 	const curveSegmentsRow = new UIRow();
-	const curveSegments = new UIInteger( parameters.curveSegments || 12 ).onChange( changeShape ).setRange( 1, Infinity );
+	const curveSegments = new UIInteger( parameters.curveSegments || 12 ).onChange(changeShape).setRange( 1, Infinity );
 
 	curveSegmentsRow.add( new UIText( strings.getKey( 'sidebar/geometry/shape_geometry/curveSegments' ) ).setClass( 'Label' ) );
 	curveSegmentsRow.add( curveSegments );

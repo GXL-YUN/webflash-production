@@ -227,102 +227,102 @@
 					'dash / gap': 1
 				};
 
-				gui.add( param, 'line type', { 'LineGeometry': 0, '"line-strip"': 1 } ).onChange( function ( val ) {
+				gui.add( param, 'line type', { 'LineGeometry': 0, '"line-strip"': 1 } ).onChange(function (val) {
 
-					switch ( val ) {
+                    switch (val) {
 
-						case 0:
-							line.visible = true;
+                        case 0:
+                            line.visible = true;
 
-							line1.visible = false;
+                            line1.visible = false;
 
-							break;
+                            break;
 
-						case 1:
-							line.visible = false;
+                        case 1:
+                            line.visible = false;
 
-							line1.visible = true;
+                            line1.visible = true;
 
-							break;
+                            break;
 
-					}
+                    }
 
-				} );
+                });
 
-				gui.add( param, 'world units' ).onChange( function ( val ) {
+				gui.add( param, 'world units' ).onChange(function (val) {
 
-					matLine.worldUnits = val;
-					matLine.needsUpdate = true;
+                    matLine.worldUnits = val;
+                    matLine.needsUpdate = true;
 
-				} );
+                });
 
-				gui.add( param, 'width', 1, 10 ).onChange( function ( val ) {
+				gui.add( param, 'width', 1, 10 ).onChange(function (val) {
 
-					matLine.linewidth = val;
+                    matLine.linewidth = val;
 
-				} );
+                });
 
-				gui.add( param, 'alphaToCoverage' ).onChange( function ( val ) {
+				gui.add( param, 'alphaToCoverage' ).onChange(function (val) {
 
-					matLine.alphaToCoverage = val;
+                    matLine.alphaToCoverage = val;
 
-				} );
+                });
 
-				gui.add( param, 'dashed' ).onChange( function ( val ) {
+				gui.add( param, 'dashed' ).onChange(function (val) {
 
-					matLine.dashed = val;
-					line1.material = val ? matLineDashed : matLineBasic;
+                    matLine.dashed = val;
+                    line1.material = val ? matLineDashed : matLineBasic;
 
-				} );
+                });
 
-				gui.add( param, 'dash scale', 0.5, 2, 0.1 ).onChange( function ( val ) {
+				gui.add( param, 'dash scale', 0.5, 2, 0.1 ).onChange(function (val) {
 
-					matLine.scale = val;
-					matLineDashed.scale = val;
+                    matLine.scale = val;
+                    matLineDashed.scale = val;
 
-				} );
+                });
 
-				gui.add( param, 'dash offset', 0, 5, 0.1 ).onChange( function ( val ) {
+				gui.add( param, 'dash offset', 0, 5, 0.1 ).onChange(function (val) {
 
-					matLine.dashOffset = val;
-					matLineDashed.dashOffset = val;
+                    matLine.dashOffset = val;
+                    matLineDashed.dashOffset = val;
 
-				} );
+                });
 
-				gui.add( param, 'dash / gap', { '2 : 1': 0, '1 : 1': 1, '1 : 2': 2 } ).onChange( function ( val ) {
+				gui.add( param, 'dash / gap', { '2 : 1': 0, '1 : 1': 1, '1 : 2': 2 } ).onChange(function (val) {
 
-					switch ( val ) {
+                    switch (val) {
 
-						case 0:
-							matLine.dashSize = 2;
-							matLine.gapSize = 1;
+                        case 0:
+                            matLine.dashSize = 2;
+                            matLine.gapSize = 1;
 
-							matLineDashed.dashSize = 2;
-							matLineDashed.gapSize = 1;
+                            matLineDashed.dashSize = 2;
+                            matLineDashed.gapSize = 1;
 
-							break;
+                            break;
 
-						case 1:
-							matLine.dashSize = 1;
-							matLine.gapSize = 1;
+                        case 1:
+                            matLine.dashSize = 1;
+                            matLine.gapSize = 1;
 
-							matLineDashed.dashSize = 1;
-							matLineDashed.gapSize = 1;
+                            matLineDashed.dashSize = 1;
+                            matLineDashed.gapSize = 1;
 
-							break;
+                            break;
 
-						case 2:
-							matLine.dashSize = 1;
-							matLine.gapSize = 2;
+                        case 2:
+                            matLine.dashSize = 1;
+                            matLine.gapSize = 2;
 
-							matLineDashed.dashSize = 1;
-							matLineDashed.gapSize = 2;
+                            matLineDashed.dashSize = 1;
+                            matLineDashed.gapSize = 2;
 
-							break;
+                            break;
 
-					}
+                    }
 
-				} );
+                });
 
 			}
 

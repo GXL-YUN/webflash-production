@@ -168,41 +168,41 @@
 
 					const gui = new GUI();
 
-					gui.add( api, 'animation' ).onChange( function () {
+					gui.add( api, 'animation' ).onChange(function () {
 
-						helper.enable( 'animation', api[ 'animation' ] );
+                        helper.enable('animation', api['animation']);
 
-					} );
+                    });
 
-					gui.add( api, 'ik' ).onChange( function () {
+					gui.add( api, 'ik' ).onChange(function () {
 
-						helper.enable( 'ik', api[ 'ik' ] );
+                        helper.enable('ik', api['ik']);
 
-					} );
+                    });
 
-					gui.add( api, 'outline' ).onChange( function () {
+					gui.add( api, 'outline' ).onChange(function () {
 
-						effect.enabled = api[ 'outline' ];
+                        effect.enabled = api['outline'];
 
-					} );
+                    });
 
-					gui.add( api, 'physics' ).onChange( function () {
+					gui.add( api, 'physics' ).onChange(function () {
 
-						helper.enable( 'physics', api[ 'physics' ] );
+                        helper.enable('physics', api['physics']);
 
-					} );
+                    });
 
-					gui.add( api, 'show IK bones' ).onChange( function () {
+					gui.add( api, 'show IK bones' ).onChange(function () {
 
-						ikHelper.visible = api[ 'show IK bones' ];
+                        ikHelper.visible = api['show IK bones'];
 
-					} );
+                    });
 
-					gui.add( api, 'show rigid bodies' ).onChange( function () {
+					gui.add( api, 'show rigid bodies' ).onChange(function () {
 
-						if ( physicsHelper !== undefined ) physicsHelper.visible = api[ 'show rigid bodies' ];
+                        if (physicsHelper !== undefined) physicsHelper.visible = api['show rigid bodies'];
 
-					} );
+                    });
 
 				}
 

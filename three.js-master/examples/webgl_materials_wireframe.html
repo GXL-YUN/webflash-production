@@ -137,12 +137,12 @@
 
 				const gui = new GUI();
 
-				gui.add( API, 'thickness', 0, 4 ).onChange( function () {
+				gui.add( API, 'thickness', 0, 4 ).onChange(function () {
 
-					mesh2.material.uniforms.thickness.value = API.thickness;
-					render();
+                    mesh2.material.uniforms.thickness.value = API.thickness;
+                    render();
 
-				} );
+                });
 
 				gui.open();
 
