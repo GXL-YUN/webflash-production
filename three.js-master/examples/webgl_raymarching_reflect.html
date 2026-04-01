@@ -314,7 +314,7 @@
 				// GUI
 				const gui = new GUI();
 				gui.add( config, 'saveImage' ).name( 'Save Image' );
-				gui.add( config, 'resolution', [ '256', '512', '800', 'full' ] ).name( 'Resolution' ).onChange( onWindowResize );
+				gui.add( config, 'resolution', [ '256', '512', '800', 'full' ] ).name( 'Resolution' ).onChange(onWindowResize);
 
 				stats = new Stats();
 				document.body.appendChild( stats.dom );

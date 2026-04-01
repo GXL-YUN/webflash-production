@@ -15,19 +15,19 @@ export class BasicMaterialEditor extends MaterialEditor {
 		const opacity = setInputAestheticsFromType( new LabelElement( 'opacity' ), 'Number' );
 		const position = setInputAestheticsFromType( new LabelElement( 'position' ), 'Vector3' );
 
-		color.add( new ColorInput( material.color.getHex() ).onChange( ( input ) => {
+		color.add( new ColorInput( material.color.getHex() ).onChange((input) => {
 
-			material.color.setHex( input.getValue() );
+            material.color.setHex(input.getValue());
 
-		} ) );
+        }));
 
-		opacity.add( new SliderInput( material.opacity, 0, 1 ).onChange( ( input ) => {
+		opacity.add( new SliderInput( material.opacity, 0, 1 ).onChange((input) => {
 
-			material.opacity = input.getValue();
+            material.opacity = input.getValue();
 
-			this.updateTransparent();
+            this.updateTransparent();
 
-		} ) );
+        }));
 
 		color.onConnect( () => this.update(), true );
 		opacity.onConnect( () => this.update(), true );

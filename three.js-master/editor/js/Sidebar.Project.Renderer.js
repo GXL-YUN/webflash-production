@@ -21,7 +21,7 @@ function SidebarProjectRenderer( editor ) {
 
 	antialiasRow.add( new UIText( strings.getKey( 'sidebar/project/antialias' ) ).setClass( 'Label' ) );
 
-	const antialiasBoolean = new UIBoolean( config.getKey( 'project/renderer/antialias' ) ).onChange( createRenderer );
+	const antialiasBoolean = new UIBoolean( config.getKey( 'project/renderer/antialias' ) ).onChange(createRenderer);
 	antialiasRow.add( antialiasBoolean );
 
 	// Shadows
@@ -31,7 +31,7 @@ function SidebarProjectRenderer( editor ) {
 
 	shadowsRow.add( new UIText( strings.getKey( 'sidebar/project/shadows' ) ).setClass( 'Label' ) );
 
-	const shadowsBoolean = new UIBoolean( config.getKey( 'project/renderer/shadows' ) ).onChange( updateShadows );
+	const shadowsBoolean = new UIBoolean( config.getKey( 'project/renderer/shadows' ) ).onChange(updateShadows);
 	shadowsRow.add( shadowsBoolean );
 
 	const shadowTypeSelect = new UISelect().setOptions( {
@@ -39,7 +39,7 @@ function SidebarProjectRenderer( editor ) {
 		1: 'PCF',
 		2: 'PCF Soft',
 		//	3: 'VSM'
-	} ).setWidth( '125px' ).onChange( updateShadows );
+	} ).setWidth( '125px' ).onChange(updateShadows);
 	shadowTypeSelect.setValue( config.getKey( 'project/renderer/shadowType' ) );
 	shadowsRow.add( shadowTypeSelect );
 
@@ -67,7 +67,7 @@ function SidebarProjectRenderer( editor ) {
 		4: 'ACESFilmic',
 		6: 'AgX',
 		7: 'Neutral'
-	} ).setWidth( '120px' ).onChange( updateToneMapping );
+	} ).setWidth( '120px' ).onChange(updateToneMapping);
 	toneMappingSelect.setValue( config.getKey( 'project/renderer/toneMapping' ) );
 	toneMappingRow.add( toneMappingSelect );
 
@@ -75,7 +75,7 @@ function SidebarProjectRenderer( editor ) {
 	toneMappingExposure.setDisplay( toneMappingSelect.getValue() === '0' ? 'none' : '' );
 	toneMappingExposure.setWidth( '30px' ).setMarginLeft( '10px' );
 	toneMappingExposure.setRange( 0, 10 );
-	toneMappingExposure.onChange( updateToneMapping );
+	toneMappingExposure.onChange(updateToneMapping);
 	toneMappingRow.add( toneMappingExposure );
 
 	function updateToneMapping() {

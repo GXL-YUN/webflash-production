@@ -47,7 +47,7 @@ import java.util.Map;
 
 //@EntityScan(basePackages = {"cn.enilu.log", "cn.enilu.flash.bean.entity"})
 //@EnableJpaRepositories(basePackages = {"cn.enilu.log.dao", "cn.enilu.flash.dao"})
-@EnableJpaRepositories(basePackages = "cn.enilu.*.dao", repositoryFactoryBeanClass = BaseRepositoryFactoryBean.class)
+@EnableJpaRepositories(basePackages = {"cn.enilu.*.dao","cn.enilu.flash.sys.*.dao"}, repositoryFactoryBeanClass = BaseRepositoryFactoryBean.class)
 @EnableJpaAuditing
 @EnableOpenApi
 @Controller

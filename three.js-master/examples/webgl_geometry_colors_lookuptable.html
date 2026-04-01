@@ -109,12 +109,12 @@
 
 				const gui = new GUI();
 
-				gui.add( params, 'colorMap', [ 'rainbow', 'cooltowarm', 'blackbody', 'grayscale' ] ).onChange( function () {
+				gui.add( params, 'colorMap', [ 'rainbow', 'cooltowarm', 'blackbody', 'grayscale' ] ).onChange(function () {
 
-					updateColors();
-					render();
+                    updateColors();
+                    render();
 
-				} );
+                });
 
 			}
 

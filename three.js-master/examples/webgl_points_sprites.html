@@ -125,16 +125,16 @@
 					texture: true
 				};
 
-				gui.add( params, 'texture' ).onChange( function ( value ) {
+				gui.add( params, 'texture' ).onChange(function (value) {
 
-					for ( let i = 0; i < materials.length; i ++ ) {
+                    for (let i = 0; i < materials.length; i++) {
 
-						materials[ i ].map = ( value === true ) ? parameters[ i ][ 1 ] : null;
-						materials[ i ].needsUpdate = true;
+                        materials[i].map = (value === true) ? parameters[i][1] : null;
+                        materials[i].needsUpdate = true;
 
-					}
+                    }
 
-				} );
+                });
 
 				gui.open();
 

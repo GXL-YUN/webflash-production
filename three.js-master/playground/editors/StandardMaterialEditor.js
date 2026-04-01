@@ -19,31 +19,31 @@ export class StandardMaterialEditor extends MaterialEditor {
 		const normal = setInputAestheticsFromType( new LabelElement( 'normal' ), 'Vector3' );
 		const position = setInputAestheticsFromType( new LabelElement( 'position' ), 'Vector3' );
 
-		color.add( new ColorInput( material.color.getHex() ).onChange( ( input ) => {
+		color.add( new ColorInput( material.color.getHex() ).onChange((input) => {
 
-			material.color.setHex( input.getValue() );
+            material.color.setHex(input.getValue());
 
-		} ) );
+        }));
 
-		opacity.add( new SliderInput( material.opacity, 0, 1 ).onChange( ( input ) => {
+		opacity.add( new SliderInput( material.opacity, 0, 1 ).onChange((input) => {
 
-			material.opacity = input.getValue();
+            material.opacity = input.getValue();
 
-			this.updateTransparent();
+            this.updateTransparent();
 
-		} ) );
+        }));
 
-		metalness.add( new SliderInput( material.metalness, 0, 1 ).onChange( ( input ) => {
+		metalness.add( new SliderInput( material.metalness, 0, 1 ).onChange((input) => {
 
-			material.metalness = input.getValue();
+            material.metalness = input.getValue();
 
-		} ) );
+        }));
 
-		roughness.add( new SliderInput( material.roughness, 0, 1 ).onChange( ( input ) => {
+		roughness.add( new SliderInput( material.roughness, 0, 1 ).onChange((input) => {
 
-			material.roughness = input.getValue();
+            material.roughness = input.getValue();
 
-		} ) );
+        }));
 
 		color.onConnect( () => this.update(), true );
 		opacity.onConnect( () => this.update(), true );

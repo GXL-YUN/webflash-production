@@ -1,7 +1,6 @@
 // ApiLogAspect.java
 package cn.enilu.aop;
 
-
 import cn.enilu.log.bean.model.ApiLog;
 import cn.enilu.log.service.ApiLogService;
 import lombok.extern.slf4j.Slf4j;
@@ -65,9 +64,9 @@ public class ApiLogAspect {
         apiLog.setClientIp(getClientIp(request));
         apiLog.setUserAgent(request.getHeader("User-Agent"));
 
-
         Object result = null;
         Integer statusCode = null;
+        Throwable exception = null;
 
         try {
             // 执行目标方法
@@ -76,44 +75,56 @@ public class ApiLogAspect {
             // 获取响应状态码
             if (response != null) {
                 statusCode = response.getStatus();
-                apiLog.setStatusCode(statusCode);
-                apiLog.setSuccess(statusCode < 400);
             }
 
             return result;
 
         } catch (Exception e) {
+            exception = e;
             statusCode = 500;
-            apiLog.setStatusCode(statusCode);
             apiLog.setSuccess(false);
             apiLog.setErrorMessage(e.getMessage());
             log.error("接口执行异常: {} {}, 异常: {}", apiLog.getMethod(), apiLog.getUri(), e.getMessage());
             throw e;
 
         } finally {
-            long duration = System.currentTimeMillis() - startTime;
-            apiLog.setDuration(duration);
-            //apiLog.setCreateTime(LocalDateTime.now());
-
             try {
+                long duration = System.currentTimeMillis() - startTime;
+                apiLog.setDuration(duration);
+                // apiLog.setCreateTime(LocalDateTime.now());
+
+                // 设置状态码
+                apiLog.setStatusCode(statusCode);
+                if (apiLog.getSuccess() == null) {
+                    apiLog.setSuccess(statusCode != null && statusCode < 400);
+                }
+
                 // 记录请求体和响应体
                 recordRequestBody(request, apiLog);
                 recordResponseBody(response, apiLog);
 
-                // 获取请求体
-//                if (request instanceof ContentCachingRequestWrapper) {
-//                    apiLog.setRequestBody(getRequestBody((ContentCachingRequestWrapper) request));
-//                }
-                result = joinPoint.proceed();
-
-                // 获取响应信息
-                if (result instanceof ResponseEntity) {
-                    ResponseEntity<?> responseEntity = (ResponseEntity<?>) result;
-                    apiLog.setStatusCode(responseEntity.getStatusCodeValue());
+                // 记录响应结果
+                if (result != null) {
+                    if (result instanceof ResponseEntity) {
+                        ResponseEntity<?> responseEntity = (ResponseEntity<?>) result;
+                        apiLog.setStatusCode(responseEntity.getStatusCodeValue());
+                        // 记录响应体
+                        if (responseEntity.getBody() != null) {
+                            String responseBody = responseEntity.getBody().toString();
+                            if (responseBody.length() > MAX_BODY_LENGTH) {
+                                responseBody = responseBody.substring(0, MAX_BODY_LENGTH) + "...[截断]";
+                            }
+                            apiLog.setResponseBody(responseBody);
+                        }
+                    } else {
+                        // 处理基本类型
+                        String responseBody = convertToString(result);
+                        if (responseBody.length() > MAX_BODY_LENGTH) {
+                            responseBody = responseBody.substring(0, MAX_BODY_LENGTH) + "...[截断]";
+                        }
+                        apiLog.setResponseBody(responseBody);
+                    }
                 }
-
-                // 记录响应体
-                apiLog.setResponseBody(result.toString());
 
                 // 保存日志
                 saveLog(apiLog);
@@ -123,6 +134,21 @@ public class ApiLogAspect {
                 log.debug("记录API日志异常: {}", e.getMessage());
             }
         }
+    }
+
+    /**
+     * 将结果转换为字符串，处理基本类型
+     */
+    /**
+     * 将结果转换为字符串，正确处理基本类型
+     */
+    private String convertToString(Object result) {
+        if (result == null) {
+            return "null";
+        }
+
+        // 直接调用toString()，基本类型的包装类会自动处理
+        return String.valueOf(result);
     }
 
     /**
@@ -181,7 +207,10 @@ public class ApiLogAspect {
                         responseBody = responseBody.substring(0, MAX_BODY_LENGTH) + "...[截断]";
                     }
 
-                    apiLog.setResponseBody(responseBody);
+                    // 注意：这里不应该覆盖已有的responseBody
+                    if (apiLog.getResponseBody() == null || apiLog.getResponseBody().isEmpty()) {
+                        apiLog.setResponseBody(responseBody);
+                    }
 
                     // 重要：复制响应体到原始响应
                     wrapper.copyBodyToResponse();

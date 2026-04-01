@@ -165,7 +165,7 @@ import { GUI } from '../../examples/jsm/libs/lil-gui.module.min.js';
 				};
 
 				const gui = new GUI( { autoPlace: false } );
-				gui.add( new DegRadHelper( settings, 'rotation' ), 'value', - 180, 180 ).name( 'rotation' ).onChange( render );
+				gui.add( new DegRadHelper( settings, 'rotation' ), 'value', - 180, 180 ).name( 'rotation' ).onChange(render);
 				gui.domElement.style.position = 'absolute';
 				gui.domElement.style.top = '0';
 				gui.domElement.style.right = '0';

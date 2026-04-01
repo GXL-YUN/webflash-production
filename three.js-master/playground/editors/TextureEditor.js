@@ -70,27 +70,27 @@ export class TextureEditor extends BaseNodeEditor {
 			{ name: 'Repeat Wrapping', value: RepeatWrapping },
 			{ name: 'Clamp To Edge Wrapping', value: ClampToEdgeWrapping },
 			{ name: 'Mirrored Repeat Wrapping', value: MirroredRepeatWrapping }
-		], RepeatWrapping ).onChange( () => {
+		], RepeatWrapping ).onChange(() => {
 
-			this.update();
+            this.update();
 
-		} );
+        });
 
 		this.wrapTInput = new SelectInput( [
 			{ name: 'Repeat Wrapping', value: RepeatWrapping },
 			{ name: 'Clamp To Edge Wrapping', value: ClampToEdgeWrapping },
 			{ name: 'Mirrored Repeat Wrapping', value: MirroredRepeatWrapping }
-		], RepeatWrapping ).onChange( () => {
+		], RepeatWrapping ).onChange(() => {
 
-			this.update();
+            this.update();
 
-		} );
+        });
 
-		this.flipYInput = new ToggleInput( false ).onChange( () => {
+		this.flipYInput = new ToggleInput( false ).onChange(() => {
 
-			this.update();
+            this.update();
 
-		} );
+        });
 
 		this.add( uvField )
 			.add( new LabelElement( 'Wrap S' ).add( this.wrapSInput ) )

@@ -18,17 +18,17 @@ export class TimerEditor extends BaseNodeEditor {
 
 		};
 
-		const field = new NumberInput().onChange( () => {
+		const field = new NumberInput().onChange(() => {
 
-			node.value = field.getValue();
+            node.value = field.getValue();
 
-		} );
+        });
 
-		const scaleField = new NumberInput( 1 ).onChange( () => {
+		const scaleField = new NumberInput( 1 ).onChange(() => {
 
-			node.scale = scaleField.getValue();
+            node.scale = scaleField.getValue();
 
-		} );
+        });
 
 		const moreElement = new Element().add( new ButtonInput( 'Reset' ).onClick( () => {
 

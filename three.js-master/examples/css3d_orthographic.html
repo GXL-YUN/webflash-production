@@ -194,12 +194,12 @@
 				};
 
 				folder1.add( settings, 'setViewOffset' );
-				folder1.add( settings, 'fullWidth', window.screen.width / 4, window.screen.width * 2, 1 ).onChange( ( val ) => updateCameraViewOffset( { fullWidth: val } ) ).disable();
-				folder1.add( settings, 'fullHeight', window.screen.height / 4, window.screen.height * 2, 1 ).onChange( ( val ) => updateCameraViewOffset( { fullHeight: val } ) ).disable();
-				folder1.add( settings, 'offsetX', 0, 256, 1 ).onChange( ( val ) => updateCameraViewOffset( { x: val } ) ).disable();
-				folder1.add( settings, 'offsetY', 0, 256, 1 ).onChange( ( val ) => updateCameraViewOffset( { y: val } ) ).disable();
-				folder1.add( settings, 'width', window.screen.width / 4, window.screen.width * 2, 1 ).onChange( ( val ) => updateCameraViewOffset( { width: val } ) ).disable();
-				folder1.add( settings, 'height', window.screen.height / 4, window.screen.height * 2, 1 ).onChange( ( val ) => updateCameraViewOffset( { height: val } ) ).disable();
+				folder1.add( settings, 'fullWidth', window.screen.width / 4, window.screen.width * 2, 1 ).onChange((val) => updateCameraViewOffset({fullWidth: val})).disable();
+				folder1.add( settings, 'fullHeight', window.screen.height / 4, window.screen.height * 2, 1 ).onChange((val) => updateCameraViewOffset({fullHeight: val})).disable();
+				folder1.add( settings, 'offsetX', 0, 256, 1 ).onChange((val) => updateCameraViewOffset({x: val})).disable();
+				folder1.add( settings, 'offsetY', 0, 256, 1 ).onChange((val) => updateCameraViewOffset({y: val})).disable();
+				folder1.add( settings, 'width', window.screen.width / 4, window.screen.width * 2, 1 ).onChange((val) => updateCameraViewOffset({width: val})).disable();
+				folder1.add( settings, 'height', window.screen.height / 4, window.screen.height * 2, 1 ).onChange((val) => updateCameraViewOffset({height: val})).disable();
 				folder1.add( settings, 'clearViewOffset' );
 
 			}

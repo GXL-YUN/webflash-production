@@ -8,7 +8,7 @@ function SidebarMaterialBooleanProperty( editor, property, name ) {
 	const container = new UIRow();
 	container.add( new UIText( name ).setClass( 'Label' ) );
 
-	const boolean = new UICheckbox().setLeft( '100px' ).onChange( onChange );
+	const boolean = new UICheckbox().setLeft( '100px' ).onChange(onChange);
 	container.add( boolean );
 
 	let object = null;

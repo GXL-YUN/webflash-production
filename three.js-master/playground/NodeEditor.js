@@ -683,52 +683,52 @@ export class NodeEditor extends THREE.EventDispatcher {
 
 		} );
 
-		search.onChange( () => {
+		search.onChange(() => {
 
-			const value = search.getValue().toLowerCase();
+            const value = search.getValue().toLowerCase();
 
-			if ( value.length === 0 ) return reset();
+            if (value.length === 0) return reset();
 
-			nodeButtonsVisible = [];
-			nodeButtonsIndex = 0;
+            nodeButtonsVisible = [];
+            nodeButtonsIndex = 0;
 
-			for ( const button of nodeButtons ) {
+            for (const button of nodeButtons) {
 
-				const buttonLabel = button.getLabel().toLowerCase();
+                const buttonLabel = button.getLabel().toLowerCase();
 
-				button.setVisible( false ).setSelected( false );
+                button.setVisible(false).setSelected(false);
 
-				const visible = buttonLabel.indexOf( value ) !== - 1;
+                const visible = buttonLabel.indexOf(value) !== -1;
 
-				if ( visible && button.children.length === 0 ) {
+                if (visible && button.children.length === 0) {
 
-					nodeButtonsVisible.push( button );
+                    nodeButtonsVisible.push(button);
 
-				}
+                }
 
-			}
+            }
 
-			for ( const button of nodeButtonsVisible ) {
+            for (const button of nodeButtonsVisible) {
 
-				let parent = button;
+                let parent = button;
 
-				while ( parent !== null ) {
+                while (parent !== null) {
 
-					parent.setOpened( true ).setVisible( true );
+                    parent.setOpened(true).setVisible(true);
 
-					parent = parent.parent;
+                    parent = parent.parent;
 
-				}
+                }
 
-			}
+            }
 
-			if ( nodeButtonsVisible[ nodeButtonsIndex ] !== undefined ) {
+            if (nodeButtonsVisible[nodeButtonsIndex] !== undefined) {
 
-				nodeButtonsVisible[ nodeButtonsIndex ].setSelected( true );
+                nodeButtonsVisible[nodeButtonsIndex].setSelected(true);
 
-			}
+            }
 
-		} );
+        });
 
 		const treeView = new TreeViewInput();
 		node.add( new Element().setHeight( 30 ).add( search ) );

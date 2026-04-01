@@ -1,6 +1,8 @@
 package cn.enilu.flash.bean.entity;
 
+import cn.enilu.flash.bean.entity.att.AttMainMassage;
 import cn.enilu.flash.bean.entity.att.AttachmentInfo;
+import cn.enilu.flash.bean.entity.system.FileInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -35,8 +37,10 @@ public abstract class BaseEntity implements Serializable {
     @Column(name = "fd_id", updatable = false, nullable = false)
     private String fdId;
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", columnDefinition = "VARCHAR(50) COMMENT '项目编码'")
     private Long id;
+
     @CreationTimestamp
     @Column(name = "create_time", columnDefinition = "DATETIME COMMENT '创建时间/注册时间'", updatable = false)
     private Date createTime;
@@ -50,9 +54,9 @@ public abstract class BaseEntity implements Serializable {
     @Column(name = "modify_by", columnDefinition = "bigint COMMENT '最后更新人'")
     private Long modifyBy;
 
-
-
-
-
-
+    /**
+     * 附件（临时字段，不持久化到数据库）
+     */
+    @Transient
+    private   List<FileInfo> attacherList;
 }

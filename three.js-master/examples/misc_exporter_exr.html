@@ -87,7 +87,7 @@
 				const gui = new GUI();
 
 				const input = gui.addFolder( 'Input' );
-				input.add( params, 'target' ).options( [ 'pmrem', 'data-texture' ] ).onChange( swapScene );
+				input.add( params, 'target' ).options( [ 'pmrem', 'data-texture' ] ).onChange(swapScene);
 
 				const options = gui.addFolder( 'Output Options' );
 				options.add( params, 'type' ).options( [ 'FloatType', 'HalfFloatType' ] );

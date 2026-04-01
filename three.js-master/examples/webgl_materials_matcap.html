@@ -101,20 +101,20 @@
 
 				gui.addColor( API, 'color' )
 					.listen()
-					.onChange( function () {
+					.onChange(function () {
 
-						mesh.material.color.set( API.color ).convertSRGBToLinear();
-						render();
+                        mesh.material.color.set(API.color).convertSRGBToLinear();
+                        render();
 
-					} );
+                    });
 
 				gui.add( API, 'exposure', 0, 2 )
-					.onChange( function () {
+					.onChange(function () {
 
-						renderer.toneMappingExposure = API.exposure;
-						render();
+                        renderer.toneMappingExposure = API.exposure;
+                        render();
 
-					} );
+                    });
 
 				gui.domElement.style.webkitUserSelect = 'none';
 

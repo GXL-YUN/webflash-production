@@ -148,36 +148,36 @@
 
 				const thicknessControls = new ThicknessControls();
 
-				gui.add( thicknessControls, 'distortion' ).min( 0.01 ).max( 1 ).step( 0.01 ).onChange( function () {
+				gui.add( thicknessControls, 'distortion' ).min( 0.01 ).max( 1 ).step( 0.01 ).onChange(function () {
 
-					material.thicknessDistortionNode.value = thicknessControls.distortion;
-					console.log( 'distortion' );
+                    material.thicknessDistortionNode.value = thicknessControls.distortion;
+                    console.log('distortion');
 
-				} );
+                });
 
-				gui.add( thicknessControls, 'ambient' ).min( 0.01 ).max( 5.0 ).step( 0.05 ).onChange( function () {
+				gui.add( thicknessControls, 'ambient' ).min( 0.01 ).max( 5.0 ).step( 0.05 ).onChange(function () {
 
-					material.thicknessAmbientNode.value = thicknessControls.ambient;
+                    material.thicknessAmbientNode.value = thicknessControls.ambient;
 
-				} );
+                });
 
-				gui.add( thicknessControls, 'attenuation' ).min( 0.01 ).max( 5.0 ).step( 0.05 ).onChange( function () {
+				gui.add( thicknessControls, 'attenuation' ).min( 0.01 ).max( 5.0 ).step( 0.05 ).onChange(function () {
 
-					material.thicknessAttenuationNode.value = thicknessControls.attenuation;
+                    material.thicknessAttenuationNode.value = thicknessControls.attenuation;
 
-				} );
+                });
 
-				gui.add( thicknessControls, 'power' ).min( 0.01 ).max( 16.0 ).step( 0.1 ).onChange( function () {
+				gui.add( thicknessControls, 'power' ).min( 0.01 ).max( 16.0 ).step( 0.1 ).onChange(function () {
 
-					material.thicknessPowerNode.value = thicknessControls.power;
+                    material.thicknessPowerNode.value = thicknessControls.power;
 
-				} );
+                });
 
-				gui.add( thicknessControls, 'scale' ).min( 0.01 ).max( 50.0 ).step( 0.1 ).onChange( function () {
+				gui.add( thicknessControls, 'scale' ).min( 0.01 ).max( 50.0 ).step( 0.1 ).onChange(function () {
 
-					material.thicknessScaleNode.value = thicknessControls.scale;
+                    material.thicknessScaleNode.value = thicknessControls.scale;
 
-				} );
+                });
 
 			}
 

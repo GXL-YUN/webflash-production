@@ -113,6 +113,15 @@ public class BaseRepositoryImpl<T, ID extends Serializable>
         return entityManager.createNativeQuery(query).executeUpdate();
     }
 
+    @Override
+    public <T1> T1 getOneById(ID id) {
+        Optional<T> optional = findById(id);
+        if (optional.isPresent()) {
+            return (T1) optional.get();
+        }
+        return null;
+    }
+
     /**
      * 根据entityType获取表名称
      *

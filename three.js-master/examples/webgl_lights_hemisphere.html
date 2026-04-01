@@ -226,11 +226,11 @@
 
 				gui.add( params, 'toggleHemisphereLight' ).name( 'toggle hemisphere light' );
 				gui.add( params, 'toggleDirectionalLight' ).name( 'toggle directional light' );
-				gui.add( params, 'shadowIntensity', 0, 1 ).name( 'shadow intensity' ).onChange( ( value ) => {
+				gui.add( params, 'shadowIntensity', 0, 1 ).name( 'shadow intensity' ).onChange((value) => {
 
-					dirLight.shadow.intensity = value;
+                    dirLight.shadow.intensity = value;
 
-				} );
+                });
 				gui.open();
 
 				//

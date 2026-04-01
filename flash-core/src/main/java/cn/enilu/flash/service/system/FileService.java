@@ -189,8 +189,8 @@ public class FileService extends BaseService<FileInfo, Long, FileInfoRepository>
            // fileInfo.setCreateBy(JwtUtil.getUserId());
             fileInfo.setOriginalFileName(originalFileName);
             fileInfo.setRealFileName(file.getName());
-            fileInfo.setFdKey(fdKey);
-            fileInfo.setFdModelId(fdModelId);
+            //fileInfo.setFdKey(fdKey);
+            //fileInfo.setFdModelId(fdModelId);
             //doc转换为pdf
             //判断类型
             insert(fileInfo);

@@ -20,6 +20,8 @@ public interface SelectService<T, ID> {
      */
     T get(ID id);
 
+    T getById(ID  id);
+
     T get(SearchFilter filter);
 
     T get(List<SearchFilter> filters);

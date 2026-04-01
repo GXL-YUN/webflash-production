@@ -125,9 +125,9 @@ function main() {
 	function makeXYZGUI( gui, vector3, name, onChangeFn ) {
 
 		const folder = gui.addFolder( name );
-		folder.add( vector3, 'x', - 10, 10 ).onChange( onChangeFn );
-		folder.add( vector3, 'y', 0, 10 ).onChange( onChangeFn );
-		folder.add( vector3, 'z', - 10, 10 ).onChange( onChangeFn );
+		folder.add( vector3, 'x', - 10, 10 ).onChange(onChangeFn);
+		folder.add( vector3, 'y', 0, 10 ).onChange(onChangeFn);
+		folder.add( vector3, 'z', - 10, 10 ).onChange(onChangeFn);
 		folder.open();
 
 	}
@@ -152,7 +152,7 @@ function main() {
 		const gui = new GUI();
 		gui.addColor( new ColorGUIHelper( light, 'color' ), 'value' ).name( 'color' );
 		gui.add( light, 'intensity', 0, 250, 1 );
-		gui.add( light, 'distance', 0, 40 ).onChange( updateLight );
+		gui.add( light, 'distance', 0, 40 ).onChange(updateLight);
 
 		makeXYZGUI( gui, light.position, 'position' );
 

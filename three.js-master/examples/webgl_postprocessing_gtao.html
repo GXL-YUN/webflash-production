@@ -125,11 +125,11 @@
 					'AO Only + Denoise': GTAOPass.OUTPUT.Denoise,
 					'Depth': GTAOPass.OUTPUT.Depth,
 					'Normal': GTAOPass.OUTPUT.Normal
-				} ).onChange( function ( value ) {
+				} ).onChange(function (value) {
 
-					gtaoPass.output = value;
+                    gtaoPass.output = value;
 
-				} );
+                });
 
 				const aoParameters = {
 					radius: 0.25,
@@ -152,20 +152,20 @@
 				gtaoPass.updateGtaoMaterial( aoParameters );
 				gtaoPass.updatePdMaterial( pdParameters );
 				gui.add( gtaoPass, 'blendIntensity' ).min( 0 ).max( 1 ).step( 0.01 );
-				gui.add( aoParameters, 'radius' ).min( 0.01 ).max( 1 ).step( 0.01 ).onChange( () => gtaoPass.updateGtaoMaterial( aoParameters ) );
-				gui.add( aoParameters, 'distanceExponent' ).min( 1 ).max( 4 ).step( 0.01 ).onChange( () => gtaoPass.updateGtaoMaterial( aoParameters ) );
-				gui.add( aoParameters, 'thickness' ).min( 0.01 ).max( 10 ).step( 0.01 ).onChange( () => gtaoPass.updateGtaoMaterial( aoParameters ) );
-				gui.add( aoParameters, 'distanceFallOff' ).min( 0 ).max( 1 ).step( 0.01 ).onChange( () => gtaoPass.updateGtaoMaterial( aoParameters ) );
-				gui.add( aoParameters, 'scale' ).min( 0.01 ).max( 2.0 ).step( 0.01 ).onChange( () => gtaoPass.updateGtaoMaterial( aoParameters ) );
-				gui.add( aoParameters, 'samples' ).min( 2 ).max( 32 ).step( 1 ).onChange( () => gtaoPass.updateGtaoMaterial( aoParameters ) );
-				gui.add( aoParameters, 'screenSpaceRadius' ).onChange( () => gtaoPass.updateGtaoMaterial( aoParameters ) );
-				gui.add( pdParameters, 'lumaPhi' ).min( 0 ).max( 20 ).step( 0.01 ).onChange( () => gtaoPass.updatePdMaterial( pdParameters ) );
-				gui.add( pdParameters, 'depthPhi' ).min( 0.01 ).max( 20 ).step( 0.01 ).onChange( () => gtaoPass.updatePdMaterial( pdParameters ) );
-				gui.add( pdParameters, 'normalPhi' ).min( 0.01 ).max( 20 ).step( 0.01 ).onChange( () => gtaoPass.updatePdMaterial( pdParameters ) );
-				gui.add( pdParameters, 'radius' ).min( 0 ).max( 32 ).step( 1 ).onChange( () => gtaoPass.updatePdMaterial( pdParameters ) );
-				gui.add( pdParameters, 'radiusExponent' ).min( 0.1 ).max( 4. ).step( 0.1 ).onChange( () => gtaoPass.updatePdMaterial( pdParameters ) );
-				gui.add( pdParameters, 'rings' ).min( 1 ).max( 16 ).step( 0.125 ).onChange( () => gtaoPass.updatePdMaterial( pdParameters ) );
-				gui.add( pdParameters, 'samples' ).min( 2 ).max( 32 ).step( 1 ).onChange( () => gtaoPass.updatePdMaterial( pdParameters ) );
+				gui.add( aoParameters, 'radius' ).min( 0.01 ).max( 1 ).step( 0.01 ).onChange(() => gtaoPass.updateGtaoMaterial(aoParameters));
+				gui.add( aoParameters, 'distanceExponent' ).min( 1 ).max( 4 ).step( 0.01 ).onChange(() => gtaoPass.updateGtaoMaterial(aoParameters));
+				gui.add( aoParameters, 'thickness' ).min( 0.01 ).max( 10 ).step( 0.01 ).onChange(() => gtaoPass.updateGtaoMaterial(aoParameters));
+				gui.add( aoParameters, 'distanceFallOff' ).min( 0 ).max( 1 ).step( 0.01 ).onChange(() => gtaoPass.updateGtaoMaterial(aoParameters));
+				gui.add( aoParameters, 'scale' ).min( 0.01 ).max( 2.0 ).step( 0.01 ).onChange(() => gtaoPass.updateGtaoMaterial(aoParameters));
+				gui.add( aoParameters, 'samples' ).min( 2 ).max( 32 ).step( 1 ).onChange(() => gtaoPass.updateGtaoMaterial(aoParameters));
+				gui.add( aoParameters, 'screenSpaceRadius' ).onChange(() => gtaoPass.updateGtaoMaterial(aoParameters));
+				gui.add( pdParameters, 'lumaPhi' ).min( 0 ).max( 20 ).step( 0.01 ).onChange(() => gtaoPass.updatePdMaterial(pdParameters));
+				gui.add( pdParameters, 'depthPhi' ).min( 0.01 ).max( 20 ).step( 0.01 ).onChange(() => gtaoPass.updatePdMaterial(pdParameters));
+				gui.add( pdParameters, 'normalPhi' ).min( 0.01 ).max( 20 ).step( 0.01 ).onChange(() => gtaoPass.updatePdMaterial(pdParameters));
+				gui.add( pdParameters, 'radius' ).min( 0 ).max( 32 ).step( 1 ).onChange(() => gtaoPass.updatePdMaterial(pdParameters));
+				gui.add( pdParameters, 'radiusExponent' ).min( 0.1 ).max( 4. ).step( 0.1 ).onChange(() => gtaoPass.updatePdMaterial(pdParameters));
+				gui.add( pdParameters, 'rings' ).min( 1 ).max( 16 ).step( 0.125 ).onChange(() => gtaoPass.updatePdMaterial(pdParameters));
+				gui.add( pdParameters, 'samples' ).min( 2 ).max( 32 ).step( 1 ).onChange(() => gtaoPass.updatePdMaterial(pdParameters));
 			
 				window.addEventListener( 'resize', onWindowResize );
 

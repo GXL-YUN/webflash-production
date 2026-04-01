@@ -112,7 +112,7 @@
 
 				const gui = new GUI();
 
-				gui.add( params, 'sample', SAMPLES ).onChange( loadTexture );
+				gui.add( params, 'sample', SAMPLES ).onChange(loadTexture);
 
 				await loadTexture( params.sample );
 

@@ -111,23 +111,23 @@
 				const gui = new GUI( { width: 300 } );
 				gui.add( params, 'Cube' );
 				gui.add( params, 'Equirectangular' );
-				gui.add( params, 'Refraction' ).onChange( function ( value ) {
+				gui.add( params, 'Refraction' ).onChange(function (value) {
 
-					if ( value ) {
+                    if (value) {
 
-						textureEquirec.mapping = THREE.EquirectangularRefractionMapping;
-						textureCube.mapping = THREE.CubeRefractionMapping;
+                        textureEquirec.mapping = THREE.EquirectangularRefractionMapping;
+                        textureCube.mapping = THREE.CubeRefractionMapping;
 
-					} else {
+                    } else {
 
-						textureEquirec.mapping = THREE.EquirectangularReflectionMapping;
-						textureCube.mapping = THREE.CubeReflectionMapping;
+                        textureEquirec.mapping = THREE.EquirectangularReflectionMapping;
+                        textureCube.mapping = THREE.CubeReflectionMapping;
 
-					}
+                    }
 
-					sphereMaterial.needsUpdate = true;
+                    sphereMaterial.needsUpdate = true;
 
-				} );
+                });
 				gui.add( params, 'backgroundRotationX' );
 				gui.add( params, 'backgroundRotationY' );
 				gui.add( params, 'backgroundRotationZ' );

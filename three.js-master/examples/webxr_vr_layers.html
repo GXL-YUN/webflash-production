@@ -215,7 +215,7 @@
 				// behavior, but since the layer is in the same place as the invisible mesh, the user
 				// thinks they're directly interacting with the layer.
 				const gui = new GUI( { width: 300 } );
-				gui.add( parameters, 'eyeChartDistanceFt', 1.0, 20.0 ).onChange( onChange );
+				gui.add( parameters, 'eyeChartDistanceFt', 1.0, 20.0 ).onChange(onChange);
 				gui.domElement.style.visibility = 'hidden';
 
 				function onChange() {

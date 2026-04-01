@@ -74,11 +74,11 @@
 			// The gui for interaction
 			volconfig = { clim1: 0, clim2: 1, renderstyle: 'iso', isothreshold: 0.15, colormap: 'viridis' };
 			const gui = new GUI();
-			gui.add( volconfig, 'clim1', 0, 1, 0.01 ).onChange( updateUniforms );
-			gui.add( volconfig, 'clim2', 0, 1, 0.01 ).onChange( updateUniforms );
-			gui.add( volconfig, 'colormap', { gray: 'gray', viridis: 'viridis' } ).onChange( updateUniforms );
-			gui.add( volconfig, 'renderstyle', { mip: 'mip', iso: 'iso' } ).onChange( updateUniforms );
-			gui.add( volconfig, 'isothreshold', 0, 1, 0.01 ).onChange( updateUniforms );
+			gui.add( volconfig, 'clim1', 0, 1, 0.01 ).onChange(updateUniforms);
+			gui.add( volconfig, 'clim2', 0, 1, 0.01 ).onChange(updateUniforms);
+			gui.add( volconfig, 'colormap', { gray: 'gray', viridis: 'viridis' } ).onChange(updateUniforms);
+			gui.add( volconfig, 'renderstyle', { mip: 'mip', iso: 'iso' } ).onChange(updateUniforms);
+			gui.add( volconfig, 'isothreshold', 0, 1, 0.01 ).onChange(updateUniforms);
 
 			// Load the data ...
 			new NRRDLoader().load( 'models/nrrd/stent.nrrd', function ( volume ) {

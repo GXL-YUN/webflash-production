@@ -299,7 +299,7 @@
 					'ambient light': ambientLight.color.getHex()
 				};
 
-				folder.addColor( data, 'ambient light' ).onChange( handleColorChange( ambientLight.color ) );
+				folder.addColor( data, 'ambient light' ).onChange(handleColorChange(ambientLight.color));
 
 				guiSceneFog( folder, scene );
 
@@ -318,21 +318,21 @@
 					}
 				};
 
-				fogFolder.add( data.fog, 'THREE.Fog()' ).onChange( function ( useFog ) {
+				fogFolder.add( data.fog, 'THREE.Fog()' ).onChange(function (useFog) {
 
-					if ( useFog ) {
+                    if (useFog) {
 
-						scene.fog = fog;
+                        scene.fog = fog;
 
-					} else {
+                    } else {
 
-						scene.fog = null;
+                        scene.fog = null;
 
-					}
+                    }
 
-				} );
+                });
 
-				fogFolder.addColor( data.fog, 'scene.fog.color' ).onChange( handleColorChange( fog.color ) );
+				fogFolder.addColor( data.fog, 'scene.fog.color' ).onChange(handleColorChange(fog.color));
 
 			}
 
@@ -340,7 +340,7 @@
 
 				const folder = gui.addFolder( 'THREE.Material' );
 
-				folder.add( material, 'transparent' ).onChange( needsUpdate( material, geometry ) );
+				folder.add( material, 'transparent' ).onChange(needsUpdate(material, geometry));
 				folder.add( material, 'opacity', 0, 1 ).step( 0.01 );
 				// folder.add( material, 'blending', constants.blendingMode );
 				// folder.add( material, 'blendSrc', constants.destinationFactors );
@@ -351,10 +351,10 @@
 				// folder.add( material, 'polygonOffset' );
 				// folder.add( material, 'polygonOffsetFactor' );
 				// folder.add( material, 'polygonOffsetUnits' );
-				folder.add( material, 'alphaTest', 0, 1 ).step( 0.01 ).onChange( needsUpdate( material, geometry ) );
-				folder.add( material, 'alphaHash' ).onChange( needsUpdate( material, geometry ) );
+				folder.add( material, 'alphaTest', 0, 1 ).step( 0.01 ).onChange(needsUpdate(material, geometry));
+				folder.add( material, 'alphaHash' ).onChange(needsUpdate(material, geometry));
 				folder.add( material, 'visible' );
-				folder.add( material, 'side', constants.side ).onChange( needsUpdate( material, geometry ) );
+				folder.add( material, 'side', constants.side ).onChange(needsUpdate(material, geometry));
 
 			}
 
@@ -369,15 +369,15 @@
 
 				const folder = gui.addFolder( 'THREE.MeshBasicMaterial' );
 
-				folder.addColor( data, 'color' ).onChange( handleColorChange( material.color ) );
+				folder.addColor( data, 'color' ).onChange(handleColorChange(material.color));
 				folder.add( material, 'wireframe' );
-				folder.add( material, 'vertexColors' ).onChange( needsUpdate( material, geometry ) );
-				folder.add( material, 'fog' ).onChange( needsUpdate( material, geometry ) );
+				folder.add( material, 'vertexColors' ).onChange(needsUpdate(material, geometry));
+				folder.add( material, 'fog' ).onChange(needsUpdate(material, geometry));
 
-				folder.add( data, 'envMaps', envMapKeys ).onChange( updateTexture( material, 'envMap', envMaps ) );
-				folder.add( data, 'map', diffuseMapKeys ).onChange( updateTexture( material, 'map', diffuseMaps ) );
-				folder.add( data, 'alphaMap', alphaMapKeys ).onChange( updateTexture( material, 'alphaMap', alphaMaps ) );
-				folder.add( material, 'combine', constants.combine ).onChange( updateCombine( material ) );
+				folder.add( data, 'envMaps', envMapKeys ).onChange(updateTexture(material, 'envMap', envMaps));
+				folder.add( data, 'map', diffuseMapKeys ).onChange(updateTexture(material, 'map', diffuseMaps));
+				folder.add( data, 'alphaMap', alphaMapKeys ).onChange(updateTexture(material, 'alphaMap', alphaMaps));
+				folder.add( material, 'combine', constants.combine ).onChange(updateCombine(material));
 				folder.add( material, 'reflectivity', 0, 1 );
 				folder.add( material, 'refractionRatio', 0, 1 );
 
@@ -393,7 +393,7 @@
 
 				folder.add( material, 'wireframe' );
 
-				folder.add( data, 'alphaMap', alphaMapKeys ).onChange( updateTexture( material, 'alphaMap', alphaMaps ) );
+				folder.add( data, 'alphaMap', alphaMapKeys ).onChange(updateTexture(material, 'alphaMap', alphaMaps));
 
 			}
 
@@ -401,7 +401,7 @@
 
 				const folder = gui.addFolder( 'THREE.MeshNormalMaterial' );
 
-				folder.add( material, 'flatShading' ).onChange( needsUpdate( material, geometry ) );
+				folder.add( material, 'flatShading' ).onChange(needsUpdate(material, geometry));
 				folder.add( material, 'wireframe' );
 
 			}
@@ -414,12 +414,12 @@
 
 				const folder = gui.addFolder( 'THREE.LineBasicMaterial' );
 
-				folder.addColor( data, 'color' ).onChange( handleColorChange( material.color ) );
+				folder.addColor( data, 'color' ).onChange(handleColorChange(material.color));
 				folder.add( material, 'linewidth', 0, 10 );
 				folder.add( material, 'linecap', [ 'butt', 'round', 'square' ] );
 				folder.add( material, 'linejoin', [ 'round', 'bevel', 'miter' ] );
-				folder.add( material, 'vertexColors' ).onChange( needsUpdate( material, geometry ) );
-				folder.add( material, 'fog' ).onChange( needsUpdate( material, geometry ) );
+				folder.add( material, 'vertexColors' ).onChange(needsUpdate(material, geometry));
+				folder.add( material, 'fog' ).onChange(needsUpdate(material, geometry));
 
 			}
 
@@ -435,17 +435,17 @@
 
 				const folder = gui.addFolder( 'THREE.MeshLambertMaterial' );
 
-				folder.addColor( data, 'color' ).onChange( handleColorChange( material.color ) );
-				folder.addColor( data, 'emissive' ).onChange( handleColorChange( material.emissive ) );
+				folder.addColor( data, 'color' ).onChange(handleColorChange(material.color));
+				folder.addColor( data, 'emissive' ).onChange(handleColorChange(material.emissive));
 
 				folder.add( material, 'wireframe' );
-				folder.add( material, 'vertexColors' ).onChange( needsUpdate( material, geometry ) );
-				folder.add( material, 'fog' ).onChange( needsUpdate( material, geometry ) );
+				folder.add( material, 'vertexColors' ).onChange(needsUpdate(material, geometry));
+				folder.add( material, 'fog' ).onChange(needsUpdate(material, geometry));
 
-				folder.add( data, 'envMaps', envMapKeys ).onChange( updateTexture( material, 'envMap', envMaps ) );
-				folder.add( data, 'map', diffuseMapKeys ).onChange( updateTexture( material, 'map', diffuseMaps ) );
-				folder.add( data, 'alphaMap', alphaMapKeys ).onChange( updateTexture( material, 'alphaMap', alphaMaps ) );
-				folder.add( material, 'combine', constants.combine ).onChange( updateCombine( material ) );
+				folder.add( data, 'envMaps', envMapKeys ).onChange(updateTexture(material, 'envMap', envMaps));
+				folder.add( data, 'map', diffuseMapKeys ).onChange(updateTexture(material, 'map', diffuseMaps));
+				folder.add( data, 'alphaMap', alphaMapKeys ).onChange(updateTexture(material, 'alphaMap', alphaMaps));
+				folder.add( material, 'combine', constants.combine ).onChange(updateCombine(material));
 				folder.add( material, 'reflectivity', 0, 1 );
 				folder.add( material, 'refractionRatio', 0, 1 );
 
@@ -461,11 +461,11 @@
 
 				const folder = gui.addFolder( 'THREE.MeshMatcapMaterial' );
 
-				folder.addColor( data, 'color' ).onChange( handleColorChange( material.color ) );
+				folder.addColor( data, 'color' ).onChange(handleColorChange(material.color));
 
-				folder.add( material, 'flatShading' ).onChange( needsUpdate( material, geometry ) );
-				folder.add( data, 'matcap', matcapKeys ).onChange( updateTexture( material, 'matcap', matcaps ) );
-				folder.add( data, 'alphaMap', alphaMapKeys ).onChange( updateTexture( material, 'alphaMap', alphaMaps ) );
+				folder.add( material, 'flatShading' ).onChange(needsUpdate(material, geometry));
+				folder.add( data, 'matcap', matcapKeys ).onChange(updateTexture(material, 'matcap', matcaps));
+				folder.add( data, 'alphaMap', alphaMapKeys ).onChange(updateTexture(material, 'alphaMap', alphaMaps));
 
 			}
 
@@ -482,19 +482,19 @@
 
 				const folder = gui.addFolder( 'THREE.MeshPhongMaterial' );
 
-				folder.addColor( data, 'color' ).onChange( handleColorChange( material.color ) );
-				folder.addColor( data, 'emissive' ).onChange( handleColorChange( material.emissive ) );
-				folder.addColor( data, 'specular' ).onChange( handleColorChange( material.specular ) );
+				folder.addColor( data, 'color' ).onChange(handleColorChange(material.color));
+				folder.addColor( data, 'emissive' ).onChange(handleColorChange(material.emissive));
+				folder.addColor( data, 'specular' ).onChange(handleColorChange(material.specular));
 
 				folder.add( material, 'shininess', 0, 100 );
-				folder.add( material, 'flatShading' ).onChange( needsUpdate( material, geometry ) );
+				folder.add( material, 'flatShading' ).onChange(needsUpdate(material, geometry));
 				folder.add( material, 'wireframe' );
-				folder.add( material, 'vertexColors' ).onChange( needsUpdate( material, geometry ) );
-				folder.add( material, 'fog' ).onChange( needsUpdate( material, geometry ) );
-				folder.add( data, 'envMaps', envMapKeys ).onChange( updateTexture( material, 'envMap', envMaps ) );
-				folder.add( data, 'map', diffuseMapKeys ).onChange( updateTexture( material, 'map', diffuseMaps ) );
-				folder.add( data, 'alphaMap', alphaMapKeys ).onChange( updateTexture( material, 'alphaMap', alphaMaps ) );
-				folder.add( material, 'combine', constants.combine ).onChange( updateCombine( material ) );
+				folder.add( material, 'vertexColors' ).onChange(needsUpdate(material, geometry));
+				folder.add( material, 'fog' ).onChange(needsUpdate(material, geometry));
+				folder.add( data, 'envMaps', envMapKeys ).onChange(updateTexture(material, 'envMap', envMaps));
+				folder.add( data, 'map', diffuseMapKeys ).onChange(updateTexture(material, 'map', diffuseMaps));
+				folder.add( data, 'alphaMap', alphaMapKeys ).onChange(updateTexture(material, 'alphaMap', alphaMaps));
+				folder.add( material, 'combine', constants.combine ).onChange(updateCombine(material));
 				folder.add( material, 'reflectivity', 0, 1 );
 				folder.add( material, 'refractionRatio', 0, 1 );
 
@@ -511,10 +511,10 @@
 
 				const folder = gui.addFolder( 'THREE.MeshToonMaterial' );
 
-				folder.addColor( data, 'color' ).onChange( handleColorChange( material.color ) );
-				folder.add( data, 'map', diffuseMapKeys ).onChange( updateTexture( material, 'map', diffuseMaps ) );
-				folder.add( data, 'gradientMap', gradientMapKeys ).onChange( updateTexture( material, 'gradientMap', gradientMaps ) );
-				folder.add( data, 'alphaMap', alphaMapKeys ).onChange( updateTexture( material, 'alphaMap', alphaMaps ) );
+				folder.addColor( data, 'color' ).onChange(handleColorChange(material.color));
+				folder.add( data, 'map', diffuseMapKeys ).onChange(updateTexture(material, 'map', diffuseMaps));
+				folder.add( data, 'gradientMap', gradientMapKeys ).onChange(updateTexture(material, 'gradientMap', gradientMaps));
+				folder.add( data, 'alphaMap', alphaMapKeys ).onChange(updateTexture(material, 'alphaMap', alphaMaps));
 
 			}
 
@@ -532,20 +532,20 @@
 
 				const folder = gui.addFolder( 'THREE.MeshStandardMaterial' );
 
-				folder.addColor( data, 'color' ).onChange( handleColorChange( material.color ) );
-				folder.addColor( data, 'emissive' ).onChange( handleColorChange( material.emissive ) );
+				folder.addColor( data, 'color' ).onChange(handleColorChange(material.color));
+				folder.addColor( data, 'emissive' ).onChange(handleColorChange(material.emissive));
 
 				folder.add( material, 'roughness', 0, 1 );
 				folder.add( material, 'metalness', 0, 1 );
-				folder.add( material, 'flatShading' ).onChange( needsUpdate( material, geometry ) );
+				folder.add( material, 'flatShading' ).onChange(needsUpdate(material, geometry));
 				folder.add( material, 'wireframe' );
-				folder.add( material, 'vertexColors' ).onChange( needsUpdate( material, geometry ) );
-				folder.add( material, 'fog' ).onChange( needsUpdate( material, geometry ) );
-				folder.add( data, 'envMaps', envMapKeysPBR ).onChange( updateTexture( material, 'envMap', envMaps ) );
-				folder.add( data, 'map', diffuseMapKeys ).onChange( updateTexture( material, 'map', diffuseMaps ) );
-				folder.add( data, 'roughnessMap', roughnessMapKeys ).onChange( updateTexture( material, 'roughnessMap', roughnessMaps ) );
-				folder.add( data, 'alphaMap', alphaMapKeys ).onChange( updateTexture( material, 'alphaMap', alphaMaps ) );
-				folder.add( data, 'metalnessMap', alphaMapKeys ).onChange( updateTexture( material, 'metalnessMap', alphaMaps ) );
+				folder.add( material, 'vertexColors' ).onChange(needsUpdate(material, geometry));
+				folder.add( material, 'fog' ).onChange(needsUpdate(material, geometry));
+				folder.add( data, 'envMaps', envMapKeysPBR ).onChange(updateTexture(material, 'envMap', envMaps));
+				folder.add( data, 'map', diffuseMapKeys ).onChange(updateTexture(material, 'map', diffuseMaps));
+				folder.add( data, 'roughnessMap', roughnessMapKeys ).onChange(updateTexture(material, 'roughnessMap', roughnessMaps));
+				folder.add( data, 'alphaMap', alphaMapKeys ).onChange(updateTexture(material, 'alphaMap', alphaMaps));
+				folder.add( data, 'metalnessMap', alphaMapKeys ).onChange(updateTexture(material, 'metalnessMap', alphaMaps));
 
 			}
 
@@ -566,8 +566,8 @@
 
 				const folder = gui.addFolder( 'THREE.MeshPhysicalMaterial' );
 
-				folder.addColor( data, 'color' ).onChange( handleColorChange( material.color ) );
-				folder.addColor( data, 'emissive' ).onChange( handleColorChange( material.emissive ) );
+				folder.addColor( data, 'color' ).onChange(handleColorChange(material.color));
+				folder.addColor( data, 'emissive' ).onChange(handleColorChange(material.emissive));
 
 				folder.add( material, 'roughness', 0, 1 );
 				folder.add( material, 'metalness', 0, 1 );
@@ -577,21 +577,21 @@
 				folder.add( material, 'iridescenceIOR', 1, 2.333 );
 				folder.add( material, 'sheen', 0, 1 );
 				folder.add( material, 'sheenRoughness', 0, 1 );
-				folder.addColor( data, 'sheenColor' ).onChange( handleColorChange( material.sheenColor ) );
+				folder.addColor( data, 'sheenColor' ).onChange(handleColorChange(material.sheenColor));
 				folder.add( material, 'clearcoat', 0, 1 ).step( 0.01 );
 				folder.add( material, 'clearcoatRoughness', 0, 1 ).step( 0.01 );
 				folder.add( material, 'specularIntensity', 0, 1);
-				folder.addColor( data, 'specularColor' ).onChange( handleColorChange( material.specularColor ) );
-				folder.add( material, 'flatShading' ).onChange( needsUpdate( material, geometry ) );
+				folder.addColor( data, 'specularColor' ).onChange(handleColorChange(material.specularColor));
+				folder.add( material, 'flatShading' ).onChange(needsUpdate(material, geometry));
 				folder.add( material, 'wireframe' );
-				folder.add( material, 'vertexColors' ).onChange( needsUpdate( material, geometry ) );
-				folder.add( material, 'fog' ).onChange( needsUpdate( material, geometry ) );
-				folder.add( data, 'envMaps', envMapKeysPBR ).onChange( updateTexture( material, 'envMap', envMaps ) );
-				folder.add( data, 'map', diffuseMapKeys ).onChange( updateTexture( material, 'map', diffuseMaps ) );
-				folder.add( data, 'roughnessMap', roughnessMapKeys ).onChange( updateTexture( material, 'roughnessMap', roughnessMaps ) );
-				folder.add( data, 'alphaMap', alphaMapKeys ).onChange( updateTexture( material, 'alphaMap', alphaMaps ) );
-				folder.add( data, 'metalnessMap', alphaMapKeys ).onChange( updateTexture( material, 'metalnessMap', alphaMaps ) );
-				folder.add( data, 'iridescenceMap', alphaMapKeys ).onChange( updateTexture( material, 'iridescenceMap', alphaMaps ) );
+				folder.add( material, 'vertexColors' ).onChange(needsUpdate(material, geometry));
+				folder.add( material, 'fog' ).onChange(needsUpdate(material, geometry));
+				folder.add( data, 'envMaps', envMapKeysPBR ).onChange(updateTexture(material, 'envMap', envMaps));
+				folder.add( data, 'map', diffuseMapKeys ).onChange(updateTexture(material, 'map', diffuseMaps));
+				folder.add( data, 'roughnessMap', roughnessMapKeys ).onChange(updateTexture(material, 'roughnessMap', roughnessMaps));
+				folder.add( data, 'alphaMap', alphaMapKeys ).onChange(updateTexture(material, 'alphaMap', alphaMaps));
+				folder.add( data, 'metalnessMap', alphaMapKeys ).onChange(updateTexture(material, 'metalnessMap', alphaMaps));
+				folder.add( data, 'iridescenceMap', alphaMapKeys ).onChange(updateTexture(material, 'iridescenceMap', alphaMaps));
 
 			}
 
