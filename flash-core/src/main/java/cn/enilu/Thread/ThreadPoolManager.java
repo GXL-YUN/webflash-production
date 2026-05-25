@@ -296,7 +296,7 @@ public class ThreadPoolManager {
 
                 // 定期记录线程池状态
                 if (log.isDebugEnabled()) {
-                    log.debug("线程池状态: {}", status.toMapStr());
+                    //log.debug("线程池状态: {}", status.toMapStr());
                 }
 
             } catch (Exception e) {

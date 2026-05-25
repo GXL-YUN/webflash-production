@@ -31,7 +31,7 @@ public class ApiLogService extends BaseService<ApiLog, Long, ApiLogDao> {
                 }
 
             } catch (Exception e) {
-                log.error("保存API日志失败", e);
+                log.error("保存API日志失败", e.getMessage());
             }
         });
     }

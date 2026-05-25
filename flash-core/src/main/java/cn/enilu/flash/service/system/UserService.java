@@ -19,7 +19,7 @@ import java.util.Date;
  * @author enilu
  */
 @Service
-public class UserService extends BaseService<User, Long, UserRepository> {
+public class UserService extends BaseService<User, String, UserRepository> {
     private Logger logger = LoggerFactory.getLogger(UserService.class);
     @Autowired
     private UserRepository userRepository;

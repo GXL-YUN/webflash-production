@@ -29,10 +29,10 @@ public class BaseController {
      * @param request
      * @return
      */
-    public Long getIdUser(HttpServletRequest request) {
+    public String getIdUser(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
 
-        Long idUser = JwtUtil.getUserId(token);
+        String idUser = JwtUtil.getUserIdStr(token);
         if (idUser == null) {
             throw new RuntimeException("用户不存在");
         }

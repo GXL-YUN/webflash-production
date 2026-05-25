@@ -19,7 +19,7 @@ public class TaskWrapper extends BaseControllerWrapper {
 
     @Override
     protected void warpTheMap(Map<String, Object> map) {
-        Long userid = Long.valueOf(map.get("createBy").toString());
+        String userid = map.get("createBy").toString();
         map.put("userName", ConstantFactory.me().getUserNameById(userid));
 
     }

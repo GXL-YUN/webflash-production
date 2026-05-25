@@ -1,4 +1,4 @@
-package cn.enilu.flash.api.mq;
+package cn.enilu.pet.Listener;
 
 
 import cn.enilu.flash.bean.entity.message.Message;
@@ -11,15 +11,18 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+/**
+ * 延迟消息
+ */
 @Component
 public class RabbitMQConsumer {
 
     // 简单队列消费
-    @RabbitListener(queues = "delay.queue")
+    @RabbitListener(queues = "order.close.queue")
     public void handleDirectMessage(String message, Channel channel,
                                     @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag) throws IOException {
         try {
-            System.out.println("收到消息进行消费: " + message);
+            System.out.println("收到消息进行高延迟关闭: " + message);
             // 业务处理逻辑...
 
             // 手动确认

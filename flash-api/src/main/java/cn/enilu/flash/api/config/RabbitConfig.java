@@ -1,6 +1,8 @@
 package cn.enilu.flash.api.config;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
@@ -15,11 +17,12 @@ import org.springframework.retry.support.RetryTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 @Configuration
 @Slf4j
 public class RabbitConfig {
+
+    /* ================= 基础配置 ================= */
 
     @Value("${spring.rabbitmq.host}")
     private String host;
@@ -36,145 +39,200 @@ public class RabbitConfig {
     @Value("${spring.rabbitmq.virtual-host:/}")
     private String virtualHost;
 
+    /* ================= MQ 常量 ================= */
 
-    // 定义交换机
-    public static final String EXCHANGE_DIRECT = "exchange.direct";
-    public static final String EXCHANGE_FANOUT = "exchange.fanout";
-    public static final String EXCHANGE_TOPIC = "exchange.topic";
+    public interface MqConstants {
 
-    // 定义队列
-    public static final String QUEUE_ORDER = "queue.order";
-    public static final String QUEUE_PAYMENT = "queue.payment";
-    public static final String QUEUE_NOTIFY = "queue.notify";
+        String ORDER_EXCHANGE = "order.exchange";
+        String ORDER_QUEUE = "order.queue";
+        String ORDER_ROUTING_KEY = "order.create";
 
-    // 定义路由键
-    public static final String ROUTING_KEY_ORDER = "routing.order";
-    public static final String ROUTING_KEY_PAYMENT = "routing.payment";
-    public static final String ROUTING_KEY_NOTIFY = "routing.notify";
-    // 1. 连接工厂
-    @Bean
-    public ConnectionFactory connectionFactory() {
-        CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
-        connectionFactory.setHost(host);
-        connectionFactory.setPort(port);
-        connectionFactory.setUsername(username);
-        connectionFactory.setPassword(password);
-        connectionFactory.setVirtualHost(virtualHost);
+        /* ===== 延迟关单（核心） ===== */
+        String DELAY_EXCHANGE = "order.delay.exchange";
+        String DELAY_QUEUE = "order.close.queue";
+        String DELAY_ROUTING_KEY = "order.close";
 
-        log.info("初始化-----------------------------------------rabbittMq");
-        // 连接池配置
-        connectionFactory.setCacheMode(CachingConnectionFactory.CacheMode.CHANNEL);
-        connectionFactory.setChannelCacheSize(25);
-        connectionFactory.setChannelCheckoutTimeout(10000);
+        /* ===== 死信兜底 ===== */
+        String ORDER_DLX_EXCHANGE = "order.dlx.exchange";
+        String ORDER_DLX_QUEUE = "order.dlx.queue";
+        String ORDER_DLX_ROUTING_KEY = "order.dlx";
 
-        // 发布确认
-        connectionFactory.setPublisherConfirmType(CachingConnectionFactory.ConfirmType.CORRELATED);
-        connectionFactory.setPublisherReturns(true);
 
-        return connectionFactory;
     }
 
-    // 2. JSON消息转换器
+    /* ================= 连接工厂 ================= */
+
     @Bean
-    public MessageConverter jsonMessageConverter() {
+    public ConnectionFactory connectionFactory() {
+        CachingConnectionFactory factory = new CachingConnectionFactory();
+        factory.setHost(host);
+        factory.setPort(port);
+        factory.setUsername(username);
+        factory.setPassword(password);
+        factory.setVirtualHost(virtualHost);
+
+        factory.setCacheMode(CachingConnectionFactory.CacheMode.CHANNEL);
+        factory.setChannelCacheSize(25);
+        factory.setChannelCheckoutTimeout(10_000);
+
+        factory.setPublisherConfirmType(CachingConnectionFactory.ConfirmType.CORRELATED);
+        factory.setPublisherReturns(true);
+
+        log.info("RabbitMQ connectionFactory initialized {}","初始化成功");
+        return factory;
+    }
+
+    /* ================= JSON 序列化 ================= */
+
+    @Bean
+    public MessageConverter messageConverter() {
         return new Jackson2JsonMessageConverter();
     }
 
-    // 3. RabbitTemplate
+    /* ================= RabbitTemplate ================= */
+
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
-        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-        rabbitTemplate.setMessageConverter(jsonMessageConverter());
+        RabbitTemplate template = new RabbitTemplate(connectionFactory);
+        template.setMessageConverter(messageConverter());
 
-        // 开启消息返回机制
-        rabbitTemplate.setMandatory(true);
+        template.setMandatory(true);
 
-        // 确认回调
-        rabbitTemplate.setConfirmCallback((correlationData, ack, cause) -> {
+        template.setConfirmCallback((correlationData, ack, cause) -> {
             if (ack) {
-                System.out.println("消息发送成功: " + correlationData);
+                log.info("Message send success: {}", correlationData);
             } else {
-                System.out.println("消息发送失败: " + cause);
+                log.error("Message send failed: {}", cause);
             }
         });
-
-        // 返回回调
-//        rabbitTemplate.setReturnsCallback(returned -> {
-//            System.out.println("消息被退回: " + returned.getMessage());
-//        });
-
-        // 重试机制
         RetryTemplate retryTemplate = new RetryTemplate();
-        SimpleRetryPolicy retryPolicy = new SimpleRetryPolicy();
-        retryPolicy.setMaxAttempts(3);
-        retryTemplate.setRetryPolicy(retryPolicy);
-        rabbitTemplate.setRetryTemplate(retryTemplate);
-
-        return rabbitTemplate;
+        retryTemplate.setRetryPolicy(new SimpleRetryPolicy(3));
+        template.setRetryTemplate(retryTemplate);
+        return template;
     }
 
-    // 4. RabbitAdmin (关键配置)
+    /* ================= RabbitAdmin ================= */
+
     @Bean
     public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory) {
-        RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
-        rabbitAdmin.setAutoStartup(true);  // 自动启动
-        rabbitAdmin.setIgnoreDeclarationExceptions(true);  // 忽略声明异常
-
-        // 声明默认交换机和队列
-        declareDefaultComponents(rabbitAdmin);
-
-        return rabbitAdmin;
+        RabbitAdmin admin = new RabbitAdmin(connectionFactory);
+        admin.setAutoStartup(true);
+        admin.setIgnoreDeclarationExceptions(true);
+        return admin;
     }
 
-    // 5. 声明默认组件
-    private void declareDefaultComponents(RabbitAdmin rabbitAdmin) {
-        // 声明死信交换机
-        DirectExchange dlxExchange = new DirectExchange("exchange.dlx", true, false);
-        rabbitAdmin.declareExchange(dlxExchange);
+    /* ================= 死信交换机 & 队列 ================= */
 
-        // 声明死信队列
-        Queue dlxQueue = new Queue("queue.dlx.default", true);
-        rabbitAdmin.declareQueue(dlxQueue);
+    /***
+     * 什么是 DLX（Dead Letter Exchange）
+     * DLX = 死信交换机
+     * 当一条消息变成 “死信”​ 时：
+     * 死信触发条件
+     * 说明
+     *  消息 TTL 过期
+     *  消息被拒绝（reject/nack）
+     * 消费失败
+     *  队列满了
+     * 新消息进不来
+     *  RabbitMQ 不会扔掉消息​
+     *  而是 转发到指定的 DLX
+     * @return
+     */
 
-        // 绑定死信队列
-        Binding dlxBinding = BindingBuilder.bind(dlxQueue)
-                .to(dlxExchange)
-                .with("key.dlx.default");
-        rabbitAdmin.declareBinding(dlxBinding);
+    @Bean
+    public DirectExchange orderDlxExchange() {
+        //常见交换机
+        return new DirectExchange(MqConstants.ORDER_DLX_EXCHANGE, true, false);
+    }
+    @Bean
+    public Queue orderDlxQueue() {
+        //创建队列
+        return QueueBuilder
+                .durable(MqConstants.ORDER_DLX_QUEUE)
+                .build();
+    }
+    @Bean
+    public Binding orderDlxBinding() {
+        return BindingBuilder
+                .bind(orderDlxQueue())
+                .to(orderDlxExchange())
+                .with(MqConstants.ORDER_DLX_ROUTING_KEY);
     }
 
-    // 6. 业务交换机
+
+
+    /* ================= 业务交换机 & 队列 ================= */
     @Bean
     public DirectExchange orderExchange() {
-        return new DirectExchange("exchange.order", true, false);
+        return new DirectExchange(MqConstants.ORDER_EXCHANGE, true, false);
     }
-
-    // 7. 业务队列（带死信配置）
     @Bean
     public Queue orderQueue() {
         Map<String, Object> args = new HashMap<>();
-        args.put("x-dead-letter-exchange", "exchange.dlx");
-        args.put("x-dead-letter-routing-key", "key.dlx.order");
-        args.put("x-message-ttl", 60000);  // 60秒过期
-        args.put("x-max-length", 10000);
-        return new Queue("queue.order", true, false, false, args);
-    }
+        args.put("x-dead-letter-exchange", MqConstants.ORDER_DLX_EXCHANGE);
+        args.put("x-dead-letter-routing-key", MqConstants.ORDER_DLX_ROUTING_KEY);
+        args.put("x-max-length", 10_000);
 
-    // 8. 绑定
+        return QueueBuilder
+                .durable(MqConstants.ORDER_QUEUE)
+                .withArguments(args)
+                .build();
+    }
     @Bean
     public Binding orderBinding() {
-        return BindingBuilder.bind(orderQueue())
+        return BindingBuilder
+                .bind(orderQueue())
                 .to(orderExchange())
-                .with("key.order.create");
+                .with(MqConstants.ORDER_ROUTING_KEY);
     }
 
-    // 9. 延迟队列
+
+
+/*===================================延迟队列=======================================================*/
+    /**
+     *
+     * @return
+     */
+    @Bean
+    public CustomExchange delayExchange() {
+        Map<String, Object> args = new HashMap<>();
+        args.put("x-delayed-type", "direct");
+        return new CustomExchange(
+                MqConstants.DELAY_EXCHANGE,
+                "x-delayed-message",
+                true,
+                false,
+                args
+        );
+    }
     @Bean
     public Queue delayQueue() {
-        Map<String, Object> args = new HashMap<>();
-        args.put("x-dead-letter-exchange", "exchange.order");
-        args.put("x-dead-letter-routing-key", "key.order.process");
-        args.put("x-message-ttl", 30000);  // 30秒延迟
-        return new Queue("queue.delay.order", true, false, false, args);
+        return new Queue(MqConstants.DELAY_QUEUE, true);
+    }
+    @Bean
+    public Binding delayBinding() {
+        return BindingBuilder
+                .bind(delayQueue())
+                .to(delayExchange())
+                .with(MqConstants.DELAY_ROUTING_KEY)
+                .noargs();
+    }
+
+    /* ================= 消费者容器工厂 ================= */
+
+    @Bean
+    public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(
+            ConnectionFactory connectionFactory) {
+
+        SimpleRabbitListenerContainerFactory factory =
+                new SimpleRabbitListenerContainerFactory();
+
+        factory.setConnectionFactory(connectionFactory);
+        factory.setMessageConverter(messageConverter());
+
+        factory.setAcknowledgeMode(AcknowledgeMode.MANUAL);
+        factory.setPrefetchCount(10);
+
+        return factory;
     }
 }

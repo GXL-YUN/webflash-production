@@ -47,6 +47,18 @@ public class User extends BaseEntity {
     private String email;
     @Column(columnDefinition = "VARCHAR(16) COMMENT '手机号'")
     private String phone;
+
+    @Column(columnDefinition = "VARCHAR(16) COMMENT '账户类型'")  //用户 1  或者 商家 2
+    private String fdType;
+
+    @Column(columnDefinition = "VARCHAR(16) COMMENT '账户类型'")  //繁育商家
+    private Boolean fdBreeding;
+
+
+    @Column(columnDefinition = "VARCHAR(16) COMMENT '账户类型'")  //繁育商家
+    private Boolean fdToiletries;//洗护商家
+
+
     @Column(columnDefinition = "VARCHAR(128) COMMENT '角色id列表，以逗号分隔'")
     private String roleid;
     @Column(columnDefinition = "BIGINT COMMENT '部门id'")

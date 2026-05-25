@@ -17,7 +17,7 @@ import javax.transaction.Transactional;
  * @author enilu
  */
 @Service
-public class TestService extends BaseService<User, Long, UserRepository> {
+public class TestService extends BaseService<User, String, UserRepository> {
     private Logger logger = LoggerFactory.getLogger(TestService.class);
     @Autowired
     private UserRepository userRepository;

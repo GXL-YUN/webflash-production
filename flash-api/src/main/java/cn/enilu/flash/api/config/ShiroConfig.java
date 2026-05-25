@@ -1,7 +1,8 @@
 package cn.enilu.flash.api.config;
 
-import cn.enilu.flash.api.interceptor.JwtFilter;
+import cn.enilu.flash.api.interceptor.JwtFilterNew;
 import cn.enilu.flash.security.ApiRealm;
+import cn.enilu.flash.api.interceptor.PermissionAuthorizationFilter;
 import cn.enilu.flash.security.SystemLogoutFilter;
 import cn.enilu.flash.utils.Maps;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
@@ -20,113 +21,105 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * @author ：enilu
- * @date ：Created in 2019/7/30 23:08
+ * Shiro配置类
  */
 @Configuration
 public class ShiroConfig {
+
+
+    /**
+     * 配置SecurityManager - 必须命名为securityManager
+     */
     @Bean("securityManager")
-    public DefaultWebSecurityManager getManager(ApiRealm realm) {
-        DefaultWebSecurityManager manager = new DefaultWebSecurityManager();
-        // 使用自己的realm
-        manager.setRealm(realm);
+    public DefaultWebSecurityManager securityManager() {
+        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
 
-        /*
-         * 关闭shiro自带的session，详情见文档
-         * http://shiro.apache.org/session-management.html#SessionManagement-StatelessApplications%28Sessionless%29
-         */
+
+        ApiRealm apiRealm=new ApiRealm();
+        // 设置自定义Realm
+        securityManager.setRealm(apiRealm);
+
+        // 关闭Shiro自带的Session
         DefaultSubjectDAO subjectDAO = new DefaultSubjectDAO();
-        DefaultSessionStorageEvaluator defaultSessionStorageEvaluator = new DefaultSessionStorageEvaluator();
-        defaultSessionStorageEvaluator.setSessionStorageEnabled(false);
-        subjectDAO.setSessionStorageEvaluator(defaultSessionStorageEvaluator);
-        manager.setSubjectDAO(subjectDAO);
+        DefaultSessionStorageEvaluator sessionStorageEvaluator = new DefaultSessionStorageEvaluator();
+        sessionStorageEvaluator.setSessionStorageEnabled(false);
+        subjectDAO.setSessionStorageEvaluator(sessionStorageEvaluator);
+        securityManager.setSubjectDAO(subjectDAO);
 
-        return manager;
+        return securityManager;
     }
 
+    /**
+     * 配置Shiro过滤器
+     */
     @Bean("shiroFilter")
-    public ShiroFilterFactoryBean factory(DefaultWebSecurityManager securityManager) {
+    public ShiroFilterFactoryBean shiroFilterFactoryBean() {
+        DefaultWebSecurityManager securityManager = securityManager();
+
         ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
-
-        // 添加自己的过滤器并且取名为jwt
-        Map<String, Filter> filterMap = Maps.newHashMap();
-        filterMap.put("jwt", new JwtFilter());
-        factoryBean.setFilters(filterMap);
-
-        filterMap.put("logout", new SystemLogoutFilter());
         factoryBean.setSecurityManager(securityManager);
         factoryBean.setUnauthorizedUrl("/401");
 
-        /*
-         * 自定义url规则
-         * http://shiro.apache.org/web.html#urls-
-         * 这里最好用LinkedHashMap,否则可能回出现anon配置无效的情况
-         */
-        Map<String, String> filterRuleMap = new LinkedHashMap<String, String>();
-        // 所有请求通过我们自己的JWT Filter
-        //swagger资源不拦截
-        filterRuleMap.put("/swagger-ui/**", "anon");
-        filterRuleMap.put("/v3/**", "anon");
-        filterRuleMap.put("/doc.html", "anon");
-        filterRuleMap.put("/webjars/**", "anon");
-        filterRuleMap.put("/swagger-resources/**", "anon");
-        filterRuleMap.put("/images/**", "anon");
-        filterRuleMap.put("/configuration/security", "anon");
-        filterRuleMap.put("/configuration/ui", "anon");
+        // 配置自定义过滤器
+        Map<String, Filter> filters = Maps.newHashMap();
+        filters.put("jwt", new JwtFilterNew());
+        filters.put("logout", new SystemLogoutFilter());
+        filters.put("perms", new PermissionAuthorizationFilter());
+        factoryBean.setFilters(filters);
 
-        filterRuleMap.put("/file/download", "anon");
-        filterRuleMap.put("/file/getImgStream", "anon");
-        filterRuleMap.put("/file/getVideo.do", "anon");
-        filterRuleMap.put("/user", "anon");
-        filterRuleMap.put("/vode/list.do", "anon");
 
-        filterRuleMap.put("/user/getImgBase64", "anon");
-        filterRuleMap.put("/fileUtil/download.do", "anon");
-        filterRuleMap.put("/fileUtil/getImgStream.do", "anon");
-        filterRuleMap.put("/fileUtil/getImgBase64.do", "anon");
-        filterRuleMap.put("/fileUtil/previewPdf.do", "anon");
 
-        filterRuleMap.put("/account/qrcode/getRet", "anon");
-        filterRuleMap.put("/account/getUser", "anon");
-        filterRuleMap.put("/account/isLogin", "anon");
-        filterRuleMap.put("/account/*", "anon");
-        filterRuleMap.put("/fileUtil/**", "anon");
-        filterRuleMap.put("/test/**", "anon");
-        filterRuleMap.put("/message/sendYj", "anon");
-        filterRuleMap.put("/api/**", "anon");
-        //工作流定义文件流
-        filterRuleMap.put("/workflow/process/definition/getDefinitionXML", "anon");
-        //druid监控地址不拦截
-        filterRuleMap.put("/druid/**", "anon");
-        //登录，二维码登录，登出不拦截
-        filterRuleMap.put("/index", "anon");
 
-        filterRuleMap.put("/rabbit/*", "anon");
-        filterRuleMap.put("/room/**", "anon");
-        filterRuleMap.put("/api/**", "anon");
-        filterRuleMap.put("/account/login", "anon");
-        filterRuleMap.put("/account/qrcode/**", "anon");
-        filterRuleMap.put("/logout", "logout");
-        //H5前端不拦截
-        filterRuleMap.put("/offcialsite/**", "anon");
-        // 访问401和404页面不通过我们的Filter
-        filterRuleMap.put("/401", "anon");
-        filterRuleMap.put("/**", "jwt");
-        factoryBean.setFilterChainDefinitionMap(filterRuleMap);
+        // 配置过滤规则
+        Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
+
+
+        //登录界面 // 认证相关/account/loginWxml
+        filterChainDefinitionMap.put("/api/account/*/*", "anon");
+        filterChainDefinitionMap.put("/account/login", "anon");
+        filterChainDefinitionMap.put("/account/logout", "logout");
+        filterChainDefinitionMap.put("/account/captcha", "anon");
+
+        // 静态资源和文档（完全开放）
+        filterChainDefinitionMap.put("/swagger-ui/**", "anon");
+        filterChainDefinitionMap.put("/v3/api-docs/**", "anon");
+        filterChainDefinitionMap.put("/doc.html", "anon");
+        filterChainDefinitionMap.put("/webjars/**", "anon");
+        filterChainDefinitionMap.put("/swagger-resources/**", "anon");
+
+        // Druid监控
+        filterChainDefinitionMap.put("/druid/**", "anon");
+
+
+        // 文件相关
+        filterChainDefinitionMap.put("/file/att/**", "anon");
+        filterChainDefinitionMap.put("/api/fileUtil/**", "anon");
+
+        // 公开接口
+        filterChainDefinitionMap.put("/api/test**", "anon");
+        filterChainDefinitionMap.put("/api/public/**", "anon");
+
+        // 错误页面
+        filterChainDefinitionMap.put("/401", "anon");
+        filterChainDefinitionMap.put("/404", "anon");
+        filterChainDefinitionMap.put("/500", "anon");
+
+        // 默认规则：所有请求都需要JWT认证
+        filterChainDefinitionMap.put("/**", "jwt");
+
+        factoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return factoryBean;
     }
 
     /**
-     * 下面的代码是添加注解支持
+     * 启用Shiro注解支持
      */
     @Bean
     @DependsOn("lifecycleBeanPostProcessor")
     public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
-        DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
-        // 强制使用cglib，防止重复代理和可能引起代理出错的问题
-        // https://zhuanlan.zhihu.com/p/29161098
-        defaultAdvisorAutoProxyCreator.setProxyTargetClass(true);
-        return defaultAdvisorAutoProxyCreator;
+        DefaultAdvisorAutoProxyCreator creator = new DefaultAdvisorAutoProxyCreator();
+        creator.setProxyTargetClass(true);
+        return creator;
     }
 
     @Bean
@@ -134,10 +127,13 @@ public class ShiroConfig {
         return new LifecycleBeanPostProcessor();
     }
 
+    /**
+     * 启用权限注解
+     */
     @Bean
-    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(DefaultWebSecurityManager securityManager) {
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor() {
         AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
-        advisor.setSecurityManager(securityManager);
+        advisor.setSecurityManager(securityManager());
         return advisor;
     }
 }

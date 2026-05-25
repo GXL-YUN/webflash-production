@@ -1,5 +1,8 @@
 package cn.enilu.util;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -61,6 +64,21 @@ public class StringUtil {
 			0x3F, 0x3F, 0x3F, 0x3F, 0x3F, 0x3F, 0x3F, 0x3F };
 	private static char[] HEXCHAR = { '0', '1', '2', '3', '4', '5', '6', '7',
 			'8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+
+
+	/**
+	 * 将字符传转为list
+	 * @param json
+	 * @return
+	 */
+	public static List<String> jsonToList(String json) {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			return mapper.readValue(json, new TypeReference<List<String>>() {});
+		} catch (Exception e) {
+			return Collections.emptyList();
+		}
+	}
 
 	/**
 	 * 将字节数组还原成16进制字符串

@@ -32,7 +32,7 @@ public class Article extends BaseEntity {
     private String author;
     @Column(columnDefinition = "VARCHAR(64) COMMENT '文章题图ID'")
     private String img;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)//这里填写的是 Customer在LinkMan中的private属性,加上级联
-    @JoinColumn(name = "file_id")
-    private List<FileInfo> fileList = new ArrayList<>();
+//    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)//这里填写的是 Customer在LinkMan中的private属性,加上级联
+//    @JoinColumn(name = "file_id")
+//    private List<FileInfo> fileList = new ArrayList<>();
 }

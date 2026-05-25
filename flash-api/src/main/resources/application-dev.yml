@@ -31,3 +31,9 @@ server:
   tomcat:
     basedir: /data/app/web-flash/runtime/tmp
 urlpath: /data/app/web-flash/runtime/tmp
+
+#nginx配置访问域名http://localhost:15000/
+hostUrlNginx: http://localhost:15000/
+
+#数据源配置
+DB_mk_oralce: ekp_mid_mysql_test

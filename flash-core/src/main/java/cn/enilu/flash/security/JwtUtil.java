@@ -7,6 +7,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
@@ -16,6 +17,7 @@ import java.util.UUID;
  * @author ：enilu
  * @date ：Created in 2019/7/30 22:56
  */
+@Slf4j
 public class JwtUtil {
 
     /**
@@ -57,10 +59,25 @@ public class JwtUtil {
         return getUserId(HttpUtil.getToken());
     }
 
+
+    /**
+     * 根据toke获取用户id
+     * @param token
+     * @return
+     */
     public static Long getUserId(String token) {
         try {
             DecodedJWT jwt = JWT.decode(token);
             return jwt.getClaim("userId").asLong();
+        } catch (JWTDecodeException e) {
+            return null;
+        }
+    }
+
+    public static String getUserIdStr(String token) {
+        try {
+            DecodedJWT jwt = JWT.decode(token);
+            return jwt.getClaim("userId").asString();
         } catch (JWTDecodeException e) {
             return null;
         }
@@ -78,13 +95,17 @@ public class JwtUtil {
             Date date = new Date(System.currentTimeMillis() + expireTime);
             Algorithm algorithm = Algorithm.HMAC256(user.getPassword());
             // 附带username信息
-            return JWT.create()
+
+            String  toke= JWT.create()
                     .withClaim("username", user.getAccount())
-                    .withClaim("userId", user.getId())
+                    .withClaim("userId", user.getFdId())
                     .withClaim("uuid", UUID.randomUUID().toString())
                     .withExpiresAt(date)
                     .sign(algorithm);
+           // log.info("用户："+ user.getAccount()+"生成toke："+ toke);
+            return toke;
         } catch (UnsupportedEncodingException e) {
+            log.debug("用户："+ user.getAccount()+"生成失败："+ user.getAccount());
             return null;
         }
     }

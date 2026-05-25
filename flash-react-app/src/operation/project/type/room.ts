@@ -19,33 +19,3 @@ export interface RoomItem {
     fileLists: [],
     fileListss: []
 }
-
-export interface ApiResponse {
-    code: number;
-    msg: string;
-    data: RoomItem[];
-    success: boolean;
-}
-
-export interface ColDate {
-    title: string;
-    dataIndex: string;
-    key: string;
-    width: number;
-    sorter:any
-}
-export interface CreateRoomDto {
-    fdName: string;
-    fdRoomName: string;
-    fdRoomPhone: string;
-    fdAddres: string;
-    fdPrincipal: string;
-    fdIsWhole: string;
-    fdAbcde: string;
-    fdlease: string;
-    fdPrincipalPhone: string;
-    img: string;
-    fdbz: string;
-}
-
-

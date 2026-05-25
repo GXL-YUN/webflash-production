@@ -1,15 +1,21 @@
 package cn.enilu.flash.api.controller.project;
 
 import cn.enilu.Thread.ThreadPoolUtil;
+import cn.enilu.flash.api.controller.CrudController;
 import cn.enilu.flash.bean.constant.factory.PageFactory;
+import cn.enilu.flash.bean.vo.query.SearchFilter;
+import cn.enilu.flash.security.PermConstant;
 import cn.enilu.flash.bean.page.RequertInfo;
 import cn.enilu.flash.bean.vo.front.Rets;
+import cn.enilu.flash.service.BaseService;
 import cn.enilu.flash.service.system.FileService;
 import cn.enilu.flash.sys.att.service.imp.SysAttMainService;
 import cn.enilu.flash.utils.factory.Page;
 import cn.enilu.project.bean.model.ProjectModel;
+import cn.enilu.project.dao.ProjectDao;
 import cn.enilu.project.service.ProjectServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +25,8 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/api/project")
-public class ProjectListController  {
+public class ProjectListController extends
+        CrudController<ProjectModel, String, ProjectDao,RequertInfo> {
 
     @Autowired
     private ProjectServiceImpl projectServiceImpl;
@@ -36,9 +43,15 @@ public class ProjectListController  {
     @Autowired
     private ThreadPoolUtil threadPoolUtil;
 
+
+    @Override
+    protected BaseService<ProjectModel, String, ProjectDao>  getService() {
+        return projectServiceImpl;
+    }
+
     @PostMapping(value = "/list")
-    // @RequiresPermissions(value = {Permission.FILE_UPLOAD})
-    public Object list(@RequestBody RequertInfo requertInfo) throws Exception{
+    @RequiresPermissions(value = {PermConstant.USER_VIEW})
+    public Object list(@RequestBody RequertInfo requertInfo) {
         try {
             Page<ProjectModel> page = new PageFactory<ProjectModel>().defaultPage();
 
@@ -48,7 +61,7 @@ public class ProjectListController  {
             page.setSort(sort);
             page = projectServiceImpl.queryPage(page);
             page.getRecords();
-            //List<ProjectModel> list= projectServiceImpl.queryAll((List<SearchFilter>) null,sort);
+            List<ProjectModel> list= projectServiceImpl.queryAll((List<SearchFilter>) null,sort);
             return Rets.success(page);
         } catch (Exception e) {
             log.error("查询全部异常", e);
@@ -160,7 +173,7 @@ public class ProjectListController  {
 
 
 
-    @PostMapping(value = "/add")
+    @PostMapping(value = "/create")
     // @RequiresPermissions(value = {Permission.FILE_UPLOAD})
     public Object add(@RequestBody ProjectModel date) {
         ProjectModel model=null;
@@ -169,7 +182,7 @@ public class ProjectListController  {
             //保存附件数据
 
             try{
-                sysAttMainService.addSysAttMain(date.getAttacherList(),model.getClass().getName(),model.getFdId());
+               // sysAttMainService.addSysAttMain(date.getAttacherList(),model.getClass().getName(),model.getFdId());
             }catch (Exception e){
                 log.error("附件新增列表异常", e);
             }
