@@ -37,7 +37,8 @@ spring:
       # 开启发送方确认机制
       #publisher-confirms: true
       # 连接池配置
-      connection-timeout: 5000
+      connection-timeout: 15000
+      requested-heartbeat: 60
       cache:
         channel:
           size: 25
@@ -67,6 +68,14 @@ spring:
             initial-interval: 1000ms
             multiplier: 2.0
             max-interval: 10000ms
+      template:
+        retry:
+          enabled: true
+          initial-interval: 1000ms
+          max-attempts: 3
+          max-interval: 10000ms
+          multiplier: 2.0
+
   cache:
     ehcache:
       config: classpath:ehcache.xml
@@ -88,7 +97,7 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
   jpa:
-    show-sql: true
+    show-sql: false #展示sql打印
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
   servlet:
     multipart:

@@ -22,8 +22,8 @@ public class ApiLogService extends BaseService<ApiLog, Long, ApiLogDao> {
         executor.submit(() -> {
             try {
                 // 临时只打印日志
-                log.info("API日志记录: 请求ID={}, 方法={}, URI={}, 耗时={}ms",
-                        apiLog.getRequestId(), apiLog.getMethod(), apiLog.getUri(), apiLog.getDuration());
+//                log.info("API日志记录: 请求ID={}, 方法={}, URI={}, 耗时={}ms",
+//                        apiLog.getRequestId(), apiLog.getMethod(), apiLog.getUri(), apiLog.getDuration());
 
                 // 等 Dao 配置好后再取消注释
                 if (apiLogDao != null) {

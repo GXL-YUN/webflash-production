@@ -14,27 +14,28 @@ import java.io.IOException;
 
 @Component
 @Slf4j
-public class OrderSendListener {
+public class OrderDlxListener {
 
     @Autowired
     private OrdersServiceImpl ordersServiceImpl;
 
-    @RabbitListener(queues = "order.queue")
+    @RabbitListener(queues = "order.dlx.queue")
     public void close(String orderId, Channel channel,
                       @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag) throws IOException {
         try {
             if (!StringUtils.hasText(orderId)) {
-                log.warn("收到空的订单ID，跳过处理");
+                log.warn("死信队列收到空的订单ID，跳过处理");
                 channel.basicAck(deliveryTag, false);
                 return;
             }
-            log.info("处理订单发货：{}", orderId);
+
+            log.warn("处理死信队列消息 - 废弃数据：{}", orderId);
             ordersServiceImpl.closeOrderIfUnpaid(orderId);
             
-            //channel.basicAck(deliveryTag, false);
-            log.info("订单处理成功：{}", orderId);
+            channel.basicAck(deliveryTag, false);
+            log.info("死信订单处理成功：{}", orderId);
         } catch (Exception e) {
-            log.error("处理订单失败，订单ID: {}, 错误: {}", orderId, e.getMessage(), e);
+            log.error("死信队列处理失败，订单ID: {}, 错误: {}", orderId, e.getMessage(), e);
             channel.basicNack(deliveryTag, false, false);
         }
     }

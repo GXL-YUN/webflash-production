@@ -1,31 +1,55 @@
 package cn.enilu.flash.api;
 
 public class test {
+
     public static void main(String[] args) {
-        StringBuffer buff=new StringBuffer();
-        buff.append( "select b.*, ROWNUM rn  from (SELECT\n" +
-                "\t\tEMPLOYEE_CODE as id,     \n" +
-                "    TO_CHAR(SCHEDULING_DATE, 'YYYYMM') AS month,\n" +
-                "\t\tEMPLOYEE_NAME  as name,\n" +
-                "\t\tDEPARTMENT_CODE as department,   \n" +
-                "\t\tNMC_CODE as employeeId,\n" +
-                "    JSON_ARRAYAGG(\n" +
-                "        JSON_OBJECT(\n" +
-                "\t\t\t\t'date' VALUE TO_CHAR(SCHEDULING_DATE, 'MM/DD'),\n" +
-                "\t\t\t\t'dayOfWeek' VALUE TO_CHAR(SCHEDULING_DATE, 'DAY'),\n" +
-                "\t\t\t\t'noWeekCount' VALUE TAKE_WORK_HOURS+SHI_DAYS+BING_DAYS+HUN_DAYS+HUN_DAYS+CHAN_DAYS+PEI_DAYS+PEI_DAYS+BU_J_DAYS+BU_F_DAYS+SANG_DAYS+GONG_DAYS+CHILD_DAYS+XIN_DAYS+\n" +
-                "WELFARE_HOURS+WELFARE_DAYS+YU_DAYS+DU_DAYS,\n" +
+        String sql="SELECT\n" +
+                "    dateList.fd_template_id,\n" +
+                "    dateList.fd_name,\n" +
+                " CASE  WHEN dateList.fd_module_code = 'km-review' THEN '流程管理'  ELSE '低代码'  END AS fd_module_code , "+
+//                                "    dateList.fd_module_code,\n" +
+                "    dateList.fd_process_instance_id,\n" +
+                "    dateList.fd_node_name,\n" +
+                "    dateList.fd_node_type,\n" +
+                "    dateList.fd_node_number,\n" +
+                "    dateList.fd_node_id,\n" +
+                "    dateList.fd_node_instance_id,\n" +
+                "\t\tmk_model_20260311ewnua.fd_col_lcpo_name,\n" +
+                "\t\tmk_model_20260311ewnua.fd_col_lcpc_name\n" +
+                "\t\tFROM (\n" +
+                "    SELECT\n" +
+                "        lbpm_process_instance.fd_template_id,\n" +
+                "        SYS_LBPM_TEMPL.fd_name,\n" +
+                "        SYS_LBPM_TEMPL.fd_module_code,\n" +
+                "        lbpm_operation_log.fd_process_instance_id,\n" +
+                "        lbpm_operation_log.fd_node_name,\n" +
+                "        lbpm_operation_log.fd_node_type,\n" +
+                "        lbpm_operation_log.fd_node_number,\n" +
+                "        lbpm_operation_log.fd_node_id,\n" +
+                "        lbpm_operation_log.fd_node_instance_id,\n" +
+                "        ROW_NUMBER() OVER (\n" +
+                "            PARTITION BY\n" +
+                "                lbpm_process_instance.fd_template_id,\n" +
+                "                SYS_LBPM_TEMPL.fd_name,\n" +
+                "                lbpm_operation_log.fd_node_number\n" +
+                "            ORDER BY\n" +
+                "                lbpm_operation_log.fd_node_instance_id\n" +
+                "        ) rn\n" +
+                "    FROM lbpm_process_instance\n" +
+                "    LEFT JOIN lbpm_operation_log\n" +
+                "        ON lbpm_process_instance.fd_id = lbpm_operation_log.fd_process_instance_id\n" +
+                "    LEFT JOIN SYS_LBPM_TEMPL\n" +
+                "        ON SYS_LBPM_TEMPL.fd_id = lbpm_process_instance.fd_template_id\n" +
                 "\t\t\t\t\n" +
-                "\t\t\t\t'detail' value SCHEDULING_NAME\n" +
-                "\t\t\t\t)\n" +
-                "        RETURNING CLOB\n" +
-                "    ) AS schedules\n" +
-                "FROM MK_MODEL_20260423U037V\n" +
-                "WHERE TO_CHAR(SCHEDULING_DATE, 'YYYYMM') = "+
-                " GROUP BY TO_CHAR(SCHEDULING_DATE, 'YYYYMM')  ,EMPLOYEE_NAME  ,DEPARTMENT_CODE  ,    EMPLOYEE_CODE ,NMC_CODE\n)b ");
+                "\t\t\t\t\n" +
+                "    WHERE   lbpm_operation_log.fd_node_number!='N2' and lbpm_operation_log.fd_node_number!='N3' and SYS_LBPM_TEMPL.fd_name NOT LIKE '%已停用%' and  lbpm_operation_log.fd_identity_id = '"+
+                ") dateList\n" +
+                "LEFT JOIN mk_model_20260311ewnua\n" +
+                "        ON dateList.fd_name = mk_model_20260311ewnua.fd_col_lcnewname\n" +
+                "WHERE rn = 1\n" +
+                "ORDER BY fd_name";
 
-        System.out.println(buff.toString());
 
+        System.out.println(sql);
     }
-
 }

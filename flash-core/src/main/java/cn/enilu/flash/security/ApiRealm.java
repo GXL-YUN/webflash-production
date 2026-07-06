@@ -42,7 +42,7 @@ public class ApiRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(
             AuthenticationToken authenticationToken) throws AuthenticationException {
 
-        log.info("开始认证...");
+        //log.info("开始认证...");
 
         if (!(authenticationToken instanceof JwtToken)) {
             log.error("Token类型不正确: {}", authenticationToken.getClass().getName());
@@ -50,7 +50,7 @@ public class ApiRealm extends AuthorizingRealm {
         }
 
         String token = (String) authenticationToken.getCredentials();
-        log.debug("验证Token: {}", token.substring(0, Math.min(20, token.length())) + "...");
+        //log.debug("验证Token: {}", token.substring(0, Math.min(20, token.length())) + "...");
 
         // 解密获得username
         String username = JwtUtil.getUsername(token);
@@ -59,7 +59,7 @@ public class ApiRealm extends AuthorizingRealm {
             throw new AuthenticationException("Token无效或已过期");
         }
 
-        log.info("Token解析成功，username: {}", username);
+        //log.info("Token解析成功，username: {}", username);
 
         // 查询用户
         UserService operationLogRepository = SpringContextHolder.getBean(UserService.class);
@@ -70,7 +70,7 @@ public class ApiRealm extends AuthorizingRealm {
             throw new UnknownAccountException("用户不存在");
         }
 
-        log.info("找到用户: {}", user.getAccount());
+        //log.info("找到用户: {}", user.getAccount());
 
         // 检查用户状态
         if (user.getStatus() != null && user.getStatus() != 1) {
@@ -87,7 +87,7 @@ public class ApiRealm extends AuthorizingRealm {
             //throw new IncorrectCredentialsException("Token验证失败");
         }
 
-        log.info("认证成功: {}", username);
+        //log.info("认证成功: {}", username);
         return new SimpleAuthenticationInfo(token, token, getName());
     }
 

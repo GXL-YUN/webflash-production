@@ -70,7 +70,7 @@ public class JwtFilterNew extends AccessControlFilter {
         try {
             // 执行登录
             getSubject(request, response).login(authenticationToken);
-            log.info("认证成功: {}", httpRequest.getRequestURI());
+            //log.info("认证成功: {}", httpRequest.getRequestURI());
             return true;
         } catch (UnknownAccountException e) {
             log.warn("账号不存在: {}", e.getMessage());

@@ -90,13 +90,17 @@ public class ShiroConfig {
         // Druid监控
         filterChainDefinitionMap.put("/druid/**", "anon");
 
+        //腾讯文档配回调
+        filterChainDefinitionMap.put("/api/tencent/callback", "anon");
+
 
         // 文件相关
         filterChainDefinitionMap.put("/file/att/**", "anon");
         filterChainDefinitionMap.put("/api/fileUtil/**", "anon");
 
         // 公开接口
-        filterChainDefinitionMap.put("/api/test**", "anon");
+        filterChainDefinitionMap.put("/ekp_mkpass/back/EHS/multiplant/dateAll", "anon");
+        filterChainDefinitionMap.put("/api/test/**", "anon");
         filterChainDefinitionMap.put("/api/public/**", "anon");
 
         // 错误页面

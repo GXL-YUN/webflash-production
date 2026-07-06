@@ -58,6 +58,22 @@ public class RabbitConfig {
         String ORDER_DLX_ROUTING_KEY = "order.dlx";
 
 
+
+        /*======消费者处理======*/
+        /**
+         * 系统业务交换机
+         */
+        String SYS_EXCHANGE = "sys.exchange";
+        /**
+         * 系统业务队列
+         */
+        String SYS_QUEUE = "sys.queue";
+        /**
+         * 系统创建路由键
+         */
+        String SYS_CREATE_ROUTING_KEY = "sys.create";
+
+
     }
 
     /* ================= 连接工厂 ================= */
@@ -77,6 +93,9 @@ public class RabbitConfig {
 
         factory.setPublisherConfirmType(CachingConnectionFactory.ConfirmType.CORRELATED);
         factory.setPublisherReturns(true);
+
+        factory.setConnectionTimeout(15000);
+        factory.setRequestedHeartBeat(60);
 
         log.info("RabbitMQ connectionFactory initialized {}","初始化成功");
         return factory;
@@ -188,6 +207,76 @@ public class RabbitConfig {
 
 
 
+
+    //======================================================================================
+    /**
+     * 订单业务交换机 (普通消费)
+     * durable: true (持久化)
+     * autoDelete: false (不自动删除)
+     */
+    @Bean
+    public DirectExchange orderSysExchange() {
+        return new DirectExchange(MqConstants.ORDER_EXCHANGE, true, false);
+    }
+
+    /**
+     * 订单业务队列 (普通消费)
+     * 仅做持久化配置，不配置死信转发，用于正常业务处理
+     */
+    @Bean
+    public Queue orderSysQueue() {
+        return QueueBuilder
+                .durable(MqConstants.ORDER_QUEUE)
+                .build();
+    }
+
+    /**
+     * 订单队列绑定
+     * 将订单队列绑定到订单交换机，使用指定的路由键
+     */
+    @Bean
+    public Binding orderSysBinding() {
+        return BindingBuilder
+                .bind(orderSysQueue())
+                .to(orderSysExchange())
+                .with(MqConstants.ORDER_ROUTING_KEY);
+    }
+
+    /* ================= 系统业务交换机 & 队列 ================= */
+    
+    /**
+     * 系统业务交换机
+     * durable: true (持久化)
+     * autoDelete: false (不自动删除)
+     */
+    @Bean
+    public DirectExchange sysExchange() {
+        return new DirectExchange(MqConstants.SYS_EXCHANGE, true, false);
+    }
+
+    /**
+     * 系统业务队列
+     * durable: true (持久化)
+     */
+    @Bean
+    public Queue sysQueue() {
+        return QueueBuilder
+                .durable(MqConstants.SYS_QUEUE)
+                .build();
+    }
+
+    /**
+     * 系统业务队列绑定
+     * 将系统队列绑定到系统交换机，使用指定的路由键
+     */
+    @Bean
+    public Binding sysBinding() {
+        return BindingBuilder
+                .bind(sysQueue())
+                .to(sysExchange())
+                .with(MqConstants.SYS_CREATE_ROUTING_KEY);
+    }
+
 /*===================================延迟队列=======================================================*/
     /**
      *
@@ -207,7 +296,14 @@ public class RabbitConfig {
     }
     @Bean
     public Queue delayQueue() {
-        return new Queue(MqConstants.DELAY_QUEUE, true);
+        Map<String, Object> args = new HashMap<>();
+        args.put("x-max-length", 50000);
+        args.put("x-overflow", "reject-publish");
+        
+        return QueueBuilder
+                .durable(MqConstants.DELAY_QUEUE)
+                .withArguments(args)
+                .build();
     }
     @Bean
     public Binding delayBinding() {
@@ -229,6 +325,42 @@ public class RabbitConfig {
 
         factory.setConnectionFactory(connectionFactory);
         factory.setMessageConverter(messageConverter());
+
+        factory.setAcknowledgeMode(AcknowledgeMode.MANUAL);
+        factory.setPrefetchCount(10);
+
+        factory.setErrorHandler(errorHandler());
+
+        return factory;
+    }
+
+    @Bean
+    public org.springframework.util.ErrorHandler errorHandler() {
+        return new org.springframework.amqp.rabbit.listener.ConditionalRejectingErrorHandler(
+            cause -> {
+                if (cause instanceof org.springframework.amqp.ImmediateAcknowledgeAmqpException) {
+                    System.err.println("立即确认异常（消息将被丢弃）: " + cause.getMessage());
+                    return true;
+                }
+                if (cause.getCause() instanceof IllegalArgumentException) {
+                    System.err.println("参数错误，拒绝消息: " + cause.getMessage());
+                    return true;
+                }
+                return false;
+            }
+        );
+    }
+
+
+    @Bean
+    public SimpleRabbitListenerContainerFactory sysListenerContainerFactory(
+            ConnectionFactory connectionFactory) {
+
+        SimpleRabbitListenerContainerFactory factory =
+                new SimpleRabbitListenerContainerFactory();
+
+        factory.setConnectionFactory(connectionFactory);
+        factory.setMessageConverter(new org.springframework.amqp.support.converter.SimpleMessageConverter());
 
         factory.setAcknowledgeMode(AcknowledgeMode.MANUAL);
         factory.setPrefetchCount(10);

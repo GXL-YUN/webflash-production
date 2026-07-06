@@ -67,7 +67,7 @@ public class OrdersServiceImpl extends BaseService<Orders, String, OrdersDao> {
         /*尝试往 Redis 中写入一个 key，只有当 key 不存在时才成功​
         ✅ 同时设置 10 秒后自动过期*/
         Boolean ok = redisTemplate.opsForValue()
-                .setIfAbsent(dedupKey, "1", 10, TimeUnit.SECONDS);
+                .setIfAbsent(dedupKey, "1", 20, TimeUnit.SECONDS);
         if (Boolean.FALSE.equals(ok)) {
             throw new BizException("请勿重复提交");
         }
@@ -84,21 +84,34 @@ public class OrdersServiceImpl extends BaseService<Orders, String, OrdersDao> {
         order.setFdProductId(req.getFdProductId());
 
         Orders orders= ordersDao.save(order);
-        log.info("获取到的id{}", orders.getId());
+        log.info("获取到的id{}--队列发送成功", orders.getFdId());
 
         // 4️⃣ 发送延迟关单消息
         //15分钟订单未支付自动结束
-        rabbitTemplate.convertAndSend(
-                "order.close.queue",//order.close.queue
-                "order.close",
+        // 确保消息体被正确序列化，并设置延迟属性
+        // 注意：RabbitMQ 原生不支持 delay 属性，通常需要安装 rabbitmq-delayed-message-exchange 插件
+        // 或者使用 x-death/ttl 机制。这里假设已配置支持 delay 的 Exchange 或插件。
+        // 如果控制台看不见，常见原因是：
+        // 1. Exchange 名称错误或未绑定 Queue
+        // 2. Routing Key 不匹配
+        // 3. 消息被路由到死信队列或直接丢弃（如果没有消费者且未持久化等）
+        // 4. setDelay 需要插件支持，否则无效
+        
+        // 为了调试，先尝试发送一条不带延迟的标准消息，确认链路通畅
+        // 如果标准消息能看见，再排查延迟插件配置
+         rabbitTemplate.convertAndSend(
+                "order.delay.exchange",
+                "order.close", 
                 orders.getFdId(),
-                (org.springframework.amqp.core.Message msg) -> {
-                    msg.getMessageProperties()
-                            .setDelay(15 * 60 * 1000);
-                    return msg;
+                message -> {
+                    // 设置消息ID便于追踪
+                    message.getMessageProperties().setMessageId(UUID.randomUUID().toString());
+                    // 尝试设置延迟 (需要 rabbitmq-delayed-message-exchange 插件支持)
+                    // 如果没有插件，这行代码可能被忽略或导致异常，取决于客户端版本和配置
+                    message.getMessageProperties().setDelay(60*1000);
+                    return message;
                 }
         );
-
         return orders;
     }
 
@@ -130,7 +143,7 @@ public class OrdersServiceImpl extends BaseService<Orders, String, OrdersDao> {
         payment_recordDao.save(record);
         // 发送发货/履约消息
         rabbitTemplate.convertAndSend(
-                "order.queue",
+                "order.exchange",
                 "order.create",
                 order.getFdId()
         );
@@ -166,7 +179,7 @@ public class OrdersServiceImpl extends BaseService<Orders, String, OrdersDao> {
      * @param orderId
      */
     @Transactional
-    public void closeOrderIfUnpaid(Long orderId) {
+    public void closeOrderIfUnpaid(String orderId) {
         System.out.println("关闭相关：" + orderId);
 
 //        Orders order = orderMapper.selectById(orderId);
