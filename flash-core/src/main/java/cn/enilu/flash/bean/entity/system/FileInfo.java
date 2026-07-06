@@ -2,11 +2,14 @@ package cn.enilu.flash.bean.entity.system;
 
 import cn.enilu.flash.bean.entity.BaseEntity;
 import cn.enilu.flash.bean.entity.cms.Article;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.hibernate.annotations.Table;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -23,10 +26,15 @@ public class FileInfo extends BaseEntity {
     private String realFileName;
 
     @Transient
+    @JsonProperty("c")
     private String ablatePath;
+    // 添加自定义的序列化方法
+    @JsonGetter("ablatePath")
+    public String getRequirementsForJson() {
+       return "/fileUtil/download?fdId="+this.getFdId();
+    }
 
-
-/*    @Column(columnDefinition = "VARCHAR(64) COMMENT '模版id'")
+    @Column(columnDefinition = "VARCHAR(64) COMMENT '模版id'")
     private String fdModelId;
 
 
@@ -40,7 +48,7 @@ public class FileInfo extends BaseEntity {
 
 
     @Column(columnDefinition = "VARCHAR(64) COMMENT '文件名称'")
-    private String name;*/
+    private String name;
 
 
     @Column(columnDefinition = "VARCHAR(64) COMMENT '大小'")
@@ -58,8 +66,5 @@ public class FileInfo extends BaseEntity {
     @Column(columnDefinition = "VARCHAR(64) COMMENT '类型'")
     private String status;
 
-
-    @Transient
-    private String fdKey;
 
 }

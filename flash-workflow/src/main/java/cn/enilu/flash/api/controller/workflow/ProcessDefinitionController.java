@@ -78,7 +78,7 @@ public class ProcessDefinitionController extends BaseController {
      * @return
      */
     @GetMapping(value = "getProcessDefinitionXml")
-    public void getProcessDefinitionXml(@RequestParam("idFile") Long idFile, HttpServletResponse response) {
+    public void getProcessDefinitionXml(@RequestParam("idFile") String idFile, HttpServletResponse response) {
         FileInfo fileInfo = fileService.get(idFile);
         response.setContentType("application/octet-stream");
         try {

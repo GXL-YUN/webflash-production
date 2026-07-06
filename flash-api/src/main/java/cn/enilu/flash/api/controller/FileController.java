@@ -27,7 +27,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @RestController
-@RequestMapping("/file")
+@RequestMapping("/file/att")
 public class FileController extends BaseController {
     @Autowired
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);
@@ -59,7 +59,7 @@ public class FileController extends BaseController {
      * @param fileName
      */
     @GetMapping(value = "download")
-    public void download(@RequestParam("idFile") Long idFile,
+    public void download(@RequestParam("idFile") String idFile,
                          @RequestParam(value = "fileName", required = false) String fileName) {
         FileInfo fileInfo = fileService.get(idFile);
         fileName = StringUtil.isEmpty(fileName) ? fileInfo.getOriginalFileName() : fileName;
@@ -101,6 +101,56 @@ public class FileController extends BaseController {
 
     }
 
+
+
+    /**
+     * 下载文件
+     *
+     * @param fdId
+     */
+    @GetMapping(value = "/get/download")
+    public void download(@RequestParam("fdId") String fdId) {
+        FileInfo fileInfo = fileService.getById(fdId);
+        HttpServletResponse response = HttpUtil.getResponse();
+        response.setContentType("application/x-download");
+        String fileName="";
+        try {
+            fileName = new String(fileInfo.getOriginalFileName().getBytes(), "ISO-8859-1");
+            response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        int length = 1024;
+        byte[] buffer = new byte[length];
+        FileInputStream fis = null;
+        BufferedInputStream bis = null;
+
+        OutputStream os = null;
+        try {
+            File file = new File(fileInfo.getAblatePath());
+            os = response.getOutputStream();
+            fis = new FileInputStream(file);
+            bis = new BufferedInputStream(fis);
+            int i = bis.read(buffer);
+            while (i != -1) {
+                os.write(buffer, 0, i);
+                buffer = new byte[length];
+                i = bis.read(buffer);
+            }
+        } catch (Exception e) {
+            logger.error("download error", e);
+        } finally {
+            try {
+                bis.close();
+                fis.close();
+            } catch (IOException e) {
+                logger.error("close inputstream error", e);
+            }
+        }
+
+    }
+
+
     /**
      * 获取base64图片数据
      *
@@ -108,7 +158,7 @@ public class FileController extends BaseController {
      * @return
      */
     @GetMapping(value = "getImgBase64")
-    public Object getImgBase64(@RequestParam("idFile") Long idFile) {
+    public Object getImgBase64(@RequestParam("idFile") String idFile) {
 
         FileInfo fileInfo = fileService.get(idFile);
         FileInputStream fis = null;
@@ -141,7 +191,7 @@ public class FileController extends BaseController {
      */
     @GetMapping(value = "getImgStream")
     public void getImgStream(HttpServletResponse response,
-                             @RequestParam("idFile") Long idFile) {
+                             @RequestParam("idFile") String idFile) {
         FileInfo fileInfo = fileService.get(idFile);
         FileInputStream fis = null;
         String suffix = "." + fileInfo.getRealFileName().split("\\.")[1];
@@ -194,7 +244,7 @@ public class FileController extends BaseController {
 
     @GetMapping("/getVideo.do")
     public ResponseEntity<Resource> getVideo(HttpServletResponse response,
-                         @RequestParam("idFile") Long idFile) {
+                         @RequestParam("idFile") String idFile) {
         FileInfo fileInfo = fileService.get(idFile);
         String url =fileInfo.getAblatePath();
        String type= fileInfo.getRealFileName().indexOf("mp4")>0?"mp4":"ogg";

@@ -53,6 +53,13 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
     }
 
 
+    /**
+     * 验证toke是否有效
+     * @param request The current HTTP servlet request.
+     * @param response The current HTTP servlet response.
+     * @param mappedValue The array of configured HTTP methods as strings. This is empty if no methods are configured.
+     * @return
+     */
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
         if (isLoginAttempt(request, response)) {
@@ -64,7 +71,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
                 if (e.getMessage().contains("expired")) {
                     //获取用户信息
                     String oldToken = HttpUtil.getToken();
-                    Long userId = JwtUtil.getUserId(oldToken);
+                    String userId = JwtUtil.getUserIdStr(oldToken);
                     UserService userService = SpringContextHolder.getBean(UserService.class);
                     User user = userService.get(userId);
                     //验证refreshToken是否有效

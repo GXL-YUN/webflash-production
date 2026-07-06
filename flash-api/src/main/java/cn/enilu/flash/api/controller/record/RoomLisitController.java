@@ -140,7 +140,7 @@ public class RoomLisitController {
     public Object UtilGetModelMk(String id,String cook) {
 
         JSONObject boby=new JSONObject();
-            String url = "https://testmmk.naura.com/data/km-review/kmReviewTemplate/get";
+            String url = "http://testmk.naura.local/data/km-review/kmReviewTemplate/get";
           //  String cookie =
                  //       "isMkLogin=true; X-AUTH-TOKEN=1ittmou4cw5w4c8p0w1telu1j3496lrp3ow0"; // 替换为实际的cookie值
 
@@ -324,7 +324,7 @@ public class RoomLisitController {
                     mainData.put("fdMianDate",mainArr);
 
                     // 7. 生成Excel文件
-                  //  createExcelFromJson(mainData, dateName+".xlsx");
+                   createExcelFromJson(mainData, dateName+".xlsx");
                     System.out.println("Excel文件已生成!");
                     redisTemplate.opsForValue().set("test", "Hello Redis");
                     redisTemplate.opsForValue().set("TEST:EDIS:DATA:name", "测试书");
@@ -387,9 +387,14 @@ public class RoomLisitController {
     }
 
 
-
-
-    private static void createExcelFromJson(JSONObject jSONObject, String fileName) throws Exception {
+    /**
+     * 接送  参数设置
+     * @param jSONObject    //主表数据
+     * @param fileName    接口文件名称
+     * @param jsonArray   //明细表数据
+     * @throws Exception
+     */
+    private void     createExcelFromJson(JSONObject jSONObject, String fileName, JSONArray jsonArray) throws Exception {
         try {
             // 1. 解析JSON数据
             ObjectMapper mapper = new ObjectMapper();
@@ -398,7 +403,160 @@ public class RoomLisitController {
 
             // 2. 创建Excel工作簿
             Workbook workbook = new XSSFWorkbook();
-            Sheet sheet = workbook.createSheet("字段明细");
+            Sheet sheet = workbook.createSheet("1. 接口概括");
+
+            // 3. 设置表头样式  加粗
+            //灰色
+            CellStyle GREY_25_PERCENT=this.setCellStyle(workbook,IndexedColors.GREY_25_PERCENT.getIndex());
+            //红色
+            CellStyle RED= this.setCellStyle(workbook,IndexedColors.RED.getIndex());
+            //黄色
+            CellStyle YELLOW= this.setCellStyle(workbook,IndexedColors.YELLOW.getIndex());
+            //浅蓝色
+            CellStyle LIGHT_TURQUOISE=this.setCellStyle(workbook,IndexedColors.LIGHT_TURQUOISE.getIndex());
+
+
+            //第一行数据
+            Row headerRow = sheet.createRow(0);
+            // 合并单元格：第0行，从第0列到第4列（共5列）
+            sheet.addMergedRegion(new org.apache.poi.ss.util.CellRangeAddress(0, 0, 0, 12));
+            Cell headerRowCell1 = headerRow.createCell(0);//第一行第一列数据
+            headerRowCell1.setCellValue("接口概括");
+            // headerStyle 已经包含了加粗和背景颜色设置，直接应用即可
+            headerRowCell1.setCellStyle(GREY_25_PERCENT);
+
+
+            //数据流向		数据流向						ESB接口地址						下游接口地址
+            // 4. 创建表头
+            Row headerRow2 = sheet.createRow(1);
+            String[] headers = {"数据流向", "数据流向","ESB接口地址","下游接口地址"};
+            for (int i = 0; i < headers.length; i++) {
+                Cell cell = headerRow2.createCell(i);
+                // 合并单元格
+                sheet.addMergedRegion(new org.apache.poi.ss.util.CellRangeAddress(1, 1, 0, 2));
+                sheet.addMergedRegion(new org.apache.poi.ss.util.CellRangeAddress(1, 1, 3, 6));
+                sheet.addMergedRegion(new org.apache.poi.ss.util.CellRangeAddress(1, 1, 7, 9));
+                sheet.addMergedRegion(new org.apache.poi.ss.util.CellRangeAddress(1, 1, 10, 12));
+                if(i<3){
+                    cell.setCellValue(headers[i]);
+                    cell.setCellStyle(YELLOW);
+                }else {
+                    cell.setCellValue(headers[i]);
+                    cell.setCellStyle(RED);
+                }
+            }
+
+//            		1-价格审批_维修清洗追加工MK创建】						DEV:http://ipaas-uat.naura.com:8080/ipaas/MK/API_MK_flowCreate
+//            PROD: http://ipaas.naura.com:8080/ipaas/MK/API_MK_flowCreate
+//            Authorization:联系管理员获取接口授权						DEV:
+//            TEST:
+//            PROD:
+
+
+            // 4. 创建表头
+            Row headerRow3 = sheet.createRow(2);
+            String[] col3 = {"第三方→MK", "","ESB接口地址","下游接口地址"};
+            for (int i = 0; i < col3.length; i++) {
+                Cell cell = headerRow3.createCell(i);
+                // 合并单元格
+                sheet.addMergedRegion(new org.apache.poi.ss.util.CellRangeAddress(1, 1, 0, 2));
+                sheet.addMergedRegion(new org.apache.poi.ss.util.CellRangeAddress(1, 1, 3, 6));
+                sheet.addMergedRegion(new org.apache.poi.ss.util.CellRangeAddress(1, 1, 7, 9));
+                sheet.addMergedRegion(new org.apache.poi.ss.util.CellRangeAddress(1, 1, 10, 12));
+                if(i<3){
+                    cell.setCellValue(col3[i]);
+                    cell.setCellStyle(YELLOW);
+                }else {
+                    cell.setCellValue(col3[i]);
+                    cell.setCellStyle(RED);
+                }
+            }
+
+
+
+            // 5. 填充数据
+            int rowNum = 1;
+            for (Map<String, String> field : fieldList) {
+                Row row = sheet.createRow(rowNum++);
+                row.createCell(0).setCellValue(field.get("fdKey"));
+                row.createCell(1).setCellValue(field.get("fdName"));
+                row.createCell(2).setCellValue(field.get("fdType"));
+                row.createCell(3).setCellValue(field.get("fdEnum"));
+            }
+
+            // 6. 自动调整列宽
+            for (int i = 0; i < headers.length; i++) {
+                sheet.autoSizeColumn(i);
+            }
+
+            // 7. 写入文件
+            try (FileOutputStream outputStream = new FileOutputStream("D:\\项目文件\\接口文档字段\\"+fileName+".xlsx")) {
+                workbook.write(outputStream);
+            }
+
+            System.out.println("Excel文件生成成功！");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("生成Excel文件时出错: " + e.getMessage());
+        }
+    }
+
+
+
+    /**
+     * @param  workbook   Excel工作簿
+     *设置单元格样式
+     */
+    private  CellStyle setCellStyle(Workbook workbook,short index) {
+
+        CellStyle headerStyle = workbook.createCellStyle();
+        // 创建一个单元格样式对象，用于定义单元格的格式
+        Font headerFont = workbook.createFont();
+        // 创建一个字体对象，用于设置文本的字体属性
+        headerFont.setBold(true);
+        // 将字体设置为粗体，使表头文字更醒目
+        headerStyle.setFont(headerFont);
+        // 将粗体字体应用到单元格样式中
+        headerStyle.setFillForegroundColor(index );//IndexedColors.GREY_25_PERCENT.getIndex()
+        // 设置单元格背景填充色为浅灰色（25%灰度）
+        headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        // 设置填充模式为纯色填充，使背景色生效
+        headerStyle.setBorderBottom(BorderStyle.THIN);
+        // 为单元格底部添加细边框，增加视觉分隔
+        //设置居中
+        headerStyle.setAlignment(HorizontalAlignment.CENTER);
+
+        return headerStyle;
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private static void     createExcelFromJson(JSONObject jSONObject, String fileName) throws Exception {
+        try {
+            // 1. 解析JSON数据
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> dataMap = mapper.readValue(jSONObject.toString(), Map.class);
+            List<Map<String, String>> fieldList = (List<Map<String, String>>) dataMap.get("fdMianDate");
+
+            // 2. 创建Excel工作簿
+            Workbook workbook = new XSSFWorkbook();
+            Sheet sheet = workbook.createSheet("1. 接口概括");
 
             // 3. 设置表头样式
             CellStyle headerStyle = workbook.createCellStyle();

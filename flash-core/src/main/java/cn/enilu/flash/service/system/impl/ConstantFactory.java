@@ -61,7 +61,7 @@ public class ConstantFactory implements IConstantFactory {
      * @Date 2017/5/9 23:41
      */
     @Override
-    public String getUserNameById(Long userId) {
+    public String getUserNameById(String userId) {
         String val = get(CacheKey.SYS_USER_NAME + userId);
         if (StringUtil.isNotEmpty(val)) {
             return val;
@@ -78,7 +78,7 @@ public class ConstantFactory implements IConstantFactory {
         return "--";
     }
 
-    private User getUser(Long id) {
+    private User getUser(String id) {
         return userRepository.getOne(id);
     }
 
@@ -89,7 +89,7 @@ public class ConstantFactory implements IConstantFactory {
      * @date 2017年5月16日21:55:371
      */
     @Override
-    public String getUserAccountById(Long userId) {
+    public String getUserAccountById(String userId) {
         User user = getUser(userId);
         if (user != null) {
             return user.getAccount();

@@ -1,6 +1,7 @@
 {
   "name": "flash-react-app",
   "version": "0.1.0",
+  "homepage": "/ekp_mkpass/mk_limi_table_view",
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^6.1.0",

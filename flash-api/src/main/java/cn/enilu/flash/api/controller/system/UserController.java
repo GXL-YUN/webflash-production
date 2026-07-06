@@ -1,6 +1,7 @@
 package cn.enilu.flash.api.controller.system;
 
 import cn.enilu.flash.api.controller.BaseController;
+import cn.enilu.flash.api.utils.StringUtil;
 import cn.enilu.flash.bean.constant.Const;
 import cn.enilu.flash.bean.constant.factory.PageFactory;
 import cn.enilu.flash.bean.constant.state.ManagerStatus;
@@ -88,11 +89,11 @@ public class UserController extends BaseController {
     @BussinessLog(value = "删除账号", key = "userId")
     @DeleteMapping
     @RequiresPermissions(value = {Permission.USER_DEL})
-    public Object remove(@RequestParam Long userId) {
+    public Object remove(@RequestParam String userId) {
         if (userId == null) {
             throw new ApplicationException(BizExceptionEnum.REQUEST_NULL);
         }
-        if (userId.intValue() <= 3) {
+        if (StringUtil.isNotNull(userId)) {
             return Rets.failure("不能删除初始用户");
         }
         User user = userService.get(userId);
@@ -104,12 +105,12 @@ public class UserController extends BaseController {
     @BussinessLog(value = "设置账号角色", key = "userId")
     @PostMapping(value = "/setRole")
     @RequiresPermissions(value = {Permission.USER_EDIT})
-    public Object setRole(@RequestParam("userId") Long userId, @RequestParam("roleIds") String roleIds) {
+    public Object setRole(@RequestParam("userId") String userId, @RequestParam("roleIds") String roleIds) {
         if (BeanUtil.isOneEmpty(userId, roleIds)) {
             throw new ApplicationException(BizExceptionEnum.REQUEST_NULL);
         }
         //不能修改超级管理员
-        if (userId.intValue() == Const.ADMIN_ID.intValue()) {
+        if (StringUtil.isNotNull(userId)) {
             return Rets.failure("不能修改超级管理员得角色");
         }
         User user = userService.get(userId);
@@ -121,11 +122,11 @@ public class UserController extends BaseController {
     @BussinessLog(value = "冻结/解冻账号", key = "userId")
     @GetMapping(value = "changeStatus")
     @RequiresPermissions(value = {Permission.USER_EDIT})
-    public Object changeStatus(@RequestParam Long userId) {
+    public Object changeStatus(@RequestParam String userId) {
         if (userId == null) {
             throw new ApplicationException(BizExceptionEnum.REQUEST_NULL);
         }
-        if (userId.intValue() <= 3) {
+        if (StringUtil.isNotNull(userId)) {
             return Rets.failure("不能冻结初始用户");
         }
         User user = userService.get(userId);
@@ -136,7 +137,7 @@ public class UserController extends BaseController {
 
     @BussinessLog(value = "重置密码", key = "userId")
     @PostMapping(value = "resetPassword")
-    public Object resetPassword(Long userId) {
+    public Object resetPassword(String userId) {
         User user = userService.get(userId);
         user.setPassword(MD5.md5("111111", user.getSalt()));
         userService.update(user);

@@ -17,7 +17,7 @@ import java.util.Date;
 @Data
 public class UserDto {
 
-    private Long id;
+    private String id;
 
     @NotBlank(message = "账号不能为空")
     private String account;

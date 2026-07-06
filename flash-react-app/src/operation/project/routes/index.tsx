@@ -11,8 +11,11 @@ const Index = () => {
     return ([
             <Route key="project-table" path="/ProjectDashboard/:id" element={<ProjectDashboard/>} />,
             <Route key="project-table" path="/project/list" element={ <AppLayout><TableGlobbing /></AppLayout>} />,
-    <Route key="project-table" path="/project/demandList" element={ <AppLayout><TemTable /></AppLayout>} />
+            <Route key="project-table" path="/project/demandList" element={ <AppLayout><TemTable /></AppLayout>} />
             ]
     );
 };
 export default Index;
+
+
+

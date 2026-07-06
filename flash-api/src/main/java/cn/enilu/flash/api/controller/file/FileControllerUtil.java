@@ -28,7 +28,7 @@ import java.io.*;
 
 
 @RestController
-@RequestMapping("/fileUtil")
+@RequestMapping("/api/fileUtil")
 public class FileControllerUtil {
     @Autowired
     private static final Logger logger = LoggerFactory.getLogger(cn.enilu.flash.api.controller.FileController.class);
@@ -45,10 +45,10 @@ public class FileControllerUtil {
      * @return
      */
     @PostMapping("upLoder")
-    public Object upload(@RequestPart("file") MultipartFile multipartFile) {
+    public Object upload(@RequestPart("file") MultipartFile multipartFile,@RequestPart(value = "fdKey",required = false) String fdKey,@RequestPart(value = "fdModelName",required = false) String fdModelName) {
 
         try {
-            FileInfo fileInfo = fileService.upload(multipartFile,"","");
+            FileInfo fileInfo = fileService.upload(multipartFile,fdKey,fdModelName);
             return Rets.success(fileInfo);
         } catch (Exception e) {
             logger.error("上传文件异常", e);
@@ -74,6 +74,54 @@ public class FileControllerUtil {
     }
 
 
+
+    /**
+     * 下载文件
+     *
+     * @param fdId
+     */
+    @GetMapping(value = "/download")
+    public void download(@RequestParam("fdId") String fdId) {
+        FileInfo fileInfo = fileService.getById(fdId);
+        HttpServletResponse response = HttpUtil.getResponse();
+        response.setContentType("application/x-download");
+        String fileName="";
+        try {
+            fileName = new String(fileInfo.getOriginalFileName().getBytes(), "ISO-8859-1");
+            response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        int length = 1024;
+        byte[] buffer = new byte[length];
+        FileInputStream fis = null;
+        BufferedInputStream bis = null;
+
+        OutputStream os = null;
+        try {
+            File file = new File(fileInfo.getUrl());
+            os = response.getOutputStream();
+            fis = new FileInputStream(file);
+            bis = new BufferedInputStream(fis);
+            int i = bis.read(buffer);
+            while (i != -1) {
+                os.write(buffer, 0, i);
+                buffer = new byte[length];
+                i = bis.read(buffer);
+            }
+        } catch (Exception e) {
+            logger.error("download error", e);
+        } finally {
+            try {
+                bis.close();
+                fis.close();
+            } catch (IOException e) {
+                logger.error("close inputstream error", e);
+            }
+        }
+
+    }
+
     /**
      * 下载文件
      *
@@ -81,7 +129,7 @@ public class FileControllerUtil {
      * @param fileName
      */
     @GetMapping(value = "download.do")
-    public void download(@RequestParam("idFile") Long idFile,
+    public void download(@RequestParam("idFile") String idFile,
                          @RequestParam(value = "fileName", required = false) String fileName) {
         FileInfo fileInfo = fileService.get(idFile);
         fileName = StringUtil.isEmpty(fileName) ? fileInfo.getOriginalFileName() : fileName;
@@ -131,7 +179,7 @@ public class FileControllerUtil {
      */
     @GetMapping(value = "getImgBase64.do")
     @ResponseBody
-    public Object getImgBase64(@RequestParam("idFile") Long idFile) {
+    public Object getImgBase64(@RequestParam("idFile") String idFile) {
 
         FileInfo fileInfo = fileService.get(idFile);
         FileInputStream fis = null;
@@ -164,7 +212,7 @@ public class FileControllerUtil {
      */
     @GetMapping(value = "getImgStream.do")
     public void getImgStream(HttpServletResponse response,
-                             @RequestParam("idFile") Long idFile) {
+                             @RequestParam("idFile") String idFile) {
         FileInfo fileInfo = fileService.get(idFile);
         FileInputStream fis = null;
         String suffix = "." + fileInfo.getRealFileName().split("\\.")[1];
@@ -198,7 +246,7 @@ public class FileControllerUtil {
 
     @GetMapping(value = "previewPdf.do")
     public void previewPdf(HttpServletResponse response,
-                           @RequestParam("idFile") Long idFile) {
+                           @RequestParam("idFile") String idFile) {
         FileInfo fileInfo = fileService.get(idFile);
         FileInputStream fis = null;
         try {
