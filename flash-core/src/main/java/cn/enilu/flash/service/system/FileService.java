@@ -2,15 +2,22 @@ package cn.enilu.flash.service.system;
 
 import cn.enilu.flash.bean.constant.cache.Cache;
 import cn.enilu.flash.bean.constant.cache.CacheKey;
+import cn.enilu.flash.bean.constant.factory.PageFactory;
 import cn.enilu.flash.bean.entity.system.FileInfo;
 import cn.enilu.flash.bean.enumeration.ConfigKeyEnum;
+import cn.enilu.flash.bean.vo.query.SearchFilter;
 import cn.enilu.flash.cache.ConfigCache;
 import cn.enilu.flash.cache.TokenCache;
 import cn.enilu.flash.dao.system.FileInfoRepository;
 import cn.enilu.flash.security.JwtUtil;
 import cn.enilu.flash.service.BaseService;
 import cn.enilu.flash.utils.XlsUtils;
+import cn.enilu.flash.utils.factory.Page;
+import cn.enilu.pet.bean.model.Demand;
+import cn.enilu.pet.em.DemandStatus;
 import cn.enilu.util.PdfUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.formula.functions.T;
 import org.jxls.common.Context;
 import org.jxls.expression.JexlExpressionEvaluator;
 import org.jxls.transform.Transformer;
@@ -18,6 +25,7 @@ import org.jxls.util.JxlsHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,7 +38,8 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-public class FileService extends BaseService<FileInfo, Long, FileInfoRepository> {
+@Slf4j
+public class FileService extends BaseService<FileInfo, String, FileInfoRepository> {
     @Autowired
     private ConfigCache configCache;
     @Autowired
@@ -41,6 +50,44 @@ public class FileService extends BaseService<FileInfo, Long, FileInfoRepository>
 
     @Value("${urlpath}")
     private String configValue;
+
+
+    /**
+     *
+     * @param fdId
+     * @param className
+     * @param key
+     * @return根据单据id   类路径  关键字   查询对应的附件
+     */
+    public List<FileInfo> getListByIdFile(String fdId, String className, String key){
+        Page<FileInfo> page = new PageFactory<FileInfo>().defaultPage();
+        page.addFilter("fdModelId", SearchFilter.Operator.EQ, fdId, SearchFilter.Join.and);
+        page.addFilter("fdKey", SearchFilter.Operator.EQ, key, SearchFilter.Join.and);
+        page.addFilter("fdModelName", SearchFilter.Operator.EQ, className, SearchFilter.Join.and);
+        Sort sort = Sort.by(Sort.Direction.DESC, "createTime");
+        page.setSort(sort);
+        Page<FileInfo> date= this.queryPage(page);
+        return page.getRecords();
+    }
+
+
+    /**
+     *
+     * @param fdId
+     * @param list
+     * @return根据单据id
+     */
+    public void getListByIdFileChangeMainId(String fdId, List<String>   list){
+        if(list!=null&&list.size()>0){
+            for(String fdFileId:list){
+                FileInfo main= this.getById(fdFileId);
+                main.setFdModelId(fdId);
+                this.update(main);
+                log.info("附件更新成功{}",fdFileId);
+            }
+        }
+    }
+
 
     /**
      * 批量上传上传附件
@@ -53,14 +100,13 @@ public class FileService extends BaseService<FileInfo, Long, FileInfoRepository>
             }
         }
     }
-
     /**
      * 文件上传
      *
      * @param multipartFile
      * @return
      */
-    public FileInfo upload(MultipartFile multipartFile, String fdKey, String fdModelId) {
+    public FileInfo upload(MultipartFile multipartFile, String fdKey, String fdModelName) {
         // 参数校验
         if (multipartFile == null || multipartFile.isEmpty()) {
             throw new IllegalArgumentException("上传文件不能为空");
@@ -70,11 +116,28 @@ public class FileService extends BaseService<FileInfo, Long, FileInfoRepository>
         try {
             // 生成UUID
             String uuid = UUID.randomUUID().toString();
+            log.info("originalFilename={}", multipartFile.getOriginalFilename());
+            log.info("name={}", multipartFile.getName());
+            log.info("contentType={}", multipartFile.getContentType());
 
             // 安全获取文件扩展名
             String originalFilename = multipartFile.getOriginalFilename();
             if (originalFilename == null || !originalFilename.contains(".")) {
-                throw new IllegalArgumentException("文件名不合法");
+
+                // 1. 从 content-type 取后缀（最靠谱）
+                String contentType = multipartFile.getContentType();
+                String ext = ".jpg";
+
+                if (contentType != null) {
+                    if (contentType.contains("png")) ext = ".png";
+                    else if (contentType.contains("jpeg")) ext = ".jpg";
+                    else if (contentType.contains("gif")) ext = ".gif";
+                }
+
+                // 2. UUID 文件名
+                originalFilename = UUID.randomUUID() + ext;
+                log.info("文件名不合法，从新生成文件名称={}", originalFilename);
+                //throw new IllegalArgumentException("文件名不合法");
             }
 
             String fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
@@ -82,7 +145,11 @@ public class FileService extends BaseService<FileInfo, Long, FileInfoRepository>
 
             // 创建目标文件
             String path = configValue;
+           //path + File.separator + realFileName;
+
+
             File file = new File(path + File.separator + realFileName);
+            String pateUrl=file.getPath();
 
             // 确保目录存在
             File parentDir = file.getParentFile();
@@ -94,7 +161,7 @@ public class FileService extends BaseService<FileInfo, Long, FileInfoRepository>
             inputStream = multipartFile.getInputStream();
             Files.copy(inputStream, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
-            return save(originalFilename, file, fdKey, fdModelId);
+            return save(originalFilename, file, fdKey, fdModelName,pateUrl);
 
         } catch (IOException e) {
             throw new RuntimeException("文件上传失败", e);
@@ -183,14 +250,15 @@ public class FileService extends BaseService<FileInfo, Long, FileInfoRepository>
      * @param file
      * @return
      */
-    public FileInfo save(String originalFileName, File file,String fdKey,String fdModelId) {
+    public FileInfo save(String originalFileName, File file,String fdKey,String fdModelName,String url ) {
         try {
             FileInfo fileInfo = new FileInfo();
            // fileInfo.setCreateBy(JwtUtil.getUserId());
             fileInfo.setOriginalFileName(originalFileName);
             fileInfo.setRealFileName(file.getName());
-            //fileInfo.setFdKey(fdKey);
-            //fileInfo.setFdModelId(fdModelId);
+            fileInfo.setUrl(url);
+            fileInfo.setFdKey(fdKey);
+            fileInfo.setFdModelName(fdModelName);
             //doc转换为pdf
             //判断类型
             insert(fileInfo);
@@ -221,7 +289,7 @@ public class FileService extends BaseService<FileInfo, Long, FileInfoRepository>
     /**
      * doc转换为pdf
      */
-    public void docToPdf(Long idFile) {
+    public void docToPdf(String idFile) {
 
         try {
             FileInfo fileInfo = get(idFile);
@@ -242,13 +310,13 @@ public class FileService extends BaseService<FileInfo, Long, FileInfoRepository>
     }
 
     @Override
-    public void delete(Long aLong) {
+    public void delete(String aLong) {
         super.delete(aLong);
     }
 
     @Override
     @Cacheable(value = Cache.APPLICATION, key = "'" + CacheKey.FILE_INFO + "'+#id")
-    public FileInfo get(Long id) {
+    public FileInfo get(String id) {
         FileInfo fileInfo = fileInfoRepository.getOne(id);
 
 

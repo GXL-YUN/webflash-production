@@ -4,12 +4,11 @@ import {Table, Button, Modal, Checkbox, message, Form, Drawer} from 'antd';
 
 import type { DrawerProps, RadioChangeEvent } from 'antd';
 import axios from 'axios';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx';  //导出
 import { useNavigate, Link, NavLink } from 'react-router-dom';
-import {RoomItem} from '../type/room';
-import RoomForm from '../from/RoomForm';
+import RoomForm from '../from/RoomForm';   //新增表单
 import {roomService} from "../../../components/TableGlobbing/services/roomService";
-
+import {RoomItem,columns} from './list'
 
 // 分页信息接口
 interface PageInfo {
@@ -61,10 +60,6 @@ const App: React.FC = () => {
     const [selectedRow, setSelectedRow] = useState<RoomItem | null>(null);
     const [placement, setPlacement] = useState<DrawerProps['placement']>('right');
 
-
-
-
-
     // 模拟的流程状态选项
     const processStatusOptions = [
         { label: '待前处理', value: '7' },
@@ -74,30 +69,23 @@ const App: React.FC = () => {
         { label: '待TEM', value: '11' },
         { label: 'TEM', value: '12' },
     ];
-
     type StatusItem = {
         label: string;
         value: string;
     };
-
     const statusList: StatusItem[] = [
         { label: '接样中', value: '0' },
         { label: 'sop编制', value: '1' },
         { label: 'topview', value: '2' },
     ];
-
     const fd_type = [
         { label: 'A+', value: 'A+' },
         { label: 'B', value: 'B' },
     ];
-
     const fd_lable = [
         { label: '正常', value: '0' },
         { label: '返工', value: '1' }
     ];
-
-
-
     // 表单提交
     const handleSubmit =  useCallback(async (values: any) => {
         debugger
@@ -131,9 +119,6 @@ const App: React.FC = () => {
                     parem: params,
                 }
             );
-
-            debugger;
-
             if (response.data.success === true) {
                 const responseData = response.data.data;
                 console.log('接口返回:', {
@@ -160,7 +145,6 @@ const App: React.FC = () => {
             setLoading(false);
         }
     };
-
     const changView = () => {
         setFlage(!flage);
     };
@@ -203,142 +187,10 @@ const App: React.FC = () => {
         setModalType('create');
         setSelectedRow(null);
         setModalVisible(true);
+        setEditOpen(true);
     };
 
-    // 导出数据函数
-    const handleExport = () => {
-        if (data.length === 0) {
-            message.warning('没有数据可以导出');
-            return;
-        }
-
-        try {
-            // 准备数据 - 根据实际字段调整
-            const exportData = data.map((item, index) => ({
-                序号: (current - 1) * localPageSize + index + 1,
-                文档名称: item.fdName || '',
-                文档名称1: item.fdName || '',
-                文档名称2: item.fdName || '',
-                文档名称3: item.fdName || '',
-                文档名称4: item.fdName || '',
-                文档名称5: item.fdName || '',
-                文档名称6: item.fdName || '',
-                文档名称7: item.fdName || '',
-                文档名称8: item.fdName || '',
-
-            }));
-
-            // 创建工作簿
-            const wb = XLSX.utils.book_new();
-            const ws = XLSX.utils.json_to_sheet(exportData);
-
-            // 设置列宽
-            const wscols = [
-                { wch: 8 },   // 序号
-                { wch: 30 },  // 文档名称
-                { wch: 20 },  // 单号
-                { wch: 15 },  // 样品柜位
-                { wch: 15 },  // 测试柜位
-                { wch: 10 },  // 样品数量
-                { wch: 10 },  // 测试点数
-                { wch: 10 },  // 优先级
-                { wch: 10 },  // 是否为返工
-                { wch: 15 },  // 当前站点
-                { wch: 20 },  // 流入当前站点时长
-                { wch: 15 },  // 项目号
-                { wch: 20 },  // 预计结果上传时间
-                { wch: 15 },  // 时效
-            ];
-            ws['!cols'] = wscols;
-
-            // 添加筛选条件信息作为备注
-            if (filters.length > 0) {
-                const filterText = `筛选条件: ${filters.map(f => `${f.key}: ${f.value}`).join(', ')}`;
-                ws['!merges'] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: 13 } }];
-                ws['A1'] = { v: filterText, t: 's' };
-                ws['!rows'] = [{ hpt: 20 }];
-            }
-
-            // 添加工作表到工作簿
-            XLSX.utils.book_append_sheet(wb, ws, '流程查看列表');
-
-            // 生成文件名
-            const date = new Date();
-            const dateStr = `${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}`;
-            const timeStr = `${date.getHours().toString().padStart(2, '0')}${date.getMinutes().toString().padStart(2, '0')}`;
-            const fileName = `流程查看列表_${dateStr}_${timeStr}.xlsx`;
-
-            // 导出文件
-            XLSX.writeFile(wb, fileName);
-
-            message.success(`导出成功！共 ${exportData.length} 条记录`);
-        } catch (error) {
-            console.error('导出失败:', error);
-            message.error('导出失败，请重试');
-        }
-    };
-
-    // 表格列定义
-    const columns = [
-        {
-            title: '序号',
-            key: 'index',
-            width: 80,
-            align: 'center' as const,
-            render: (_: any, __: any, index: number) => {
-                return (current - 1) * localPageSize + index + 1;
-            }
-        },
-        {
-            title: '文档名称',
-            dataIndex: 'fdName',
-            key: 'fdName',
-            width: 200,
-            ellipsis: true,
-            render: (text: string, record: RoomItem) => text || record.fdName || '-',
-        },
-        {
-            title: '项目描述',
-            dataIndex: 'fdMassage',
-            key: 'fdMassage',
-            width: 200,
-            ellipsis: true,
-            render: (text: string, record: RoomItem) => text || record.fdName || '-',
-        },
-        {
-            title: '项目状态',
-            dataIndex: 'fdType',
-            key: 'fdType',
-            width: 200,
-            ellipsis: true,
-            render: (text: string, record: RoomItem) => text || record.fdName || '-',
-        },
-        {
-            title: '项目对接人',
-            dataIndex: 'fdUserName',
-            key: 'fdUserName',
-            width: 200,
-            ellipsis: true,
-            render: (text: string, record: RoomItem) => text || record.fdName || '-',
-        },
-        {
-            title: '项目开始时间',
-            dataIndex: 'fdActoinTime',
-            key: 'fdActoinTime',
-            width: 200,
-            ellipsis: true,
-            render: (text: string, record: RoomItem) => text || record.fdName || '-',
-        },
-        {
-            title: '项目结束时间',
-            dataIndex: 'fdEndTime',
-            key: 'fdEndTime',
-            width: 200,
-            ellipsis: true,
-            render: (text: string, record: RoomItem) => text || record.fdName || '-',
-        },
-    ];
-
+    //加载数据初始化
     useEffect(() => {
         fetchData();
     }, []);
@@ -349,7 +201,7 @@ const App: React.FC = () => {
             <div style={{ marginBottom: '20px', backgroundColor: '#fff', padding: '15px', borderRadius: '8px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '15px' }}>
                     <h3 style={{ margin: 0 }}>筛选</h3>
-                    <Button type="primary" onClick={handleExport}>导出数据</Button>
+                    {/*<Button type="primary" onClick={handleExport}>导出数据</Button>*/}
                     <Button type="primary" onClick={handleAdd}>新增</Button>
                 </div>
 
@@ -405,25 +257,25 @@ const App: React.FC = () => {
                 </div>
             </div>
             {/* 新增/编辑弹窗 */}
-            <Modal
-                title={modalType === 'create' ? '新增房间' : '编辑房间'}
-                open={false}
-                onOk={() => form.submit()}
-                onCancel={() => setModalVisible(false)}
-                width={800}
-                destroyOnClose
-            >
-                <RoomForm
-                    form={form}
-                    onSubmit={handleSubmit}
-                    initialValues={selectedRow || {}}
-                />
-            </Modal>
+            {/*<Modal*/}
+            {/*    title={modalType === 'create' ? '新增房间' : '编辑房间'}*/}
+            {/*    open={modalVisible}*/}
+            {/*    onOk={() => form.submit()}*/}
+            {/*    onCancel={() => setModalVisible(false)}*/}
+            {/*    width={800}*/}
+            {/*    destroyOnClose*/}
+            {/*>*/}
+            {/*    <RoomForm*/}
+            {/*        form={form}*/}
+            {/*        onSubmit={handleSubmit}*/}
+            {/*        initialValues={selectedRow || {}}*/}
+            {/*    />*/}
+            {/*</Modal>*/}
             <Drawer
                 title="列表详情数据"
                 placement={placement}
                 onClose={() => setEditOpen(false)}
-                open={modalVisible}
+                open={editopen}
                 width={1000}
             >
                 <RoomForm

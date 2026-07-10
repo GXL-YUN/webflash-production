@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
  *
  * @author enilu
  */
-public interface UserRepository extends BaseRepository<User, Long> {
+public interface UserRepository extends BaseRepository<User, String> {
     User findByAccount(String account);
 
     User findByAccountAndStatusNot(String account, Integer status);

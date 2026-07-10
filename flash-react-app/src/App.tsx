@@ -5,9 +5,9 @@ import './App.less';
 
 const App: React.FC = () => {
   return (
-      <BrowserRouter>
+      // <BrowserRouter>
         <AppRoutes />
-      </BrowserRouter>
+      // </BrowserRouter>
   );
 };
 

@@ -27,6 +27,51 @@
     <dependencies>
 
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>
+
+        <!--核销码-->
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>3.5.2</version>
+        </dependency>
+<!--        腾讯云CloudBase-->
+<!--        <dependency>-->
+<!--            <groupId>com.tencentcloudapi</groupId>-->
+<!--            <artifactId>tencentcloud-sdk-java-cloudbase</artifactId>-->
+<!--            <version>3.1.1270</version>-->
+<!--        </dependency>-->
+<!--       腾讯云 全部依赖-->
+<!--        <dependency>-->
+<!--            <groupId>com.tencentcloudapi</groupId>-->
+<!--            <artifactId>tencentcloud-sdk-java</artifactId>-->
+<!--            <version>3.1.1270</version>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-core</artifactId>
+        </dependency>
+
+
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.amqp</groupId>-->
+<!--            <artifactId>spring-amqp-delayed-message-exchange</artifactId>-->
+<!--            <version>2.4.18</version>-->
+<!--        </dependency>-->
+<!--        -->
+
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>javase</artifactId>
+            <version>3.5.2</version>
+        </dependency>
             <!-- 核心 POI -->
             <dependency>
                 <groupId>org.apache.poi</groupId>
@@ -40,6 +85,27 @@
                 <artifactId>poi-ooxml</artifactId>
                 <version>5.2.3</version> <!-- 必须与poi版本一致 -->
             </dependency>
+
+            <!--163邮件集成-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-mail</artifactId>
+            </dependency>
+
+            <!-- Thymeleaf -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-thymeleaf</artifactId>
+            </dependency>
+
+
+            <!--腾讯云短信-->
+            <dependency>
+                <groupId>com.tencentcloudapi</groupId>
+                <artifactId>tencentcloud-sdk-java-sms</artifactId>
+                <version>3.1.622</version>
+            </dependency>
+
 
             <!-- POI-OOXML-Schemas -->
 <!--            <dependency>-->
@@ -100,6 +166,8 @@
             <version>5.13.0</version>
         </dependency>
 
+
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>
@@ -131,11 +199,11 @@
 
 
 
-        <!-- Elasticsearch -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
-        </dependency>
+<!--        &lt;!&ndash; Elasticsearch &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>-->
+<!--        </dependency>-->
 
 <!--        <dependency>-->
 <!--            <groupId>org.elasticsearch.plugin</groupId>-->
@@ -261,10 +329,7 @@
             <groupId>com.github.qcloudsms</groupId>
             <artifactId>qcloudsms</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.aliyun</groupId>
-            <artifactId>aliyun-java-sdk-core</artifactId>
-        </dependency>
+
 
 
         <!--工具包支持-->
@@ -322,6 +387,24 @@
         <repository>
             <id>apache-snapshots</id>
             <url>https://repository.apache.org/snapshots</url>
+        </repository>
+
+
+        <repository>
+            <id>tencent-maven</id>
+            <name>Tencent Cloud Maven Repository</name>
+            <url>https://mirrors.tencent.com/nexus/repository/maven-public/</url>
+            <releases><enabled>true</enabled></releases>
+            <snapshots><enabled>false</enabled></snapshots>
+        </repository>
+
+        <!-- Spring 第三方/延迟交换机支持仓库（如有需要） -->
+        <repository>
+            <id>spring-libs-release</id>
+            <name>Spring Libs Release</name>
+            <url>https://repo.spring.io/libs-release</url>
+            <releases><enabled>true</enabled></releases>
+            <snapshots><enabled>false</enabled></snapshots>
         </repository>
     </repositories>
 </project>

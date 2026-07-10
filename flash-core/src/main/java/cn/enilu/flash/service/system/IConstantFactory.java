@@ -24,7 +24,7 @@ public interface IConstantFactory {
      * @author stylefeng
      * @Date 2017/5/9 23:41
      */
-    String getUserNameById(Long userId);
+    String getUserNameById(String userId);
 
     /**
      * 根据用户id获取用户账号
@@ -32,7 +32,7 @@ public interface IConstantFactory {
      * @author stylefeng
      * @date 2017年5月16日21:55:371
      */
-    String getUserAccountById(Long userId);
+    String getUserAccountById(String userId);
 
     /**
      * 通过角色ids获取角色名称

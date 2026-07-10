@@ -3,7 +3,10 @@ package cn.enilu.flash.bean.entity;
 import cn.enilu.flash.bean.entity.att.AttMainMassage;
 import cn.enilu.flash.bean.entity.att.AttachmentInfo;
 import cn.enilu.flash.bean.entity.system.FileInfo;
+import cn.enilu.flash.utils.DateUtil;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
@@ -12,6 +15,7 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -43,20 +47,25 @@ public abstract class BaseEntity implements Serializable {
 
     @CreationTimestamp
     @Column(name = "create_time", columnDefinition = "DATETIME COMMENT '创建时间/注册时间'", updatable = false)
+    @JsonProperty("created_at")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
+
+
     @Column(name = "create_by", columnDefinition = "bigint COMMENT '创建人'", updatable = false)
     @CreatedBy
     private Long createBy;
+
+
     @UpdateTimestamp
     @Column(name = "modify_time", columnDefinition = "DATETIME COMMENT '最后更新时间'")
+    @JsonProperty("updated_at")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date modifyTime;
+
+
     @LastModifiedBy
     @Column(name = "modify_by", columnDefinition = "bigint COMMENT '最后更新人'")
     private Long modifyBy;
 
-    /**
-     * 附件（临时字段，不持久化到数据库）
-     */
-    @Transient
-    private   List<FileInfo> attacherList;
 }

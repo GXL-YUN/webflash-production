@@ -1,4 +1,30 @@
 spring:
+  profiles:
+#    active: prod
+    active: dev
+  mail:
+    host: smtp.163.com
+    port: 465
+    username: 13720661531@163.com
+    password: PDmW6JgRH3Kcms2U
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+
+  #：排除Springfox的DevTools重加载（推荐）
+  devtools:
+    restart:
+      exclude:
+        - springfox-*
+        - springfox-oas-*
+        - springfox-swagger2-*
+        - springfox-swagger-ui-*
   application:
     name: thread-pool-demo
   rabbitmq:
@@ -6,12 +32,13 @@ spring:
       # host: http://127.0.0.1/http://122.51.246.240:15672/
       port: 5672
       username: admin
-      password: 1225dmf1212.
+      password: StrongPassword123!
       virtual-host: /
       # 开启发送方确认机制
       #publisher-confirms: true
       # 连接池配置
-      connection-timeout: 5000
+      connection-timeout: 15000
+      requested-heartbeat: 60
       cache:
         channel:
           size: 25
@@ -41,8 +68,14 @@ spring:
             initial-interval: 1000ms
             multiplier: 2.0
             max-interval: 10000ms
-  profiles:
-    active: prod
+      template:
+        retry:
+          enabled: true
+          initial-interval: 1000ms
+          max-attempts: 3
+          max-interval: 10000ms
+          multiplier: 2.0
+
   cache:
     ehcache:
       config: classpath:ehcache.xml
@@ -63,15 +96,8 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
-  mail:
-    host: smtp.qq.com
-    username: 3354627304@qq.com
-    password: rnfqmoojsocpcijf
-    port: 587
-    protocol: smtp
-
   jpa:
-    show-sql: true
+    show-sql: false #展示sql打印
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
   servlet:
     multipart:
@@ -95,9 +121,6 @@ server:
 app:
   elasticsearch:
     index-name: articles
-
-
-
 # 线程池配置
 thread:
   pool:
@@ -126,3 +149,27 @@ management:
   endpoint:
     health:
       show-details: always
+  health: ##关闭安全检查
+    elasticsearch:
+      enabled: false
+
+# application-sms.yml
+# 腾讯云短信配置
+tencent:
+  sms:
+    # 腾讯云访问密钥
+    secret-id: AKIDIwOgojT4UgjcIkEl6E8pIahaO0RffS2O   # 替换为您的 SecretId
+    secret-key: Gu5t9xG***********       # 替换为您的 SecretKey
+    # 短信应用 ID
+    sdk-app-id: 1309938595               # 替换为您的 SDK AppId
+    # 短信签名
+    sign-name: 腾讯云             # 替换为您的签名名称
+    # 短信模板ID
+    template-id: 1110                 # 替换为您的模板ID
+    # 服务地域
+    region: ap-guangzhou
+    # 验证码配置
+    code:
+      expire-minutes: 5                  # 验证码有效期（分钟）
+      max-attempts: 3                    # 最大验证尝试次数
+      send-limit: 3                      # 每分钟最多发送次数

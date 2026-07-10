@@ -112,7 +112,7 @@ public class RoleController extends BaseController {
      */
     @GetMapping(value = "/roleTreeListByIdUser")
     @RequiresPermissions(value = {Permission.ROLE})
-    public Object roleTreeListByIdUser(Long idUser) {
+    public Object roleTreeListByIdUser(String idUser) {
         User user = userService.get(idUser);
         String roleIds = user.getRoleid();
         List<ZTreeNode> roleTreeList = null;
