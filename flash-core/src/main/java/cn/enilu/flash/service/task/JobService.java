@@ -18,6 +18,7 @@ import java.util.Map;
 
 /**
  * 任务服务
+ * 创建定时任务服务
  */
 @Service
 public class JobService {
@@ -77,6 +78,7 @@ public class JobService {
             job.setJobClass(task.getJobClass());
             job.setDescription(task.getName());
             job.setDisabled(task.isDisabled());
+            job.setJobId(task.getFdId());
             if (StringUtils.isNotBlank(task.getData())) {
                 try {
                     Map<String, Object> dataMap = JsonUtil.fromJson(Map.class, task.getData());
@@ -97,12 +99,12 @@ public class JobService {
      */
 
     public boolean addJob(QuartzJob job) throws SchedulerException {
-        logger.info("新增任务Id：{}, name:{}", job.getJobName(), job.getDescription());
+        logger.info("新增任务Id：{}, name:{}", job.getJobId(), job.getDescription());
         if (job == null || job.isDisabled()) {
             return false;
         }
         if (!TaskUtils.isValidExpression(job.getCronExpression())) {
-            logger.error("时间表达式错误（" + job.getJobName() + "," + job.getJobGroup() + "）," + job.getCronExpression());
+            logger.error("时间表达式错误（" + job.getJobId() + "," + job.getJobGroup() + "）," + job.getCronExpression());
             return false;
         } else {
             // 任务名称和任务组设置规则：    // 名称：task_1 ..    // 组 ：group_1 ..
@@ -112,7 +114,8 @@ public class JobService {
             if (null == trigger) {
                 //是否允许并发执行
                 Class<? extends Job> clazz = job.isConcurrent() ? BaseJob.class : NoConurrentBaseJob.class;
-                JobDetail jobDetail = JobBuilder.newJob(clazz).withIdentity(job.getJobName(), job.getJobGroup()).build();
+               // JobDetail jobDetail = JobBuilder.newJob(clazz).withIdentity(job.getJobName(), job.getJobGroup()).build();   //任务名称  任务组
+                JobDetail jobDetail = JobBuilder.newJob(clazz).withIdentity(job.getJobId()).build();
                 jobDetail.getJobDataMap().put("job", job);
                 // 表达式调度构建器
                 CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(job.getCronExpression());

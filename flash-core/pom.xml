@@ -26,6 +26,41 @@
 
     <dependencies>
 
+    <!--阿里云短信平台-->
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>alibabacloud-dypnsapi20170525</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-core</artifactId>
+        </dependency>
+
+
+
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.8.25</version> <!-- 使用最新版本 -->
+        </dependency>
+
+
+
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>credentials-java</artifactId>
+            <version>0.3.4</version>
+        </dependency>
+
+        <!-- Tea 核心 -->
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>tea</artifactId>
+            <version>1.2.8</version>
+        </dependency>
+    <!--阿里云短信平台-->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -54,11 +89,6 @@
 <!--            <artifactId>tencentcloud-sdk-java</artifactId>-->
 <!--            <version>3.1.1270</version>-->
 <!--        </dependency>-->
-        <dependency>
-            <groupId>com.aliyun</groupId>
-            <artifactId>aliyun-java-sdk-core</artifactId>
-        </dependency>
-
 
 <!--        <dependency>-->
 <!--            <groupId>org.springframework.amqp</groupId>-->

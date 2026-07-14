@@ -32,11 +32,18 @@ public class StartJob implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments applicationArguments) throws Exception {
-        log.info("start Job >>>>>>>>>>>>>>>>>>>>>>>");
+        log.info("start Job >>>>>>>>>>>>>>>>>>>>>>定时任务初始化完成  ");
         List<Task> tasks = taskService.queryAll(SearchFilter.build("disabled", SearchFilter.Operator.EQ, false));
         List<QuartzJob> list = jobService.getTaskList(tasks);
+        log.info("启动定时任务{}",list.size());
+         int i=0;
         for (QuartzJob quartzJob : list) {
-            jobService.addJob(quartzJob);
+            Boolean  flage=jobService.addJob(quartzJob);
+            if(flage){
+                i++;
+                log.info("启动定时任务{}",quartzJob.getJobName());
+            }
         }
+        log.info("启动定时任务完成,启动数量{}",i);
     }
 }

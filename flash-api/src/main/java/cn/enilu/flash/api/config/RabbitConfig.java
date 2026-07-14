@@ -43,14 +43,23 @@ public class RabbitConfig {
 
     public interface MqConstants {
 
+
+        /**
+         * 订单交换机
+         */
         String ORDER_EXCHANGE = "order.exchange";
         String ORDER_QUEUE = "order.queue";
         String ORDER_ROUTING_KEY = "order.create";
+
+
+
 
         /* ===== 延迟关单（核心） ===== */
         String DELAY_EXCHANGE = "order.delay.exchange";
         String DELAY_QUEUE = "order.close.queue";
         String DELAY_ROUTING_KEY = "order.close";
+
+
 
         /* ===== 死信兜底 ===== */
         String ORDER_DLX_EXCHANGE = "order.dlx.exchange";

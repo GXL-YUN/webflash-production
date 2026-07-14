@@ -69,7 +69,8 @@ public class JwtUtil {
         try {
             DecodedJWT jwt = JWT.decode(token);
             return jwt.getClaim("userId").asLong();
-        } catch (JWTDecodeException e) {
+        } catch (Exception e) {
+            log.debug("用户："+ getUsername(token)+"生成失败："+ token);
             return null;
         }
     }

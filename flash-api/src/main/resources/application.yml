@@ -1,7 +1,7 @@
 spring:
   profiles:
-#    active: prod
-    active: dev
+    active: prod
+    #active: dev
   mail:
     host: smtp.163.com
     port: 465
@@ -173,3 +173,5 @@ tencent:
       expire-minutes: 5                  # 验证码有效期（分钟）
       max-attempts: 3                    # 最大验证尝试次数
       send-limit: 3                      # 每分钟最多发送次数
+log:
+  path: /data/app/web-flash/log/
