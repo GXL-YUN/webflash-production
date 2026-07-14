@@ -34,7 +34,8 @@ public class GlobalExceptionHandler {
 
         Map<String, Object> response = new HashMap<>();
         response.put("code", 500);
-        response.put("message", "数据服务暂时不可用，请稍后重试");
+        response.put("message", "sk" +
+                "数据服务暂时不可用，请稍后重试");
         response.put("error", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);

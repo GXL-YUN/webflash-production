@@ -26,7 +26,7 @@ import javax.validation.Valid;
  * @author enilu
  */
 @RestController
-@RequestMapping("/task")
+@RequestMapping("/timed/task")
 public class TaskController extends BaseController {
     @Autowired
     private TaskService taskService;
@@ -38,7 +38,7 @@ public class TaskController extends BaseController {
      * 获取定时任务管理列表
      */
     @GetMapping(value = "/list")
-    @RequiresPermissions(value = {Permission.TASK})
+    //@RequiresPermissions(value = {Permission.TASK})
     public Object list(String name) {
         if (StringUtil.isNullOrEmpty(name)) {
             return Rets.success(taskService.queryAll());
@@ -50,9 +50,9 @@ public class TaskController extends BaseController {
     /**
      * 新增定时任务管理
      */
-    @PostMapping
+    @PostMapping("/add")
     @BussinessLog(value = "编辑定时任务", key = "name")
-    @RequiresPermissions(value = {Permission.TASK_EDIT})
+    //@RequiresPermissions(value = {Permission.TASK_EDIT})
     public Object add(@RequestBody @Valid Task task) {
 
         Ret validRet = taskService.validate(task);
@@ -62,7 +62,7 @@ public class TaskController extends BaseController {
         if (task.getId() == null) {
             taskService.save(task);
         } else {
-            Task old = taskService.get(task.getId());
+            Task old = taskService.get(task.getFdId());
             old.setName(task.getName());
             old.setCron(task.getCron());
             old.setJobClass(task.getJobClass());
@@ -78,31 +78,31 @@ public class TaskController extends BaseController {
      */
     @DeleteMapping
     @BussinessLog(value = "删除定时任务", key = "taskId")
-    @RequiresPermissions(value = {Permission.TASK_DEL})
-    public Object delete(@RequestParam Long id) {
+    //@RequiresPermissions(value = {Permission.TASK_DEL})
+    public Object delete(@RequestParam String id) {
         taskService.delete(id);
         return Rets.success();
     }
 
     @PostMapping(value = "/disable")
     @BussinessLog(value = "禁用定时任务", key = "taskId")
-    @RequiresPermissions(value = {Permission.TASK_EDIT})
-    public Object disable(@RequestParam Long taskId) {
+    //@RequiresPermissions(value = {Permission.TASK_EDIT})
+    public Object disable(@RequestParam String taskId) {
         taskService.disable(taskId);
         return Rets.success();
     }
 
     @PostMapping(value = "/enable")
     @BussinessLog(value = "启用定时任务", key = "taskId")
-    @RequiresPermissions(value = {Permission.TASK_EDIT})
-    public Object enable(@RequestParam Long taskId) {
+    //@RequiresPermissions(value = {Permission.TASK_EDIT})
+    public Object enable(@RequestParam String taskId) {
         taskService.enable(taskId);
         return Rets.success();
     }
 
 
     @GetMapping(value = "/logList")
-    @RequiresPermissions(value = {Permission.TASK})
+    //@RequiresPermissions(value = {Permission.TASK})
     public Object logList(@RequestParam Long taskId) {
         Page<TaskLog> page = new PageFactory<TaskLog>().defaultPage();
         page.addFilter(SearchFilter.build("idTask", SearchFilter.Operator.EQ, taskId));

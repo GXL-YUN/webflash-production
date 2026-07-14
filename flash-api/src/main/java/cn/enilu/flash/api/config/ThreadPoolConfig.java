@@ -1,4 +1,4 @@
-package cn.enilu.config;
+package cn.enilu.flash.api.config;
 
 import cn.enilu.Thread.ThreadPoolManager;
 import lombok.Data;

@@ -77,6 +77,23 @@ public class StringUtil {
     private static char[] HEXCHAR = { '0', '1', '2', '3', '4', '5', '6', '7',
             '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
+
+    /**
+     * 去掉Json字符串中的转义字符
+     * 如果你经常遇到这种“双重 JSON 字符串”，可以封个工具方法：
+     * @param s
+     * @return
+     */
+    public static String unwrapJsonString(String s) {
+        if (s == null) return null;
+        if (s.startsWith("\"") && s.endsWith("\"")) {
+            s = s.substring(1, s.length() - 1);
+        }
+        return s.replace("\\\"", "\"");
+    }
+
+
+
     /**
      * 将字节数组还原成16进制字符串
      *

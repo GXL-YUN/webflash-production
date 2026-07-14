@@ -213,7 +213,7 @@ public class AccountController extends  CrudController<User, String, UserReposit
                 return Rets.failure("该用户未配置权限");
             }
             String token = userService.loginForToken(user);
-            ShiroFactroy.me().shiroUser(token, user);
+            //ShiroFactroy.me().shiroUser(token, user);
             Map<String, String> result = new HashMap<>(1);
             result.put("token", token);
 

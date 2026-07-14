@@ -36,10 +36,10 @@ public abstract class JobExecuter {
 
     public void execute() {
         Map dataMap = job.getDataMap();
-        String taskId = job.getJobName();
-        Task task = taskService.get(Long.valueOf(taskId));
+        String taskId = job.getJobId();
+        Task task = taskService.get(taskId);
         final String taskName = task.getName();
-        log.info(">>>>>>>>>>>>>>>>>开始执行定时任务[" + taskName + "]...<<<<<<<<<<<<<<<<<<<");
+        //log.info(">>>>>>>>>>>>>>>>>开始执行定时任务[" + taskName + "]...<<<<<<<<<<<<<<<<<<<");
 
         String exeResult = "执行成功";
         final TaskLog taskLog = new TaskLog();
@@ -62,7 +62,7 @@ public abstract class JobExecuter {
         task.setExecAt(exeAt);
         taskLogRepository.save(taskLog);
         taskRepository.save(task);
-        log.info(">>>>>>>>>>>>>>>>>执行定时任务[" + taskName + "]结束<<<<<<<<<<<<<<<<<<<");
+        //log.info(">>>>>>>>>>>>>>>>>执行定时任务[" + taskName + "]结束<<<<<<<<<<<<<<<<<<<");
     }
 
     /**

@@ -9,14 +9,14 @@
     <!-- 文件切割大小 -->
     <property name="maxFileSize" value="500MB"/>
     <!-- 文档保留天数 -->
-    <property name="maxHistory" value="10"/>
+    <property name="maxHistory" value="20"/>
     <!-- 文档保留总大小 -->
-    <property name="totalSizeCap" value="5GB"/>
+    <property name="totalSizeCap" value="50GB"/>
 
     <!-- name的值是变量的名称，value的值时变量定义的值。通过定义的值会被插入到logger上下文中。定义后，可以使"${}"来使用变量。 -->
-    <!--
-        <property name="log.path" value="/Users/zhesong/work/project/log/log1" />
-    -->
+<!--
+    <property name="log.path" value="/Users/zhesong/work/project/log/log1" />
+-->
     <springProperty scope="context" name="log.path" source="log.path"/>
 
     <!--0. 日志格式和颜色渲染 -->
@@ -148,11 +148,11 @@
     </appender>
 
     <!-- RabbitMQ输出 -->
-    <!--    <appender name="RABBITMQ" class="com.alanlee.log.RabbitMQLogAppender">-->
-    <!--        <exchange>exchange_logRevTaskMq</exchange>-->
-    <!--        <routingKey>routingKey_logRevTaskMq</routingKey>-->
-    <!--        <applicationName>${APP_NAME}</applicationName>-->
-    <!--    </appender>-->
+<!--    <appender name="RABBITMQ" class="com.alanlee.log.RabbitMQLogAppender">-->
+<!--        <exchange>exchange_logRevTaskMq</exchange>-->
+<!--        <routingKey>routingKey_logRevTaskMq</routingKey>-->
+<!--        <applicationName>${APP_NAME}</applicationName>-->
+<!--    </appender>-->
 
     <logger name="org.frameworkset.elasticsearch.client.ElasticSearchRestClient" level="ERROR"/>
 
@@ -185,10 +185,10 @@
     <root level="debug">
         <appender-ref ref="CONSOLE" />
         <!--    <appender-ref ref="DEBUG_FILE" />-->
-        <appender-ref ref="INFO_FILE" />
+            <appender-ref ref="INFO_FILE" />
         <!--    <appender-ref ref="WARN_FILE" />-->
-        <appender-ref ref="ERROR_FILE" />
-        <!--            <appender-ref ref="RABBITMQ" />-->
+            <appender-ref ref="ERROR_FILE" />
+<!--            <appender-ref ref="RABBITMQ" />-->
     </root>
 
 

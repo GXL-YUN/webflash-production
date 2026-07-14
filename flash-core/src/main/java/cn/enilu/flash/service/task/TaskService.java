@@ -29,7 +29,7 @@ import java.util.List;
  * @date 2019-06-13
  */
 @Service
-public class TaskService extends BaseService<Task, Long, TaskRepository> {
+public class TaskService extends BaseService<Task, String, TaskRepository> {
     private static final Logger logger = LoggerFactory.getLogger(TaskService.class);
     @Autowired
     private TaskRepository taskRepository;
@@ -90,7 +90,7 @@ public class TaskService extends BaseService<Task, Long, TaskRepository> {
     }
 
 
-    public Task disable(Long id) {
+    public Task disable(String id) {
         Task task = get(id);
         task.setDisabled(true);
         taskRepository.save(task);
@@ -107,7 +107,7 @@ public class TaskService extends BaseService<Task, Long, TaskRepository> {
     }
 
 
-    public Task enable(Long id) {
+    public Task enable(String id) {
         Task task = get(id);
         task.setDisabled(false);
         taskRepository.save(task);
@@ -127,7 +127,7 @@ public class TaskService extends BaseService<Task, Long, TaskRepository> {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(String id) {
         Task task = get(id);
         task.setDisabled(true);
         taskRepository.delete(task);
