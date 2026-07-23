@@ -4,6 +4,7 @@ import cn.enilu.flash.bean.constant.state.Order;
 import cn.enilu.flash.utils.HttpUtil;
 import cn.enilu.flash.utils.StringUtil;
 import cn.enilu.flash.utils.factory.Page;
+import cn.hutool.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Sort;
 
@@ -35,6 +36,32 @@ public class PageFactory<T> {
         String sortName = request.getParameter("sort");
         //asc或desc(升序或降序)
         String order = request.getParameter("order");
+        Page<T> page = new Page<>(current, limit);
+        if (StringUtil.isNotEmpty(sortName)) {
+            Sort.Direction direction = Order.ASC.getDes().equals(order) ? Sort.Direction.ASC : Sort.Direction.DESC;
+            Sort sort = Sort.by(direction, sortName);
+            page.setSort(sort);
+        }
+        return page;
+    }
+
+    public Page<T> defaultPage(JSONObject jsonObject) {
+
+        String limitStr = jsonObject.getStr("limit");
+        int limit = 10;
+        if (StringUtil.isNotEmpty(limitStr)) {
+            limit = Integer.valueOf(limitStr);
+        }
+        String pageNum = jsonObject.getStr("page");
+        int current = 1;
+
+        if (StringUtils.isNotEmpty(pageNum)) {
+            current = Integer.valueOf(pageNum);
+        }
+        //排序字段名称
+        String sortName = jsonObject.getStr("sort");
+        //asc或desc(升序或降序)
+        String order =  jsonObject.getStr("order");
         Page<T> page = new Page<>(current, limit);
         if (StringUtil.isNotEmpty(sortName)) {
             Sort.Direction direction = Order.ASC.getDes().equals(order) ? Sort.Direction.ASC : Sort.Direction.DESC;

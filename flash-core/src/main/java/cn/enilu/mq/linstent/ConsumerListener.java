@@ -35,10 +35,17 @@ public class ConsumerListener {
             JSONObject jsonObject = JSONUtil.parseObj(StringUtil.unwrapJsonString(body));
             //chaxun
             MqMainLog mqMainLog= mqMainLogService.getById(jsonObject.getStr("fdId"));
-            SpringBeanUtil.getBean(mqMainLog.getFdService()+"service");
+
 
 
             if(mqMainLog!=null){
+                try{
+                    SpringBeanUtil.getBean(mqMainLog.getFdService()+"service");
+                }catch (Exception e){
+                    mqMainLog.setFdStatus(3);
+                    log.error("队列处理，错误: 未找到BEAN{}", e.getMessage(), e);
+                    channel.basicAck(deliveryTag, false);//手动确认
+                }
                 try{
                     if (!StringUtils.hasText(body)) {
                         log.warn("队列收到空消息，跳过处理");

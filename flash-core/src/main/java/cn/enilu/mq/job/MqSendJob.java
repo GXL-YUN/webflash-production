@@ -1,21 +1,29 @@
 package cn.enilu.mq.job;
 
 
+import cn.enilu.flash.bean.constant.factory.PageFactory;
+import cn.enilu.flash.bean.entity.message.Message;
 import cn.enilu.flash.bean.entity.system.Cfg;
 import cn.enilu.flash.bean.vo.query.SearchFilter;
 import cn.enilu.flash.service.system.CfgService;
 import cn.enilu.flash.service.task.JobExecuter;
 import cn.enilu.flash.utils.DateUtil;
 import cn.enilu.flash.utils.JsonUtil;
+import cn.enilu.flash.utils.factory.Page;
 import cn.enilu.mq.bean.MqMainLog;
 import cn.enilu.mq.service.MqMainLogService;
+import cn.hutool.json.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -23,10 +31,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 
 /**
- * 当乐舞表里面存在未投递或者失败数据  则进行重新投递  直至消费成功
+ * 当日志表里面存在未投递或者失败数据  则进行重新投递  直至消费成功cn.enilu.mq.job.MqSendJob
  */
 
 @Component
@@ -34,13 +43,21 @@ import java.util.concurrent.Executors;
 public class MqSendJob extends JobExecuter {
     @Autowired
     private MqMainLogService mqMainLogService;
+
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
     private   String GXL_USER_LOGIN_TOKE="WEB-FLASH:MQ:PREVIEW:";
 
-    private final ExecutorService executor = Executors.newFixedThreadPool(8);
+    //private final ExecutorService executor = Executors.newFixedThreadPool(8);
 
+    @Autowired
+    @Qualifier("mqSendExecutor")
+    private ThreadPoolTaskExecutor executor;
+
+
+    //第三步：限制 1000 条（SQL 层）
+    private final int batchSize=1000;
     @Override
     public void execute(Map<String, Object> dataMap) throws Exception {
         //存储用户登录用户toke  用于后续接口响应
@@ -69,31 +86,90 @@ public class MqSendJob extends JobExecuter {
      */
     @Scheduled(fixedDelay = 1000)
     public void publishPendingMessages() {
-        List<SearchFilter> filters =new ArrayList<>();
-        filters.add(SearchFilter.build("fdStatus", SearchFilter.Operator.EQ, 0, SearchFilter.Join.or));
-        filters.add(SearchFilter.build("fdStatus", SearchFilter.Operator.EQ, 2, SearchFilter.Join.or));
-        List<MqMainLog> msgs = mqMainLogService.queryAll(filters);
-        for (MqMainLog msg : msgs) {
-            executor.submit(() -> {
-                try {
-                    boolean flage= mqMainLogService. pushToMq(msg.getFdId());
-                    if(flage){
-                        msg.setFdStatus(1);//投递成功
-                        redisTemplate.opsForValue().set(GXL_USER_LOGIN_TOKE+msg.getFdId(), flage);
-                        log.info("MQ消息发送成功 已存储：{}"+ GXL_USER_LOGIN_TOKE+DateUtil.getAllTime());
 
-                    }else{
-                        msg.setFdStatus(2);//投递失败
+//        List<SearchFilter> filters = new ArrayList<>();
+//        filters.add(SearchFilter.build("fdStatus", SearchFilter.Operator.EQ, 0, SearchFilter.Join.or));
+//        filters.add(SearchFilter.build("fdStatus", SearchFilter.Operator.EQ, 2, SearchFilter.Join.or));
+//
+//        List<MqMainLog> msgs = mqMainLogService.queryPage(
+//                filters
+//        );
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("page", 1);
+        jsonObject.put("limit", batchSize);
+        jsonObject.put("sort", "createTime");
+        Page<MqMainLog> page = new PageFactory<MqMainLog>().defaultPage(jsonObject);
+        //page.addFilter("fdStatus", SearchFilter.Operator.EQ, 0, SearchFilter.Join.or);
+        page.addFilter("fdStatus", SearchFilter.Operator.EQ, 2, SearchFilter.Join.or);
+        page = mqMainLogService.queryPage(page);
+        List<MqMainLog> msgs =page.getRecords();
+        //log.info("MQ消息开始发送数量{}",msgs.size());
+        for (MqMainLog msg : msgs) {
+            executor.execute(() -> {
+                String lockKey = "mq:send:lock:" + msg.getFdId();
+                try {
+                    Boolean locked = redisTemplate.opsForValue()
+                            .setIfAbsent(lockKey, "1", 30, TimeUnit.SECONDS);
+                    if (Boolean.FALSE.equals(locked)) {
+                        log.error("MQ消息发送失败  redis已存在 fdId={}", msg.getFdId());
+                        return;
+                    }
+
+                    boolean flage = mqMainLogService.pushToMq(msg.getFdId());
+                    if (flage) {
+                        msg.setFdStatus(1);
+                        redisTemplate.opsForValue().set(
+                                GXL_USER_LOGIN_TOKE + msg.getFdId(),
+                                true,
+                                5,
+                                TimeUnit.MINUTES
+                        );
+                        log.info("MQ消息发送成功 fdId={}", msg.getFdId());
+                    } else {
+                        log.error("MQ消息发送失败  redis更新失败 fdId={}", msg.getFdId());
+                        msg.setFdStatus(2);
                     }
 
                 } catch (Exception e) {
-                    // 留着下次重试，不更新状态
-                    msg.setFdStatus(2);//投递失败
-                    log.error("MQ消息发送失败{}", e.getMessage());
-                }finally {
-                    mqMainLogService.update( msg);
+                    msg.setFdStatus(2);
+                    log.error("MQ消息发送失败 fdId={}", msg.getFdId(), e);
+                } finally {
+                    mqMainLogService.update(msg);
+                    redisTemplate.delete(lockKey);
                 }
             });
         }
     }
+//    @Scheduled(fixedDelay = 1000)
+//    public void publishPendingMessages() {
+//        List<SearchFilter> filters =new ArrayList<>();
+//        filters.add(SearchFilter.build("fdStatus", SearchFilter.Operator.EQ, 0, SearchFilter.Join.or));
+//        filters.add(SearchFilter.build("fdStatus", SearchFilter.Operator.EQ, 2, SearchFilter.Join.or));
+//        //取100条
+//
+//        List<MqMainLog> msgs = mqMainLogService.queryAll(filters);
+//        for (MqMainLog msg : msgs) {
+//            executor.submit(() -> {
+//                try {
+//                    boolean flage= mqMainLogService. pushToMq(msg.getFdId());
+//                    if(flage){
+//                        msg.setFdStatus(1);//投递成功
+//                        redisTemplate.opsForValue().set(GXL_USER_LOGIN_TOKE+msg.getFdId(), flage);
+//                        log.info("MQ消息发送成功 已存储：{}"+ GXL_USER_LOGIN_TOKE+DateUtil.getAllTime());
+//
+//                    }else{
+//                        msg.setFdStatus(2);//投递失败
+//                    }
+//
+//                } catch (Exception e) {
+//                    // 留着下次重试，不更新状态
+//                    msg.setFdStatus(2);//投递失败
+//                    log.error("MQ消息发送失败{}", e.getMessage());
+//                }finally {
+//                    mqMainLogService.update( msg);
+//                }
+//            });
+//        }
+//    }
 }
